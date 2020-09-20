@@ -67,7 +67,7 @@ function! s:MyDir(...)
     " Load Directory Part
         let l:list = split(glob(a:1),'\n')
     " Create Window/Buffer Part
-        call s:NewWindow("Left", &columns/4, "<Enter> :call g:MyDirAction('e')","s :call g:MyDirAction('vnew')", "b :call g:MyDirAction('split')")
+        call s:NewWindow("Left", &columns/4, "<Enter> :call s:MyDirAction('e')","s :call s:MyDirAction('vnew')", "b :call g:MyDirAction('split')")
         let s:DirWindow = winnr()
         nnoremap <silent> <buffer> f /^f<cr>
         echom "<enter> to edit, <s> to edit in Vert-Split, <b> to edit in Horz-Split"
