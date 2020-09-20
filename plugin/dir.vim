@@ -204,6 +204,12 @@ function! g:MyDirAction(...)
              if ( isdirectory(s:DirSet . "/" . l:sz) == 0 )
                  echom l:fs . "   "  .  filereadable(l:fs)
                  if (filereadable(l:fs))
+
+                             silent execute "q"
+                             exe s:DirEditWindow+1 . "wincmd w"
+                             silent execute a:1 . " " . l:fs
+if (0 > 1) 
+
                              if (s:DirCloseWindow == 1)
                                  silent execute "q"
                              endif
@@ -212,6 +218,10 @@ function! g:MyDirAction(...)
                              if (s:DirCloseWindow == 0)
                                  exe s:DirWindow . "wincmd w"
                              endif
+endif
+
+
+
                  endif
              else
                  silent execute "q"
