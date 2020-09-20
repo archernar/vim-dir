@@ -191,7 +191,7 @@ function! s:MyDirJSnips(...)
     call s:MyDir($HOME . "/.vim/Snips" . "/J*.txt")
 endfunction
 
-function! g:MyDirAction(...)
+function! s:MyDirAction(...)
      let l:sz   = s:DirToken(getline("."))
      if (line(".") > 1) 
          if (strlen(l:sz) > 0)
@@ -222,73 +222,3 @@ function! g:MyDirAction(...)
          endif
      endif
 endfunction
-
-let s:bb=[]
-function! g:BodyBuilderReset()
-    let s:bb=[]
-endfunction
-
-function! g:BodyBuilderDump()
-    let l:n = 0
-    for l:l in s:bb
-        let l:n = l:n + 1 
-        call setline(l:n, l:l)
-    endfor
-endfunction
-
-function! g:BodyBuilderln(...)
-    call add(s:bb, "")
-    call g:BodyBuilder(a:1)
-endfunction
-function! g:BodyBuilder(...)
-    call add(s:bb, "[" . a:1 . "]")
-    if (filereadable(a:1))
-        for l:l in readfile(a:1)
-            call add(s:bb, l:l)
-        endfor
-    endif
-endfunction
-
-function! g:SessionFiles()
-    call g:BodyBuilderReset()
-    call g:BodyBuilder(".vimsession")
-    call g:BodyBuilderln(".vimwindows")
-    call g:BodyBuilderln(".vimbuffer")
-    call g:BodyBuilderln(".vimforcebuffer")
-    call s:NewWindow("Left", &columns/4, "<Enter> :call g:MyDirAction('e')")
-    call g:BodyBuilderDump()
-endfunction
-
-" Hello New Comment!
-"
-function! g:FindBuffer()
-    let l:szIn = input('buffer >> ')
-    if (l:szIn == "ls")
-        exe "ls"
-    else
-        let l:c = 1
-        while l:c <= 64 
-            if (bufexists(l:c))
-                    let l:m = stridx(bufname(l:c), l:szIn)
-                    if (l:m > -1 )
-                         exe "buffer " . l:c
-                         let l:c = 100
-                    endif
-            endif
-            let l:c += 1
-        endwhile 
-    endif
-endfunction
-
-function! g:EditNewBuffer()
-    let l:szIn = input('new buffer >> ')
-    let l:name = g:RandomString()
-    if (strlen(l:szIn) > 0)
-        if (l:szIn == "r")
-            exe "e " . name
-        else
-            exe "e " . l:szIn
-        endif
-    endif
-endfunction
-"Get Windows let l:list = range(1,winnr('$'))
