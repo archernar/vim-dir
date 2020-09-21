@@ -9,7 +9,7 @@ let g:loaded_plugin_dir=1
 " *****************************************************************************************************
                 "  Command definitions
                 " *************************************************************************************
-command! UPDATEVIM-DIR :PluginUpdate vim-dir
+command! UPDATEVIMDIR  :PluginUpdate vim-dir
 command! CODE          :call s:MyDirCode(0)
 command! SNIPS         :call s:MyDirSnips(0)
 command! DIRE          :call s:MyDirSelect($VIMSELECTEDDIR,0)
