@@ -206,7 +206,6 @@ function! g:MyDirAction(...)
                  if (filereadable(l:fs))
 
                              silent execute "q"
-                             exe s:DirEditWindow+1 . "wincmd w"
                              silent execute a:1 . " " . l:fs
 if (0 > 1) 
 
