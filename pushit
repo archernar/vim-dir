@@ -9,5 +9,8 @@ git add plugin/dir.vim
 git add pushit
 git commit -m "Update"
 git push -u origin master
+REPO=vim-dir
+rm -rf $HOME/.vim/bundle/$REPO
+vim  -c ":PluginInstall! $REPO" -c ":qa!"
 #-------------------------------------------------------------------------------------
 
