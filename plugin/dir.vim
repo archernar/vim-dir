@@ -177,7 +177,7 @@ endfunction
 function! s:MyDirSnips(...)
     let  s:DirCloseWindow = a:1
     let  s:DirEditWindow = winnr()
-    call s:DirSetSpecific($HOME . "/.vim/Snips") 
+    call s:DirSetSpecific($HOME . "/.vim/bundle/vim-progsnips/plugin") 
     call s:MyDir($HOME . "/.vim/Snips" . s:DirMask)
 endfunction
 function! s:MyDirClasses(...)
