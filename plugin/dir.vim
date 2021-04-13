@@ -14,6 +14,7 @@ command! VIMDIR        :PluginUpdate vim-dir
 command! CODE          :call s:MyDirCode(0)
 command! SNIPS         :call s:MyDirSnips(0)
 command! DIRE          :call s:MyDirSelect($VIMSELECTEDDIR,0)
+command! J             :call s:MyDirJSnips(0)
 command! JSNIPS        :call s:MyDirJSnips(0)
 command! CLASSES       :call s:MyDirClasses(0)
 command! DIR           :call s:MyDirPwd(1)
@@ -190,8 +191,9 @@ endfunction
 function! s:MyDirJSnips(...)
     let  s:DirCloseWindow = a:1
     let  s:DirEditWindow = winnr()
-    call s:DirSetSpecific($HOME . "/.vim/Snips") 
-    call s:MyDir($HOME . "/.vim/Snips" . "/J*.txt")
+    let  l:dir="/.vim/bundle/vim-progsnips/plugin" 
+    call s:DirSetSpecific($HOME . l:dir) 
+    call s:MyDir($HOME . l:dir . "/J*.txt")
 endfunction
 function! g:MyDirAction(...)
      let l:sz   = s:DirToken(getline("."))
@@ -208,8 +210,12 @@ function! g:MyDirAction(...)
                  echom l:fs . "   "  .  filereadable(l:fs)
                  if (filereadable(l:fs))
 
-                             silent execute "q"
-                             silent execute a:1 . " " . l:fs
+                            "silent execute "q"
+                            "silent execute a:1 . " " . l:fs
+                            exe s:DirEditWindow+1 . "wincmd w"
+                            execute "read " . l:fs
+                            normal! k
+                            exe s:DirEditWindow . "wincmd w"
 if (0 > 1) 
 
                              if (s:DirCloseWindow == 1)
