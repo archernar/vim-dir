@@ -68,6 +68,8 @@ endfunction
 
 function! s:NewSnip()
     let l:name = input('Enter file name: ')
+    let l:name = "J" . l:name
+    let l:name = l:name . ".txt"
     let  l:dir="/etc/mdisks/scm/vim-progsnips/plugin/"
     execute "e " . l:dir . l:name
 endfunction
