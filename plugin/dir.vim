@@ -15,6 +15,7 @@ command! CODE          :call s:MyDirCode(0)
 command! SNIPS         :call s:MyDirSnips(0)
 command! DIRE          :call s:MyDirSelect($VIMSELECTEDDIR,0)
 command! J             :call s:MyDirJSnips(0)
+command! JN            :call s:NewSnip()
 command! JSNIPS        :call s:MyDirJSnips(0)
 command! CLASSES       :call s:MyDirClasses(0)
 command! DIR           :call s:MyDirPwd(1)
@@ -63,6 +64,12 @@ endfunction
 function! s:PutLine(...)
     call setline(s:PutLineRow, a:1)
     let s:PutLineRow = s:PutLineRow + 1
+endfunction
+
+function! s:NewSnip()
+    let l:name = input('Enter file name: ')
+    let  l:dir="/.vim/bundle/vim-progsnips/plugin"
+    execute "e " . $HOME . l:dir . l:name
 endfunction
 
 function! s:MyDir(...)
