@@ -68,8 +68,8 @@ endfunction
 
 function! s:NewSnip()
     let l:name = input('Enter file name: ')
-    let  l:dir="/etc/mdisks/scm/vim-progsnips/plugin"
-    execute "e " . $HOME . "/" . l:dir . l:name
+    let  l:dir="/etc/mdisks/scm/vim-progsnips/plugin/"
+    execute "e " . l:dir . l:name
 endfunction
 
 function! s:MyDir(...)
