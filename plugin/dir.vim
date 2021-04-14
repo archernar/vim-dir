@@ -67,13 +67,11 @@ function! s:PutLine(...)
 endfunction
 
 function! s:NewSnip()
-    normal! y
     let l:name = input('Enter file name: ')
     let l:name = "J" . l:name
     let l:name = toupper(l:name) . ".txt"
     let  l:dir="/etc/mdisks/scm/vim-progsnips/plugin/"
     execute "e " . l:dir . l:name
-    normal! p
 endfunction
 
 function! s:MyDir(...)
