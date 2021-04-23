@@ -77,9 +77,11 @@ endfunction
 function! s:MyDir(...)
     call s:PutLineSet(0)
     " Load Directory Part
+        let l:forcetype = "f"
         let l:list = split(glob(a:1),'\n')
     " Load Buffer Part
         let l:list = []
+        let l:forcetype = "b"
                 let l:c=1
                 while l:c <= 64 
                     if (bufexists(l:c))
@@ -109,7 +111,7 @@ function! s:MyDir(...)
 
 	for key in l:list
           let l:sz = s:DirFileName(key)
-          let l:type="f"
+          let l:type=l:forcetype
           if (isdirectory(s:DirSet . "/" . l:sz) > 0)
                let l:type="d"
           endif
