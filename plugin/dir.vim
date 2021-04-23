@@ -94,7 +94,7 @@ function! s:MyVimBuffers(...)
                     let l:c += 1
                 endwhile 
     " Create Window/Buffer Part
-        call s:NewWindow("Left", &columns/4, "<Enter> :call g:MyDirAction('e')","s :call g:MyDirAction('vnew')", "b :call g:MyDirAction('split')")
+        call s:NewWindow("Left", &columns/4, "<Enter> :call g:MyBufferAction()","s :call g:MyBufferAction()", "b :call g:MyBufferAction()")
         let s:DirWindow = winnr()
         nnoremap <silent> <buffer> f /^f<cr>
         echom "<enter> to edit, <s> to edit in Vert-Split, <b> to edit in Horz-Split"
@@ -247,6 +247,12 @@ function! s:MyDirJSnips(...)
     call s:DirSetSpecific($HOME . l:dir) 
     call s:MyDir($HOME . l:dir . "/J*.txt")
 endfunction
+
+function! g:MyBufferAction()
+          exe s:DirEditWindow+1 . "wincmd w"
+          execute "b " . "1"
+endfunction
+
 function! g:MyDirAction(...)
      let l:sz   = s:DirToken(getline("."))
      if (line(".") > 1) 
