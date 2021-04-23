@@ -78,6 +78,21 @@ function! s:MyDir(...)
     call s:PutLineSet(0)
     " Load Directory Part
         let l:list = split(glob(a:1),'\n')
+    " Load Buffer Part
+        let l:list = []
+                let l:c=1
+                while l:c <= 64 
+                    if (bufexists(l:c))
+                        if (filereadable(bufname(l:c)))
+                            if (getbufvar(l:c, '&buftype') == "")
+                                if !(bufname(l:c) == "")
+                                   call add(list, l:c . " " . bufname(l:c) ) 
+                                endif
+                            endif
+                        endif
+                    endif
+                    let l:c += 1
+                endwhile 
     " Create Window/Buffer Part
         call s:NewWindow("Left", &columns/4, "<Enter> :call g:MyDirAction('e')","s :call g:MyDirAction('vnew')", "b :call g:MyDirAction('split')")
         let s:DirWindow = winnr()
