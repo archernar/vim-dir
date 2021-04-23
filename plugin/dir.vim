@@ -250,7 +250,9 @@ endfunction
 
 function! g:MyBufferAction()
           exe "q"
-          execute "b " . "1"
+          let l:ret = split(getline(".")," ")[-1]
+          echom l:ret
+          "execute "b " . "1"
 endfunction
 
 function! g:MyDirAction(...)
