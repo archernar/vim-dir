@@ -97,7 +97,7 @@ function! s:MyVimBuffers(...)
         call s:NewWindow("Left", &columns/4, "<Enter> :call g:MyBufferAction()","s :call g:MyBufferAction()", "b :call g:MyBufferAction()")
         let s:DirWindow = winnr()
         nnoremap <silent> <buffer> f /^f<cr>
-        echom "<enter> to edit, <s> to edit in Vert-Split, <b> to edit in Horz-Split"
+        echom "<enter> to select"
     " Display Part
         setlocal cursorline
         call s:PutLineSet(1)
@@ -106,14 +106,15 @@ function! s:MyVimBuffers(...)
         let l:templ = []
 
 	for key in l:list
-          let l:sz = s:DirFileName(key)
           let l:type=l:forcetype
-          call add(l:templ, l:type . " " . l:sz)
+          "call add(l:templ, l:type . " " . key)
+          call s:PutLine(l:type . " " . key)
 	endfor
 
-	for key in sort(l:templ)
-          call s:PutLine(key)
-	endfor
+	"for key in sort(l:templ)
+        "  call s:PutLine(key)
+	"endfor
+
         set nowrap
 endfunc
 function! s:MyDir(...)
@@ -250,7 +251,7 @@ endfunction
 
 function! g:MyBufferAction()
           if (getline(".") != "Vim Buffers")
-              let l:ret = split(getline(".")," ")[1]
+              let l:ret = split(getline(".")," ")[-1]
               exe "q"
               execute "b " . l:ret
           endif

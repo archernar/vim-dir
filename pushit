@@ -7,8 +7,8 @@ rm $Tmp  >/dev/null 2>&1
 
 
 
-# cp plugin/dir.vim   /home/mestes/.vim/bundle/vim-dir/plugin/dir.vim
-# exit 0
+#cp plugin/dir.vim   /home/mestes/.vim/bundle/vim-dir/plugin/dir.vim
+#exit 0
 
 
 
