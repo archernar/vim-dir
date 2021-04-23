@@ -249,7 +249,7 @@ function! s:MyDirJSnips(...)
 endfunction
 
 function! g:MyBufferAction()
-          exe s:DirEditWindow+1 . "wincmd w"
+          exe "q"
           execute "b " . "1"
 endfunction
 
