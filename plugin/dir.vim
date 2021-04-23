@@ -249,10 +249,11 @@ function! s:MyDirJSnips(...)
 endfunction
 
 function! g:MyBufferAction()
-          exe "q"
-          let l:ret = split(getline(".")," ")[1]
-          echom l:ret
-          "execute "b " . "1"
+          if (getline(".") != "Vim Buffers")
+              let l:ret = split(getline(".")," ")[1]
+              exe "q"
+              execute "b " . l:ret
+          endif
 endfunction
 
 function! g:MyDirAction(...)
