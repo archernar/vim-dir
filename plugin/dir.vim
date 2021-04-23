@@ -18,6 +18,7 @@ command! J             :call s:MyDirJSnips(0)
 command! JN            :call s:NewSnip()
 command! JSNIPS        :call s:MyDirJSnips(0)
 command! CLASSES       :call s:MyDirClasses(0)
+command! DIR           :call s:MyVimBuffers(1)
 command! DIR           :call s:MyDirPwd(1)
 command! DIRC          :call s:MyDirPwd(0)
 command! DDIR          :call s:MyDirPwd(0)
@@ -74,11 +75,8 @@ function! s:NewSnip()
     execute "e " . l:dir . l:name
 endfunction
 
-function! s:MyDir(...)
+function! s:MyVimBuffers(...)
     call s:PutLineSet(0)
-    " Load Directory Part
-        let l:forcetype = "f"
-        let l:list = split(glob(a:1),'\n')
     " Load Buffer Part
         let l:list = []
         let l:forcetype = "b"
@@ -95,6 +93,34 @@ function! s:MyDir(...)
                     endif
                     let l:c += 1
                 endwhile 
+    " Create Window/Buffer Part
+        call s:NewWindow("Left", &columns/4, "<Enter> :call g:MyDirAction('e')","s :call g:MyDirAction('vnew')", "b :call g:MyDirAction('split')")
+        let s:DirWindow = winnr()
+        nnoremap <silent> <buffer> f /^f<cr>
+        echom "<enter> to edit, <s> to edit in Vert-Split, <b> to edit in Horz-Split"
+    " Display Part
+        setlocal cursorline
+        call s:PutLineSet(1)
+
+        call s:PutLine("Vim Buffers")
+        let l:templ = []
+
+	for key in l:list
+          let l:sz = s:DirFileName(key)
+          let l:type=l:forcetype
+          call add(l:templ, l:type . " " . l:sz)
+	endfor
+
+	for key in sort(l:templ)
+          call s:PutLine(key)
+	endfor
+        set nowrap
+endfunc
+function! s:MyDir(...)
+    call s:PutLineSet(0)
+    " Load Directory Part
+        let l:forcetype = "f"
+        let l:list = split(glob(a:1),'\n')
     " Create Window/Buffer Part
         call s:NewWindow("Left", &columns/4, "<Enter> :call g:MyDirAction('e')","s :call g:MyDirAction('vnew')", "b :call g:MyDirAction('split')")
         let s:DirWindow = winnr()
