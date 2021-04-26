@@ -75,6 +75,10 @@ function! s:NewSnip()
     execute "e " . l:dir . l:name
 endfunction
 
+function! g:VIMBUFFERS(...)
+    call s:MyVimBuffers(a:1)
+endfunction
+
 function! s:MyVimBuffers(...)
     call s:PutLineSet(0)
     " Load Buffer Part
