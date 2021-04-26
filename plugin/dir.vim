@@ -241,6 +241,13 @@ function! s:MyDirClasses(...)
     call s:DirSetSpecific($HOME . "/classes") 
     call s:MyDir($HOME . "/classes/*.class")
 endfunction
+
+
+function! g:JAVASNIPS(...)
+    call s:MyDirJSnips(a:1)
+endfunction
+
+
 function! s:MyDirJSnips(...)
     let  s:DirCloseWindow = a:1
     let  s:DirEditWindow = winnr()
