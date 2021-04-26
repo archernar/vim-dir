@@ -216,6 +216,11 @@ function! s:MyDirSelect(...)
     call s:DirSetSpecific(a:1) 
     call s:MyDir(a:1 . s:DirMask)
 endfunction
+
+function! g:DIRPWD(...)
+    call s:MyDirPwd(a:1)
+endfunction
+
 function! s:MyDirPwd(...)
     let s:DirCloseWindow = a:1
     let s:DirEditWindow = winnr()
