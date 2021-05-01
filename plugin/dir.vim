@@ -15,6 +15,7 @@ command! CODE          :call s:MyDirCode(0)
 command! SNIPS         :call s:MyDirSnips(0)
 command! DIRE          :call s:MyDirSelect($VIMSELECTEDDIR,0)
 command! J             :call s:MyDirJSnips(0)
+command! A             :call s:MyDirAllSnips(0)
 command! JN            :call s:NewSnip()
 command! JSNIPS        :call s:MyDirJSnips(0)
 command! CLASSES       :call s:MyDirClasses(0)
@@ -263,6 +264,17 @@ function! s:MyDirJSnips(...)
     let  l:dir="/.vim/bundle/vim-progsnips/plugin" 
     call s:DirSetSpecific($HOME . l:dir) 
     call s:MyDir($HOME . l:dir . "/J*.txt")
+endfunction
+
+function! g:ALLSNIPS(...)
+    call s:MyDirAllSnips(a:1)
+endfunction
+function! s:MyDirAllSnips(...)
+    let  s:DirCloseWindow = a:1
+    let  s:DirEditWindow = winnr()
+    let  l:dir="/.vim/bundle/vim-progsnips/plugin" 
+    call s:DirSetSpecific($HOME . l:dir) 
+    call s:MyDir($HOME . l:dir . "/*.txt")
 endfunction
 
 function! g:MyBufferAction()
