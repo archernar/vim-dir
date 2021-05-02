@@ -235,8 +235,8 @@ endfunction
 function! s:MyDirCode(...)
     let  s:DirCloseWindow = a:1
     let  s:DirEditWindow = winnr()
-    call s:DirSetSpecific($HOME . "/CODE") 
-    call s:MyDir($HOME . "/CODE" . s:DirMask)
+    call s:DirSetSpecific("/etc/air/CC") 
+    call s:MyDir("/etc/air/CC" . s:DirMask)
 endfunction
 function! s:MyDirSnips(...)
     let  s:DirCloseWindow = a:1
