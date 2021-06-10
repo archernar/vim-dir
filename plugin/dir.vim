@@ -99,7 +99,7 @@ function! s:MyVimBuffers(...)
                     let l:c += 1
                 endwhile 
     " Create Window/Buffer Part
-        call s:NewWindow("Left", &columns/4, "<Enter> :call g:MyBufferAction()","s :call g:MyBufferAction()", "b :call g:MyBufferAction()")
+        call s:NewWindow("Left", &columns/3, "<Enter> :call g:MyBufferAction()","s :call g:MyBufferAction()", "b :call g:MyBufferAction()")
         let s:DirWindow = winnr()
         nnoremap <silent> <buffer> f /^f<cr>
         echom "<enter> to select"
