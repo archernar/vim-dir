@@ -254,7 +254,7 @@ endfunction
 
 
 function! g:JAVASNIPS(...)
-    call s:MyDirJSnips(a:1)
+    call s:MyDirAllSnips(a:1)
 endfunction
 
 
