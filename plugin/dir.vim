@@ -17,6 +17,7 @@ command! DIRE          :call s:MyDirSelect($VIMSELECTEDDIR,0)
 command! J             :call s:MyDirJSnips(0)
 command! A             :call s:MyDirAllSnips(0)
 command! JN            :call s:NewSnip()
+command! FRESH         :call g:FreshSnip()
 command! JSNIPS        :call s:MyDirJSnips(0)
 command! CLASSES       :call s:MyDirClasses(0)
 command! B             :call s:MyVimBuffers(1)
@@ -66,6 +67,17 @@ endfunction
 function! s:PutLine(...)
     call setline(s:PutLineRow, a:1)
     let s:PutLineRow = s:PutLineRow + 1
+endfunction
+
+function! g:FreshSnip()
+    let l:dir = "/etc/air/scm/vim-progsnips/plugin"
+    if (isdirectory(l:dir))
+        let l:name = input('Enter snip file name: ')
+        let l:name = toupper(l:name) . ".txt"
+        execute "e " . l:dir . "/" .l:name
+    else
+        echom l:dir . " directory does not exist"
+    endif
 endfunction
 
 function! s:NewSnip()
@@ -131,6 +143,14 @@ function! s:MyDir(...)
         call s:NewWindow("Left", &columns/4, "<Enter> :call g:MyDirAction('e')","s :call g:MyDirAction('vnew')", "b :call g:MyDirAction('split')")
         let s:DirWindow = winnr()
         nnoremap <silent> <buffer> f /^f<cr>
+        nnoremap <silent> <buffer> a /^f A<cr>
+        nnoremap <silent> <buffer> A /^f A<cr>
+        nnoremap <silent> <buffer> j /^f J<cr>
+        nnoremap <silent> <buffer> J /^f J<cr>
+        nnoremap <silent> <buffer> k /^f K<cr>
+        nnoremap <silent> <buffer> K /^f K<cr>
+        nnoremap <silent> <buffer> v /^f V<cr>
+        nnoremap <silent> <buffer> V /^f V<cr>
         echom "<enter> to edit, <s> to edit in Vert-Split, <b> to edit in Horz-Split"
     " Display Part
         setlocal cursorline
