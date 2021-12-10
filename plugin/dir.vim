@@ -142,6 +142,8 @@ function! s:MyDir(...)
     " Create Window/Buffer Part
         call s:NewWindow("Left", &columns/4, "<Enter> :call g:MyDirAction('e')","s :call g:MyDirAction('vnew')", "b :call g:MyDirAction('split')")
         let s:DirWindow = winnr()
+        nnoremap <silent> <buffer> w <C-W>w
+        nnoremap <silent> <buffer> W <C-W>w
         nnoremap <silent> <buffer> f /^f<cr>
         nnoremap <silent> <buffer> a /^f A<cr>
         nnoremap <silent> <buffer> A /^f A<cr>
