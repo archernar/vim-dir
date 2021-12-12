@@ -19,6 +19,9 @@ command! A             :call s:MyDirAllSnips(0)
 command! JN            :call s:NewSnip()
 command! FRESH         :call g:FreshSnip()
 command! FRESHTHIS     :call g:BuffertoSnip()
+command! QRS           :call g:CourseSnip()
+command! COURSE        :call g:CourseSnip()
+
 command! JSNIPS        :call s:MyDirJSnips(0)
 command! CLASSES       :call s:MyDirClasses(0)
 command! B             :call s:MyVimBuffers(1)
@@ -70,12 +73,23 @@ function! s:PutLine(...)
     let s:PutLineRow = s:PutLineRow + 1
 endfunction
 
+function! g:CourseSnip()
+    let l:dir = "/etc/air/scm/vim-progsnips/plugin"
+    let l:fname=expand('%:r')
+    if (isdirectory(l:dir))
+        let l:name = "QRS"
+        let l:name = toupper(l:name) . "-" . toupper(l:fname)  . ".txt"
+        execute "w " . l:dir . "/" .l:name
+    else
+        echom l:dir . " directory does not exist"
+    endif
+endfunction
 function! g:BuffertoSnip()
     let l:dir = "/etc/air/scm/vim-progsnips/plugin"
     let l:fname=expand('%:r')
     if (isdirectory(l:dir))
         let l:name = input('Enter snip prefix name: ')
-        let l:name = toupper(l:name) . "-" . l:fname  . ".txt"
+        let l:name = toupper(l:name) . "-" . toupper(l:fname)  . ".txt"
         execute "w " . l:dir . "/" .l:name
     else
         echom l:dir . " directory does not exist"
