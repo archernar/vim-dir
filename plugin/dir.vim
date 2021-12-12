@@ -18,6 +18,7 @@ command! J             :call s:MyDirJSnips(0)
 command! A             :call s:MyDirAllSnips(0)
 command! JN            :call s:NewSnip()
 command! FRESH         :call g:FreshSnip()
+command! FRESHTHIS     :call g:FreshtoSnip()
 command! JSNIPS        :call s:MyDirJSnips(0)
 command! CLASSES       :call s:MyDirClasses(0)
 command! B             :call s:MyVimBuffers(1)
@@ -69,6 +70,17 @@ function! s:PutLine(...)
     let s:PutLineRow = s:PutLineRow + 1
 endfunction
 
+function! g:BuffertoSnip()
+    let l:dir = "/etc/air/scm/vim-progsnips/plugin"
+    let l:fname=expand('%:r')
+    if (isdirectory(l:dir))
+        let l:name = input('Enter snip prefix name: ')
+        let l:name = toupper(l:name) . "-" . l:fname  . ".txt"
+        execute "w " . l:dir . "/" .l:name
+    else
+        echom l:dir . " directory does not exist"
+    endif
+endfunction
 function! g:FreshSnip()
     let l:dir = "/etc/air/scm/vim-progsnips/plugin"
     if (isdirectory(l:dir))
