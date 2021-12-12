@@ -21,6 +21,7 @@ command! FRESH         :call g:FreshSnip()
 command! FRESHTHIS     :call g:BuffertoSnip()
 command! QRS           :call g:CourseSnip()
 command! COURSE        :call g:CourseSnip()
+command! PUSHSNIPS     :! cd /etc/air/scm/vim-progsnips;git add plugin/*.txt;git commit -m "Update";git push -u origin master
 
 command! JSNIPS        :call s:MyDirJSnips(0)
 command! CLASSES       :call s:MyDirClasses(0)
