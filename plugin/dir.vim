@@ -75,12 +75,14 @@ function! s:PutLine(...)
 endfunction
 
 function! g:CourseSnip()
-    let l:dir = "/etc/air/scm/vim-progsnips/plugin"
+    let l:repo = "/etc/air/scm/vim-progsnips"
+    let l:dir = l:repo . "/plugin"
     let l:fname=expand('%:r')
     if (isdirectory(l:dir))
         let l:name = "QRS"
         let l:name = toupper(l:name) . "-" . toupper(l:fname)  . ".txt"
         execute "w " . l:dir . "/" .l:name
+        execute "cd " . l:repo . ";git add plugin/*.txt;git commit -m 'Update';git push -u origin master"
     else
         echom l:dir . " directory does not exist"
     endif
