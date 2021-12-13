@@ -82,7 +82,9 @@ function! g:CourseSnip()
         let l:name = "QRS"
         let l:name = toupper(l:name) . "-" . toupper(l:fname)  . ".txt"
         execute "w " . l:dir . "/" .l:name
-        execute "cd " . l:repo . ";git add plugin/*.txt;git commit -m 'Update';git push -u origin master"
+        let l:cmd = "!cd " . l:repo . ";git add plugin/*.txt;git commit -m 'Update';git push -u origin master"
+        execute l:cmd
+       " execute "cd " . l:repo . ";git add plugin/*.txt;git commit -m 'Update';git push -u origin master"
     else
         echom l:dir . " directory does not exist"
     endif
