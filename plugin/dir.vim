@@ -43,6 +43,12 @@ function! s:DirSetMask(...)
     let s:DirMask = a:1
     return  s:DirMask
 endfunction
+function! s:DirFileNameExtension(...)
+    return split(a:1,"[.]")[-1]
+endfunction
+function! s:FileNameMiddlePart(...)
+    return split(a:1,"[.]")[1]
+endfunction
 function! s:DirFileName(...)
     return  join(split(a:1,"/")[-1:-1])
 endfunction
@@ -175,6 +181,10 @@ function! s:MyDir(...)
     " Load Directory Part
         let l:forcetype = "f"
         let l:list = split(glob(a:1),'\n')
+        if (a:0 == 2)
+            let l:list = split(glob(a:1),'\n') + split(glob(a:2),'\n')
+        endif
+
     " Create Window/Buffer Part
         call s:NewWindow("Left", &columns/4, "<Enter> :call g:MyDirAction('e')","n :call g:MyDirAction('n')", "b :call g:MyDirAction('split')")
         let s:DirWindow = winnr()
@@ -332,7 +342,7 @@ function! s:MyDirAllSnips(...)
     let  s:DirEditWindow = winnr()
     let  l:dir="/.vim/bundle/vim-progsnips/plugin" 
     call s:DirSetSpecific($HOME . l:dir) 
-    call s:MyDir($HOME . l:dir . "/*.txt")
+    call s:MyDir($HOME . l:dir . "/*.txt", $HOME . l:dir . "/*.vim")
 endfunction
 
 function! g:MyBufferAction()
@@ -367,9 +377,10 @@ function! g:MyDirAction(...)
                                 normal! k
                      endif
                      if (a:1 == 'e')
-                                if (l:sz == "ACTION-JAVA.txt")
+                                " if (l:sz == "ACTION-JAVA.txt")
+                                if (s:DirFileNameExtension(l:sz) == "vim")
                                     exe s:DirEditWindow+1 . "wincmd w"
-                                    call g:Javavar()
+                                    exe  "call g:" . s:FileNameMiddlePart(l:sz) . "()"
                                     normal! k
                                     exe s:DirEditWindow . "wincmd w"
                                 else
