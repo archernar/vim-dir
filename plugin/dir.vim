@@ -365,7 +365,7 @@ function! g:MyDirAction(...)
              endif
              let l:fs = s:DirSet . "/" . l:sz
              if ( isdirectory(s:DirSet . "/" . l:sz) == 0 )
-                 echom l:fs . "   "  .  filereadable(l:fs)
+                 " echom l:fs . "   "  .  filereadable(l:fs)
                  if (filereadable(l:fs))
                      if (a:1 == 'n')
                                 "silent execute "q"
@@ -380,6 +380,7 @@ function! g:MyDirAction(...)
                                 " if (l:sz == "ACTION-JAVA.txt")
                                 if (s:DirFileNameExtension(l:sz) == "vim")
                                     exe s:DirEditWindow+1 . "wincmd w"
+                                    " echom  "THECALL: call g:" . s:FileNameMiddlePart(l:sz) . "()"
                                     exe  "call g:" . s:FileNameMiddlePart(l:sz) . "()"
                                     normal! k
                                     exe s:DirEditWindow . "wincmd w"
