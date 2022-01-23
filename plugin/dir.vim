@@ -75,11 +75,16 @@ function! s:PutLine(...)
 endfunction
 
 function! g:CourseSnip()
+    let l:tag = "QRS"
     let l:repo = "/etc/air/scm/vim-progsnips"
     let l:dir = l:repo . "/plugin"
     let l:fname=expand('%:r')
+    call g:Strreplace(l:fname,l:tag . "-","")
+    call g:Strreplace(l:fname,l:tag . "-","")
+    call g:Strreplace(l:fname,l:tag . "-","")
+
     if (isdirectory(l:dir))
-        let l:name = "QRS"
+        let l:name = l:tag
         let l:name = toupper(l:name) . "-" . toupper(l:fname)  . ".txt"
         execute "w! " . l:dir . "/" .l:name
         let l:cmd = "!cd " . l:repo . ";git add plugin/*.txt;git commit -m 'Update';git push -u origin master"
@@ -171,7 +176,7 @@ function! s:MyDir(...)
         let l:forcetype = "f"
         let l:list = split(glob(a:1),'\n')
     " Create Window/Buffer Part
-        call s:NewWindow("Left", &columns/4, "<Enter> :call g:MyDirAction('e')","s :call g:MyDirAction('vnew')", "b :call g:MyDirAction('split')")
+        call s:NewWindow("Left", &columns/4, "<Enter> :call g:MyDirAction('e')","n :call g:MyDirAction('n')", "b :call g:MyDirAction('split')")
         let s:DirWindow = winnr()
         nnoremap <silent> <buffer> w <C-W>w
         nnoremap <silent> <buffer> W <C-W>w
@@ -184,7 +189,7 @@ function! s:MyDir(...)
         nnoremap <silent> <buffer> K /^f K<cr>
         nnoremap <silent> <buffer> v /^f V<cr>
         nnoremap <silent> <buffer> V /^f V<cr>
-        echom "<enter> to edit, <s> to edit in Vert-Split, <b> to edit in Horz-Split"
+        echom "<enter> to read into current buffer, <n> to edit in new buffer"
     " Display Part
         setlocal cursorline
         call s:PutLineSet(1)
@@ -352,13 +357,30 @@ function! g:MyDirAction(...)
              if ( isdirectory(s:DirSet . "/" . l:sz) == 0 )
                  echom l:fs . "   "  .  filereadable(l:fs)
                  if (filereadable(l:fs))
-
-                            "silent execute "q"
-                            "silent execute a:1 . " " . l:fs
-                            exe s:DirEditWindow+1 . "wincmd w"
-                            execute "read " . l:fs
-                            normal! k
-                            exe s:DirEditWindow . "wincmd w"
+                     if (a:1 == 'n')
+                                "silent execute "q"
+                                "silent execute a:1 . " " . l:fs
+                                "   exe s:DirEditWindow+1 . "wincmd w"
+                                silent execute "q"
+                                execute "enew"
+                                execute "r " . l:fs
+                                normal! k
+                     endif
+                     if (a:1 == 'e')
+                                if (l:sz == "ACTION-JAVA.txt")
+                                    exe s:DirEditWindow+1 . "wincmd w"
+                                    call g:Javavar()
+                                    normal! k
+                                    exe s:DirEditWindow . "wincmd w"
+                                else
+                                    "silent execute "q"
+                                    "silent execute a:1 . " " . l:fs
+                                    exe s:DirEditWindow+1 . "wincmd w"
+                                    execute "r " . l:fs
+                                    normal! k
+                                    exe s:DirEditWindow . "wincmd w"
+                                endif 
+                     endif 
 if (0 > 1) 
 
                              if (s:DirCloseWindow == 1)
