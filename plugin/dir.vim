@@ -390,7 +390,7 @@ function! g:MyDirAction(...)
                                     exe  "call g:" . s:FileNameMiddlePart(l:sz) . "()"
                                     normal! k
                                     exe s:DirEditWindow . "wincmd w"
-                                    exe "q"
+                                "    exe "q"
                                 else
                                     "silent execute "q"
                                     "silent execute a:1 . " " . l:fs
