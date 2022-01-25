@@ -348,7 +348,7 @@ function! s:MyDirAllSnips(...)
     let  s:DirEditWindow = winnr()
     let  l:dir="/.vim/bundle/vim-progsnips/plugin" 
     call s:DirSetSpecific($HOME . l:dir) 
-    call s:MyDir($HOME . l:dir . "/*.txt", $HOME . l:dir . "/*.vim")
+    call s:MyDir($HOME . l:dir . "/*.txt", $HOME . l:dir . "/*.vim", "~/snips/*.vim")
 endfunction
 
 function! g:MyBufferAction()
@@ -390,6 +390,7 @@ function! g:MyDirAction(...)
                                     exe  "call g:" . s:FileNameMiddlePart(l:sz) . "()"
                                     normal! k
                                     exe s:DirEditWindow . "wincmd w"
+                                    exe "q"
                                 else
                                     "silent execute "q"
                                     "silent execute a:1 . " " . l:fs
