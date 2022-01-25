@@ -184,6 +184,12 @@ function! s:MyDir(...)
         if (a:0 == 2)
             let l:list = split(glob(a:1),'\n') + split(glob(a:2),'\n')
         endif
+        if (a:0 == 3)
+            let l:list = split(glob(a:1),'\n') + split(glob(a:2),'\n') + split(glob(a:3),'\n')
+        endif
+        if (a:0 == 4)
+            let l:list = split(glob(a:1),'\n') + split(glob(a:2),'\n') + split(glob(a:3),'\n') + split(glob(a:4),'\n')
+        endif
 
     " Create Window/Buffer Part
         call s:NewWindow("Left", &columns/4, "<Enter> :call g:MyDirAction('e')","n :call g:MyDirAction('n')", "b :call g:MyDirAction('split')")
