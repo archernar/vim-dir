@@ -181,22 +181,31 @@ function! s:MyVimBuffers(...)
         set nowrap
 endfunc
 function! s:MyDir(...)
-    call s:PutLineSet(0)
+        let l:CommandType = a:1
+        call s:PutLineSet(0)
     " Load Directory Part
         let l:forcetype = "f"
-        let l:list = split(glob(a:1),'\n')
         if (a:0 == 2)
-            let l:list = split(glob(a:1),'\n') + split(glob(a:2),'\n')
+            let l:list = split(glob(a:2),'\n')
         endif
         if (a:0 == 3)
-            let l:list = split(glob(a:1),'\n') + split(glob(a:2),'\n') + split(glob(a:3),'\n')
+            let l:list = split(glob(a:2),'\n') + split(glob(a:3),'\n')
         endif
         if (a:0 == 4)
-            let l:list = split(glob(a:1),'\n') + split(glob(a:2),'\n') + split(glob(a:3),'\n') + split(glob(a:4),'\n')
+            let l:list = split(glob(a:2),'\n') + split(glob(a:3),'\n') + split(glob(a:4),'\n')
+        endif
+        if (a:0 == 5)
+            let l:list = split(glob(a:2),'\n') + split(glob(a:3),'\n') + split(glob(a:4),'\n') + split(glob(a:5),'\n')
         endif
 
     " Create Window/Buffer Part
-        call s:NewWindow("Left", &columns/4, "<Enter> :call g:MyDirAction('e')","n :call g:MyDirAction('n')", "b :call g:MyDirAction('split')")
+        if (l:CommandType == 0)
+            call s:NewWindow("Left", &columns/4, "<Enter> :call g:MyDirAction('e')","n :call g:MyDirAction('n')", "b :call g:MyDirAction('split')")
+        endif
+        if (l:CommandType == 1)
+            call s:NewWindow("Left", &columns/4, "<Enter> :call g:MyDirAction('t')","n :call g:MyDirAction('t')", "b :call g:MyDirAction('t')")
+        endif
+
         let s:DirWindow = winnr()
         nnoremap <silent> <buffer> w <C-W>w
         nnoremap <silent> <buffer> W <C-W>w
@@ -293,18 +302,27 @@ function! s:MyDirSelect(...)
     let  s:DirCloseWindow = a:2
     let  s:DirEditWindow = winnr()
     call s:DirSetSpecific(a:1) 
-    call s:MyDir(a:1 . s:DirMask)
+    call s:MyDir(0, a:1 . s:DirMask)
+endfunction
+
+function! g:DIRPWD1(...)
+    call s:MyDirPwd1(a:1)
+endfunction
+function! s:MyDirPwd1(...)
+    let s:DirCloseWindow = a:1
+    let s:DirEditWindow = winnr()
+    call s:DirSetPwd() 
+    call s:MyDir(1, "." . s:DirMask)
 endfunction
 
 function! g:DIRPWD(...)
     call s:MyDirPwd(a:1)
 endfunction
-
 function! s:MyDirPwd(...)
     let s:DirCloseWindow = a:1
     let s:DirEditWindow = winnr()
     call s:DirSetPwd() 
-    call s:MyDir("." . s:DirMask)
+    call s:MyDir(0, "." . s:DirMask)
 endfunction
 function! s:DirSetSpecific(...)
     let s:DirSet = a:1
@@ -314,20 +332,20 @@ function! s:MyDirCode(...)
     let  s:DirCloseWindow = a:1
     let  s:DirEditWindow = winnr()
     call s:DirSetSpecific("/etc/air/CC") 
-    call s:MyDir("/etc/air/CC" . s:DirMask)
+    call s:MyDir(0, "/etc/air/CC" . s:DirMask)
 endfunction
 function! s:MyDirSnips(...)
     let  s:DirCloseWindow = a:1
     let  s:DirEditWindow = winnr()
     let  l:dir="/.vim/bundle/vim-progsnips/plugin" 
     call s:DirSetSpecific($HOME . l:dir) 
-    call s:MyDir($HOME . l:dir . s:DirMask)
+    call s:MyDir(0, $HOME . l:dir . s:DirMask)
 endfunction
 function! s:MyDirClasses(...)
     let  s:DirCloseWindow = a:1
     let  s:DirEditWindow = winnr()
     call s:DirSetSpecific($HOME . "/classes") 
-    call s:MyDir($HOME . "/classes/*.class")
+    call s:MyDir(0, $HOME . "/classes/*.class")
 endfunction
 
 
@@ -344,7 +362,7 @@ function! s:MyDirProjectSnips(...)
     let  s:DirEditWindow = winnr()
     let  l:dir="/projects" 
     call s:DirSetSpecific($HOME . l:dir) 
-    call s:MyDir($HOME . l:dir . "/*.project")
+    call s:MyDir(1, $HOME . l:dir . "/*.project")
 endfunction
 
 function! s:MyDirJSnips(...)
@@ -352,7 +370,7 @@ function! s:MyDirJSnips(...)
     let  s:DirEditWindow = winnr()
     let  l:dir="/.vim/bundle/vim-progsnips/plugin" 
     call s:DirSetSpecific($HOME . l:dir) 
-    call s:MyDir($HOME . l:dir . "/J*.txt")
+    call s:MyDir(0, $HOME . l:dir . "/J*.txt")
 endfunction
 
 function! g:ALLSNIPS(...)
@@ -363,7 +381,7 @@ function! s:MyDirAllSnips(...)
     let  s:DirEditWindow = winnr()
     let  l:dir="/.vim/bundle/vim-progsnips/plugin" 
     call s:DirSetSpecific($HOME . l:dir) 
-    call s:MyDir($HOME . l:dir . "/*.txt", $HOME . l:dir . "/*.vim", $HOME . "/projects/*.project")
+    call s:MyDir(0, $HOME . l:dir . "/*.txt", $HOME . l:dir . "/*.vim", $HOME . "/projects/*.project")
 endfunction
 
 function! g:MyBufferAction()
@@ -381,7 +399,7 @@ function! g:MyDirAction(...)
              if (l:sz == "..")
                  silent execute "q"
                  let l:sz = s:DirSetUp()
-                 call s:MyDir(s:DirSet . s:DirMask)
+                 call s:MyDir(0, s:DirSet . s:DirMask)
                  return
              endif
              let l:fs = s:DirSet . "/" . l:sz
@@ -412,7 +430,7 @@ function! g:MyDirAction(...)
                                         exe  "cd /etc/air/scm/" . s:FileNameMiddlePart(l:sz) 
                                         exe  "pwd"
                                         silent execute "q"
-                                        call DIRPWD(1)
+                                        call DIRPWD(0)
                                     else
                                         if (s:DirFileNameExtension(l:sz) == "txt")
                                                 exe s:DirEditWindow+1 . "wincmd w"
@@ -424,6 +442,34 @@ function! g:MyDirAction(...)
                                                 "silent execute a:1 . " " . l:fs
                                                 exe s:DirEditWindow+1 . "wincmd w"
                                                 execute "r " . l:fs
+                                                normal! k
+                                                exe s:DirEditWindow . "wincmd w"
+                                        endif 
+                                    endif 
+                                endif 
+
+                     endif 
+                     if (a:1 == 't')
+                                if (s:DirFileNameExtension(l:sz) == "vim")
+                                    exe s:DirEditWindow+1 . "wincmd w"
+                                    exe  "call g:" . s:FileNameMiddlePart(l:sz) . "()"
+                                    normal! k
+                                    exe s:DirEditWindow . "wincmd w"
+                                else
+                                    if (s:FileNameExtension(l:sz) == "project")
+                                        exe  "cd /etc/air/scm/" . s:FileNameMiddlePart(l:sz) 
+                                        exe  "pwd"
+                                        silent execute "q"
+                                        call DIRPWD1(1)
+                                    else
+                                        if (s:DirFileNameExtension(l:sz) == "txt")
+                                                exe s:DirEditWindow+1 . "wincmd w"
+                                                execute "e " . l:fs
+                                                normal! k
+                                                exe s:DirEditWindow . "wincmd w"
+                                        else
+                                                exe s:DirEditWindow+1 . "wincmd w"
+                                                execute "e " . l:fs
                                                 normal! k
                                                 exe s:DirEditWindow . "wincmd w"
                                         endif 
@@ -449,7 +495,7 @@ endif
              else
                  silent execute "q"
                  call s:DirSetInto(l:sz)
-                 call s:MyDir(s:DirSet . s:DirMask)
+                 call s:MyDir(0, s:DirSet . s:DirMask)
              endif
          endif
      endif
