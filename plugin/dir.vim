@@ -361,7 +361,7 @@ endfunction
 
 function! g:MyDirAction(...)
      let l:sz   = s:DirToken(getline("."))
-                                let l:ninnnn = input("[" . l:sz . "]")
+     "                          let l:ninnnn = input("[" . l:sz . "]")
      if (line(".") > 1) 
          if (strlen(l:sz) > 0)
              if (l:sz == "..")
@@ -395,10 +395,11 @@ function! g:MyDirAction(...)
                                     exe s:DirEditWindow . "wincmd w"
                                 "    exe "q"
                                 endif
+                                let l:ninnnn = input("DEBUG1>> [" . "STOP" . "][" . s:FileNameMiddlePart(l:sz) . "]" 
                                 if (s:DirFileNameExtension(l:sz) == "project")
                                  "   echom  "cd /etc/air/scm/" . s:FileNameMiddlePart(l:sz) 
 
-                                 let l:ninnnn = input("DEBUG>> [" . "STOP" . "][" . s:FileNameMiddlePart(l:sz) . "]" 
+                                 let l:ninnnn = input("DEBUG2>> [" . "STOP" . "][" . s:FileNameMiddlePart(l:sz) . "]" 
 
                                     exe  "cd /etc/air/scm/" . s:FileNameMiddlePart(l:sz) 
                                 endif
