@@ -392,6 +392,7 @@ function! g:MyDirAction(...)
                                     exe s:DirEditWindow . "wincmd w"
                                 "    exe "q"
                                 else
+                                    echom s:DirFileNameExtension(l:sz)
                                     if (s:DirFileNameExtension(l:sz) == "project")
                                         echom  "cd /etc/air/scm/" . s:FileNameMiddlePart(l:sz) 
                                         exe  "cd /etc/air/scm/" . s:FileNameMiddlePart(l:sz) 
