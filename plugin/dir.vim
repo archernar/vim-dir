@@ -387,6 +387,7 @@ function! g:MyDirAction(...)
                                 " let l:ninnnn = input("[" . l:sz . "]")
 
                                 " if (l:sz == "ACTION-JAVA.txt")
+                                let l:ninnnn = input("DEBUG0>> [" . "STOP" . "][" . s:FileNameMiddlePart(l:sz) . "]" 
                                 if (s:DirFileNameExtension(l:sz) == "vim")
                                     exe s:DirEditWindow+1 . "wincmd w"
                                     " echom  "THECALL: call g:" . s:FileNameMiddlePart(l:sz) . "()"
@@ -395,6 +396,7 @@ function! g:MyDirAction(...)
                                     exe s:DirEditWindow . "wincmd w"
                                 "    exe "q"
                                 endif
+
                                 let l:ninnnn = input("DEBUG1>> [" . "STOP" . "][" . s:FileNameMiddlePart(l:sz) . "]" 
                                 if (s:DirFileNameExtension(l:sz) == "project")
                                  "   echom  "cd /etc/air/scm/" . s:FileNameMiddlePart(l:sz) 
