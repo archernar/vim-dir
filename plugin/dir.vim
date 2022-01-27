@@ -396,9 +396,9 @@ function! g:MyDirAction(...)
                                 "    exe "q"
                                 endif
                                 if (s:DirFileNameExtension(l:sz) == "project")
-                                    echom  "cd /etc/air/scm/" . s:FileNameMiddlePart(l:sz) 
+                                 "   echom  "cd /etc/air/scm/" . s:FileNameMiddlePart(l:sz) 
 
-                                 let l:ninnnn = input("[" . "STOP" . "][" . s:FileNameMiddlePart(l:sz) . "]" 
+                                 let l:ninnnn = input("DEBUG>> [" . "STOP" . "][" . s:FileNameMiddlePart(l:sz) . "]" 
 
                                     exe  "cd /etc/air/scm/" . s:FileNameMiddlePart(l:sz) 
                                 endif
