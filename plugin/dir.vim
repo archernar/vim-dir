@@ -361,6 +361,7 @@ endfunction
 
 function! g:MyDirAction(...)
      let l:sz   = s:DirToken(getline("."))
+                                let l:ninnnn = input("[" . l:sz . "]")
      if (line(".") > 1) 
          if (strlen(l:sz) > 0)
              if (l:sz == "..")
