@@ -361,7 +361,6 @@ endfunction
 
 function! g:MyDirAction(...)
      let l:sz   = s:DirToken(getline("."))
-                                let l:ninnnn = input(s:DirFileNameExtension(l:sz))
      if (line(".") > 1) 
          if (strlen(l:sz) > 0)
              if (l:sz == "..")
@@ -384,7 +383,7 @@ function! g:MyDirAction(...)
                                 normal! k
                      endif
                      if (a:1 == 'e')
-                                let l:ninnnn = input(s:DirFileNameExtension(l:sz))
+         "                       let l:ninnnn = input(s:DirFileNameExtension(l:sz))
 
                                 " if (l:sz == "ACTION-JAVA.txt")
                                 if (s:DirFileNameExtension(l:sz) == "vim")
