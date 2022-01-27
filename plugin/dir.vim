@@ -406,22 +406,30 @@ function! g:MyDirAction(...)
                                     normal! k
                                     exe s:DirEditWindow . "wincmd w"
                                 "    exe "q"
-                                endif
-
-                                if (s:FileNameExtension(l:sz) == "project")
-                                    " let l:ninnnn = input("DEBUG2>> [" . "STOP" . "][" . s:FileNameMiddlePart(l:sz) . "]")
-                                    exe  "cd /etc/air/scm/" . s:FileNameMiddlePart(l:sz) 
-                                    exe  "pwd"
-                                endif
-
-                                if (s:DirFileNameExtension(l:sz) == "txt")
-                                        "silent execute "q"
-                                        "silent execute a:1 . " " . l:fs
-                                        exe s:DirEditWindow+1 . "wincmd w"
-                                        execute "r " . l:fs
-                                        normal! k
-                                        exe s:DirEditWindow . "wincmd w"
+                                else
+                                    if (s:FileNameExtension(l:sz) == "project")
+                                        " let l:ninnnn = input("DEBUG2>> [" . "STOP" . "][" . s:FileNameMiddlePart(l:sz) . "]")
+                                        exe  "cd /etc/air/scm/" . s:FileNameMiddlePart(l:sz) 
+                                        exe  "pwd"
+                                        silent execute "q"
+                                        call DIRPWD(1)
+                                    else
+                                        if (s:DirFileNameExtension(l:sz) == "txt")
+                                                exe s:DirEditWindow+1 . "wincmd w"
+                                                execute "r " . l:fs
+                                                normal! k
+                                                exe s:DirEditWindow . "wincmd w"
+                                        else
+                                                "silent execute "q"
+                                                "silent execute a:1 . " " . l:fs
+                                                exe s:DirEditWindow+1 . "wincmd w"
+                                                execute "r " . l:fs
+                                                normal! k
+                                                exe s:DirEditWindow . "wincmd w"
+                                        endif 
+                                    endif 
                                 endif 
+
                      endif 
 if (0 > 1) 
 
