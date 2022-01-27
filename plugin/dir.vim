@@ -394,19 +394,18 @@ function! g:MyDirAction(...)
                                     normal! k
                                     exe s:DirEditWindow . "wincmd w"
                                 "    exe "q"
-                                else
-                                    echom s:DirFileNameExtension(l:sz)
-                                    if (s:DirFileNameExtension(l:sz) == "project")
-                                        echom  "cd /etc/air/scm/" . s:FileNameMiddlePart(l:sz) 
-                                        exe  "cd /etc/air/scm/" . s:FileNameMiddlePart(l:sz) 
-                                    else
+                                endif
+                                if (s:DirFileNameExtension(l:sz) == "project")
+                                    echom  "cd /etc/air/scm/" . s:FileNameMiddlePart(l:sz) 
+                                    exe  "cd /etc/air/scm/" . s:FileNameMiddlePart(l:sz) 
+                                endif
+                                if (s:DirFileNameExtension(l:sz) == "txt")
                                         "silent execute "q"
                                         "silent execute a:1 . " " . l:fs
                                         exe s:DirEditWindow+1 . "wincmd w"
                                         execute "r " . l:fs
                                         normal! k
                                         exe s:DirEditWindow . "wincmd w"
-                                    endif 
                                 endif 
                      endif 
 if (0 > 1) 
