@@ -14,6 +14,7 @@ command! VIMDIR        :PluginUpdate vim-dir
 command! CODE          :call s:MyDirCode(0)
 command! SNIPS         :call s:MyDirSnips(0)
 command! DIRE          :call s:MyDirSelect($VIMSELECTEDDIR,0)
+command! PROJ          :call s:MyDirProjectSnips(0)
 command! J             :call s:MyDirJSnips(0)
 command! A             :call s:MyDirAllSnips(0)
 command! JN            :call s:NewSnip()
@@ -42,6 +43,9 @@ let s:DirWindow=0
 function! s:DirSetMask(...)
     let s:DirMask = a:1
     return  s:DirMask
+endfunction
+function! s:FileNameExtension(...)
+    return split(a:1,"[.]")[-1]
 endfunction
 function! s:DirFileNameExtension(...)
     return split(a:1,"[.]")[-1]
@@ -330,7 +334,18 @@ endfunction
 function! g:JAVASNIPS(...)
     call s:MyDirAllSnips(a:1)
 endfunction
+function! g:PROJECTSNIPS(...)
+    call s:MyDirProjectSnips(a:1)
+endfunction
 
+
+function! s:MyDirProjectSnips(...)
+    let  s:DirCloseWindow = a:1
+    let  s:DirEditWindow = winnr()
+    let  l:dir="/projects" 
+    call s:DirSetSpecific($HOME . l:dir) 
+    call s:MyDir($HOME . l:dir . "/*.project")
+endfunction
 
 function! s:MyDirJSnips(...)
     let  s:DirCloseWindow = a:1
@@ -361,7 +376,6 @@ endfunction
 
 function! g:MyDirAction(...)
      let l:sz   = s:DirToken(getline("."))
-     "                          let l:ninnnn = input("[" . l:sz . "]")
      if (line(".") > 1) 
          if (strlen(l:sz) > 0)
              if (l:sz == "..")
@@ -373,7 +387,8 @@ function! g:MyDirAction(...)
              let l:fs = s:DirSet . "/" . l:sz
              if ( isdirectory(s:DirSet . "/" . l:sz) == 0 )
                  " echom l:fs . "   "  .  filereadable(l:fs)
-                 if (filereadable(l:fs))
+                 "if (filereadable(l:fs))
+                 if (1==1)
                      if (a:1 == 'n')
                                 "silent execute "q"
                                 "silent execute a:1 . " " . l:fs
@@ -384,10 +399,6 @@ function! g:MyDirAction(...)
                                 normal! k
                      endif
                      if (a:1 == 'e')
-                                " let l:ninnnn = input("[" . l:sz . "]")
-
-                                " if (l:sz == "ACTION-JAVA.txt")
-                                let l:ninnnn = input("DEBUG0>> [" . "STOP" . "][" . s:FileNameMiddlePart(l:sz) . "]" 
                                 if (s:DirFileNameExtension(l:sz) == "vim")
                                     exe s:DirEditWindow+1 . "wincmd w"
                                     " echom  "THECALL: call g:" . s:FileNameMiddlePart(l:sz) . "()"
@@ -397,14 +408,12 @@ function! g:MyDirAction(...)
                                 "    exe "q"
                                 endif
 
-                                let l:ninnnn = input("DEBUG1>> [" . "STOP" . "][" . s:FileNameMiddlePart(l:sz) . "]" 
-                                if (s:DirFileNameExtension(l:sz) == "project")
-                                 "   echom  "cd /etc/air/scm/" . s:FileNameMiddlePart(l:sz) 
-
-                                 let l:ninnnn = input("DEBUG2>> [" . "STOP" . "][" . s:FileNameMiddlePart(l:sz) . "]" 
-
+                                if (s:FileNameExtension(l:sz) == "project")
+                                    " let l:ninnnn = input("DEBUG2>> [" . "STOP" . "][" . s:FileNameMiddlePart(l:sz) . "]")
                                     exe  "cd /etc/air/scm/" . s:FileNameMiddlePart(l:sz) 
+                                    exe  "pwd"
                                 endif
+
                                 if (s:DirFileNameExtension(l:sz) == "txt")
                                         "silent execute "q"
                                         "silent execute a:1 . " " . l:fs
