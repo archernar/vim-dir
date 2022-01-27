@@ -383,7 +383,7 @@ function! g:MyDirAction(...)
                                 normal! k
                      endif
                      if (a:1 == 'e')
-         "                       let l:ninnnn = input(s:DirFileNameExtension(l:sz))
+                                let l:ninnnn = input("[" . l:sz . "]")
 
                                 " if (l:sz == "ACTION-JAVA.txt")
                                 if (s:DirFileNameExtension(l:sz) == "vim")
