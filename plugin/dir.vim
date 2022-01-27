@@ -383,6 +383,7 @@ function! g:MyDirAction(...)
                                 normal! k
                      endif
                      if (a:1 == 'e')
+                                    echom s:DirFileNameExtension(l:sz)
                                 " if (l:sz == "ACTION-JAVA.txt")
                                 if (s:DirFileNameExtension(l:sz) == "vim")
                                     exe s:DirEditWindow+1 . "wincmd w"
