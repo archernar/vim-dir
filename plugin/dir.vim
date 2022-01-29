@@ -347,7 +347,7 @@ function! s:MyDirPwd(...)
     let s:DirCloseWindow = a:1
     let s:DirEditWindow = winnr()
     call s:DirSetPwd() 
-    call s:MyDir(0, "." . s:DirMask)
+    call s:MyDir(0, "." . s:DirMask, "./.*")
 endfunction
 
 
