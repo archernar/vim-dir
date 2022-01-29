@@ -82,6 +82,13 @@ function! s:FileNameBookEnds(...)
     endif
     return l:nRet
 endfunction
+function! s:FileNameIs(...)
+    let l:nRet = 0
+    if (a:1 == a:2) 
+            let l:nRet = 1
+    endif
+    return l:nRet
+endfunction
 
 
 function! s:DirFileName(...)
@@ -230,8 +237,8 @@ function! s:MyDir(...)
         endif
 
     " Create Window/Buffer Part
-        call s:NewWindow("Left", &columns/4, "<Enter> :call g:MyDirAction('e')","r :call g:MyDirAction('r')")
-        echom "<enter> to edit the files, <r> to read into current buffer"
+        call s:NewWindow("Left", &columns/4, "<Enter> :call g:MyDirAction('e')", "r :call g:MyDirAction('r')", "l :call g:MyDirAction('l')")
+        echom "<enter> to edit the files, <r> to read into current buffer, <l> load session file"
 
         let s:DirWindow = winnr()
         nnoremap <silent> <buffer> w <C-W>w
@@ -443,6 +450,15 @@ function! g:MyDirAction(...)
                                 execute "enew"
                                 execute "r " . l:fs
                                 normal! k
+                     endif
+                     if (a:1 == 'l')
+                                if ( s:FileNameIs(l:sz, ".vim.vimsession") )
+                                    silent execute "q"
+                                    silent execute "bufdo! bd"
+                                    execute "call LoadSession()"
+                                else
+                                        echom "Not a session file"
+                                endif
                      endif
                      if (a:1 == 'r')
                                 exe s:DirEditWindow+1 . "wincmd w"
