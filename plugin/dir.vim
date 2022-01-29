@@ -230,8 +230,8 @@ function! s:MyDir(...)
         endif
 
     " Create Window/Buffer Part
-        call s:NewWindow("Left", &columns/4, "<Enter> :call g:MyDirAction('e')","i :call g:MyDirAction('i')")
-        echom "<enter> to edit the files, <i> to read into current buffer"
+        call s:NewWindow("Left", &columns/4, "<Enter> :call g:MyDirAction('e')","r :call g:MyDirAction('r')")
+        echom "<enter> to edit the files, <r> to read into current buffer"
 
         let s:DirWindow = winnr()
         nnoremap <silent> <buffer> w <C-W>w
@@ -444,7 +444,7 @@ function! g:MyDirAction(...)
                                 execute "r " . l:fs
                                 normal! k
                      endif
-                     if (a:1 == 'i')
+                     if (a:1 == 'r')
                                 exe s:DirEditWindow+1 . "wincmd w"
                                 execute "r " . l:fs
                                 normal! k
@@ -453,11 +453,9 @@ function! g:MyDirAction(...)
                      if (a:1 == 'e')
                                 if (s:FileNameBookEnds(l:sz, "A", "vim") == 1)
                                     exe s:DirEditWindow+1 . "wincmd w"
-                                    " echom  "THECALL: call g:" . s:FileNameMiddlePart(l:sz) . "()"
                                     exe  "call g:" . s:FileNameMiddlePart(l:sz) . "()"
                                     normal! k
                                     exe s:DirEditWindow . "wincmd w"
-                                "    exe "q"
                                 else
                                     if (s:FileNameBookEnds(l:sz, "A", "project") == 1)
                                         " let l:ninnnn = input("DEBUG2>> [" . "STOP" . "][" . s:FileNameMiddlePart(l:sz) . "]")
