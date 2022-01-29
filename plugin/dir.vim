@@ -6,6 +6,12 @@ if exists("g:loaded_plugin_dir") || v:version < 700 || &cp
 endif
 let g:loaded_plugin_dir=1
 
+let s:READFILEACTION = 0
+let s:OPENFILEACTION = 1
+let s:CLOSESPLITAFTERACTION = 0
+let s:OPENSPLITAFTERACTION = 1
+let s:KEEPSPLITOPEN = 0
+
 " *****************************************************************************************************
                 "  Command definitions
                 " *************************************************************************************
@@ -50,9 +56,34 @@ endfunction
 function! s:DirFileNameExtension(...)
     return split(a:1,"[.]")[-1]
 endfunction
+
+function! s:FileNameFirstPart(...)
+    return split(a:1,"[.]")[0]
+endfunction
+function! s:FileNameSecondPart(...)
+    return split(a:1,"[.]")[1]
+endfunction
 function! s:FileNameMiddlePart(...)
     return split(a:1,"[.]")[1]
 endfunction
+function! s:FileNameThirdPart(...)
+    return split(a:1,"[.]")[2]
+endfunction
+function! s:FileNameLastPart(...)
+    return split(a:1,"[.]")[-1]
+endfunction
+
+function! s:FileNameBookEnds(...)
+    let l:nRet = 0
+    if (split(a:1,"[.]")[0] == a:2) 
+        if (split(a:1,"[.]")[-1] == a:3)
+            let l:nRet = 1
+        endif
+    endif
+    return l:nRet
+endfunction
+
+
 function! s:DirFileName(...)
     return  join(split(a:1,"/")[-1:-1])
 endfunction
@@ -199,12 +230,8 @@ function! s:MyDir(...)
         endif
 
     " Create Window/Buffer Part
-        if (l:CommandType == 0)
-            call s:NewWindow("Left", &columns/4, "<Enter> :call g:MyDirAction('e')","n :call g:MyDirAction('n')", "b :call g:MyDirAction('split')")
-        endif
-        if (l:CommandType == 1)
-            call s:NewWindow("Left", &columns/4, "<Enter> :call g:MyDirAction('t')","n :call g:MyDirAction('t')", "b :call g:MyDirAction('t')")
-        endif
+        call s:NewWindow("Left", &columns/4, "<Enter> :call g:MyDirAction('e')","i :call g:MyDirAction('i')")
+        echom "<enter> to edit the files, <i> to read into current buffer"
 
         let s:DirWindow = winnr()
         nnoremap <silent> <buffer> w <C-W>w
@@ -218,7 +245,6 @@ function! s:MyDir(...)
         nnoremap <silent> <buffer> K /^f K<cr>
         nnoremap <silent> <buffer> v /^f V<cr>
         nnoremap <silent> <buffer> V /^f V<cr>
-        echom "<enter> to read into current buffer, <n> to edit in new buffer"
     " Display Part
         setlocal cursorline
         call s:PutLineSet(1)
@@ -305,14 +331,13 @@ function! s:MyDirSelect(...)
     call s:MyDir(0, a:1 . s:DirMask)
 endfunction
 
-function! g:DIRPWD1(...)
-    call s:MyDirPwd1(a:1)
-endfunction
-function! s:MyDirPwd1(...)
+function! g:DIRPWDACTION(...)
+    " a:1 is split close t/f
+    " a:2 is slection action
     let s:DirCloseWindow = a:1
     let s:DirEditWindow = winnr()
     call s:DirSetPwd() 
-    call s:MyDir(1, "." . s:DirMask)
+    call s:MyDir(a:2, "." . s:DirMask)
 endfunction
 
 function! g:DIRPWD(...)
@@ -324,6 +349,9 @@ function! s:MyDirPwd(...)
     call s:DirSetPwd() 
     call s:MyDir(0, "." . s:DirMask)
 endfunction
+
+
+
 function! s:DirSetSpecific(...)
     let s:DirSet = a:1
     return s:DirSet
@@ -416,8 +444,14 @@ function! g:MyDirAction(...)
                                 execute "r " . l:fs
                                 normal! k
                      endif
+                     if (a:1 == 'i')
+                                exe s:DirEditWindow+1 . "wincmd w"
+                                execute "r " . l:fs
+                                normal! k
+                                exe s:DirEditWindow . "wincmd w"
+                     endif
                      if (a:1 == 'e')
-                                if (s:DirFileNameExtension(l:sz) == "vim")
+                                if (s:FileNameBookEnds(l:sz, "A", "vim") == 1)
                                     exe s:DirEditWindow+1 . "wincmd w"
                                     " echom  "THECALL: call g:" . s:FileNameMiddlePart(l:sz) . "()"
                                     exe  "call g:" . s:FileNameMiddlePart(l:sz) . "()"
@@ -425,42 +459,12 @@ function! g:MyDirAction(...)
                                     exe s:DirEditWindow . "wincmd w"
                                 "    exe "q"
                                 else
-                                    if (s:FileNameExtension(l:sz) == "project")
+                                    if (s:FileNameBookEnds(l:sz, "A", "project") == 1)
                                         " let l:ninnnn = input("DEBUG2>> [" . "STOP" . "][" . s:FileNameMiddlePart(l:sz) . "]")
                                         exe  "cd /etc/air/scm/" . s:FileNameMiddlePart(l:sz) 
                                         exe  "pwd"
                                         silent execute "q"
-                                        call DIRPWD(0)
-                                    else
-                                        if (s:DirFileNameExtension(l:sz) == "txt")
-                                                exe s:DirEditWindow+1 . "wincmd w"
-                                                execute "r " . l:fs
-                                                normal! k
-                                                exe s:DirEditWindow . "wincmd w"
-                                        else
-                                                "silent execute "q"
-                                                "silent execute a:1 . " " . l:fs
-                                                exe s:DirEditWindow+1 . "wincmd w"
-                                                execute "r " . l:fs
-                                                normal! k
-                                                exe s:DirEditWindow . "wincmd w"
-                                        endif 
-                                    endif 
-                                endif 
-
-                     endif 
-                     if (a:1 == 't')
-                                if (s:DirFileNameExtension(l:sz) == "vim")
-                                    exe s:DirEditWindow+1 . "wincmd w"
-                                    exe  "call g:" . s:FileNameMiddlePart(l:sz) . "()"
-                                    normal! k
-                                    exe s:DirEditWindow . "wincmd w"
-                                else
-                                    if (s:FileNameExtension(l:sz) == "project")
-                                        exe  "cd /etc/air/scm/" . s:FileNameMiddlePart(l:sz) 
-                                        exe  "pwd"
-                                        silent execute "q"
-                                        call DIRPWD1(1)
+                                        call DIRPWD(s:KEEPSPLITOPEN)
                                     else
                                         if (s:DirFileNameExtension(l:sz) == "txt")
                                                 exe s:DirEditWindow+1 . "wincmd w"
@@ -468,6 +472,8 @@ function! g:MyDirAction(...)
                                                 normal! k
                                                 exe s:DirEditWindow . "wincmd w"
                                         else
+                                                "silent execute "q"
+                                                "silent execute a:1 . " " . l:fs
                                                 exe s:DirEditWindow+1 . "wincmd w"
                                                 execute "e " . l:fs
                                                 normal! k
