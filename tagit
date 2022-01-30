@@ -26,7 +26,7 @@ function trim(s)  { return rtrim(ltrim(s)); }
 }
 ' > $Tmp
 
-egrep    "g:" $Tmp | sort
-egrep -v "g:" $Tmp | sort
+egrep    "g:" $Tmp | sort > functions.txt
+egrep -v "g:" $Tmp | sort >> functions.txt
 
 
