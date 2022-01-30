@@ -16,8 +16,14 @@ rm $Tmp  >/dev/null 2>&1
 ./tagit
 git add functions.txt
 
+echo "# vim-dir" > README.md
+echo "" >> README.md
+cat functions.txt >> README.md
+
+
 git add plugin/dir.vim
 git add pushit
+git add README.md
 git add tagit
 git commit -m "Update"
 git push -u origin master
