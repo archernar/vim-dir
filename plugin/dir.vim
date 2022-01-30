@@ -237,8 +237,8 @@ function! s:MyDir(...)
         endif
 
     " Create Window/Buffer Part
-        call s:NewWindow("Left", &columns/4, "<Enter> :call g:MyDirAction('e')", "r :call g:MyDirAction('r')", "l :call g:MyDirAction('l')")
-        echom "<enter> to edit the files, <r> to read into current buffer, <l> load session file"
+        call s:NewWindow("Left", &columns/4, "<Enter> :call g:MyDirAction('e')", "r :call g:MyDirAction('r')", "l :call g:MyDirAction('l')" , "p :call g:MyDirAction('p')")
+        echom "<enter> to edit the files, <r> to read into current buffer, <l> load session file, <p> open and load project"
 
         let s:DirWindow = winnr()
         nnoremap <silent> <buffer> w <C-W>w
@@ -307,6 +307,12 @@ function! s:NewWindow(...)
         endif
         if ( a:0 > 4)
             execute "nnoremap <silent> <buffer> " . a:5 . "<cr>"
+        endif
+        if ( a:0 > 5)
+            execute "nnoremap <silent> <buffer> " . a:6 . "<cr>"
+        endif
+        if ( a:0 > 6)
+            execute "nnoremap <silent> <buffer> " . a:7 . "<cr>"
         endif
 endfunction
 
@@ -450,6 +456,19 @@ function! g:MyDirAction(...)
                                 execute "enew"
                                 execute "r " . l:fs
                                 normal! k
+                     endif
+                     if (a:1 == 'p')
+                                exe  "cd /etc/air/scm/" . s:FileNameMiddlePart(l:sz) 
+                                exe  "pwd"
+                                silent execute "q"
+                                "call DIRPWD(s:KEEPSPLITOPEN)
+                                let l:sz = "/etc/air/scm/" . s:FileNameMiddlePart(l:sz)  . "/.vim.vimsession"
+                                if (filereadable(l:sz))
+                                   silent execute "bufdo! bd"
+                                   execute "call LoadSession()"
+                                   else
+                                       echom "No session file (.vim.vimsession)"
+                                endif
                      endif
                      if (a:1 == 'l')
                                 if ( s:FileNameIs(l:sz, ".vim.vimsession") )
