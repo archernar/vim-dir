@@ -13,6 +13,9 @@ rm $Tmp  >/dev/null 2>&1
 
 
 #-------------------------------------------------------------------------------------
+./tagit
+git add functions.txt
+
 git add plugin/dir.vim
 git add pushit
 git add tagit
