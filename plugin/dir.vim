@@ -225,15 +225,18 @@ function! s:MyDir(...)
         let l:forcetype = "f"
         if (a:0 == 2)
             let l:list = split(glob(a:2),'\n')
-        endif
-        if (a:0 == 3)
-            let l:list = split(glob(a:2),'\n') + split(glob(a:3),'\n')
-        endif
-        if (a:0 == 4)
-            let l:list = split(glob(a:2),'\n') + split(glob(a:3),'\n') + split(glob(a:4),'\n')
-        endif
-        if (a:0 == 5)
-            let l:list = split(glob(a:2),'\n') + split(glob(a:3),'\n') + split(glob(a:4),'\n') + split(glob(a:5),'\n')
+        else
+            if (a:0 == 3)
+                let l:list = split(glob(a:2),'\n') + split(glob(a:3),'\n')
+            else
+                if (a:0 == 4)
+                    let l:list = split(glob(a:2),'\n') + split(glob(a:3),'\n') + split(glob(a:4),'\n')
+                else
+                    if (a:0 == 5)
+                        let l:list = split(glob(a:2),'\n') + split(glob(a:3),'\n') + split(glob(a:4),'\n') + split(glob(a:5),'\n')
+                    endif
+                endif
+            endif
         endif
 
     " Create Window/Buffer Part
@@ -281,18 +284,23 @@ function! s:NewWindow(...)
         " H is Left  L is Right  K is Top  J is Bottom
         vnew
         let l:sz = tolower(a:1)
+
         if (l:sz == "left")
              wincmd H
+        else
+            if (l:sz == "right")
+                 wincmd L
+            else
+                if (l:sz == "top")
+                     wincmd K
+                else
+                    if (l:sz == "bottom")
+                         wincmd J
+                    endif
+                endif
+            endif
         endif
-        if (l:sz == "right")
-             wincmd L
-        endif
-        if (l:sz == "top")
-             wincmd K
-        endif
-        if (l:sz == "bottom")
-             wincmd J
-        endif
+
         setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
         nnoremap <silent> <buffer> q :close<cr>
         nnoremap <silent> <buffer> = :vertical resize +5<cr>
@@ -301,18 +309,22 @@ function! s:NewWindow(...)
         execute "vertical resize " . a:2
         if ( a:0 > 2)
             execute "nnoremap <silent> <buffer> " . a:3 . "<cr>"
-        endif
-        if ( a:0 > 3)
-            execute "nnoremap <silent> <buffer> " . a:4 . "<cr>"
-        endif
-        if ( a:0 > 4)
-            execute "nnoremap <silent> <buffer> " . a:5 . "<cr>"
-        endif
-        if ( a:0 > 5)
-            execute "nnoremap <silent> <buffer> " . a:6 . "<cr>"
-        endif
-        if ( a:0 > 6)
-            execute "nnoremap <silent> <buffer> " . a:7 . "<cr>"
+        else
+            if ( a:0 > 3)
+                execute "nnoremap <silent> <buffer> " . a:4 . "<cr>"
+            else
+                if ( a:0 > 4)
+                    execute "nnoremap <silent> <buffer> " . a:5 . "<cr>"
+                else
+                    if ( a:0 > 5)
+                        execute "nnoremap <silent> <buffer> " . a:6 . "<cr>"
+                    else
+                        if ( a:0 > 6)
+                            execute "nnoremap <silent> <buffer> " . a:7 . "<cr>"
+                        endif
+                    endif
+                endif
+            endif
         endif
 endfunction
 
@@ -432,6 +444,8 @@ function! g:MyBufferAction()
               execute "b " . l:ret
           endif
 endfunction
+
+"if !empty(glob("path/to/file"))
 
 function! g:MyDirAction(...)
      let l:sz   = s:DirToken(getline("."))
