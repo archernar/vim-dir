@@ -279,6 +279,10 @@ function! s:MyDir(...)
         set nowrap
 endfunc
 
+function! s:AssertExecution(...)
+    silent execute a:1
+endfunc
+
 function! s:NewWindow(...)
         " for wincmdH is Left  L is Right  K is Top  J is Bottom
         " H is Left  L is Right  K is Top  J is Bottom
@@ -309,22 +313,18 @@ function! s:NewWindow(...)
         execute "vertical resize " . a:2
         if ( a:0 > 2)
             execute "nnoremap <silent> <buffer> " . a:3 . "<cr>"
-        else
-            if ( a:0 > 3)
-                execute "nnoremap <silent> <buffer> " . a:4 . "<cr>"
-            else
-                if ( a:0 > 4)
-                    execute "nnoremap <silent> <buffer> " . a:5 . "<cr>"
-                else
-                    if ( a:0 > 5)
-                        execute "nnoremap <silent> <buffer> " . a:6 . "<cr>"
-                    else
-                        if ( a:0 > 6)
-                            execute "nnoremap <silent> <buffer> " . a:7 . "<cr>"
-                        endif
-                    endif
-                endif
-            endif
+        endif
+        if ( a:0 > 3)
+            execute "nnoremap <silent> <buffer> " . a:4 . "<cr>"
+        endif
+        if ( a:0 > 4)
+            execute "nnoremap <silent> <buffer> " . a:5 . "<cr>"
+        endif
+        if ( a:0 > 5)
+            execute "nnoremap <silent> <buffer> " . a:6 . "<cr>"
+        endif
+        if ( a:0 > 6)
+            execute "nnoremap <silent> <buffer> " . a:7 . "<cr>"
         endif
 endfunction
 

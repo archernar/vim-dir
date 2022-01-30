@@ -12,6 +12,7 @@
 - g:MyDirAction(...)
 - g:PROJECTSNIPS(...)
 - g:VIMBUFFERS(...)
+- s:AssertExecution(...)
 - s:DirFileName(...)
 - s:DirFileNameExtension(...)
 - s:DirSetInto(...)
