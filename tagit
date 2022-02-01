@@ -21,6 +21,7 @@ function trim(s)  { return rtrim(ltrim(s)); }
         sz = trim(sz)
         sub(/^.*[!] /, "", sz)
         sub(/[$].*$/, "", sz)
+        sub(/[)]/, ")\t\t", sz)
         print trim(sz)
 
 }
