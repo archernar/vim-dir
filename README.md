@@ -1,6 +1,7 @@
 # vim-dir
 
 - | function | description |
+- | -------- | ----------- |
 - | g:ALLSNIPS(...) | |
 - | g:BuffertoSnip() | |
 - | g:CourseSnip() | |
