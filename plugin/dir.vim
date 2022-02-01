@@ -50,6 +50,20 @@ function! s:DirSetMask(...)
     let s:DirMask = a:1
     return  s:DirMask
 endfunction
+
+" https://vim.fandom.com/wiki/Get_the_name_of_the_current_file
+
+
+function! s:PathFileName(...)                  " Given a full filename path, return the filename part
+    return fnamemodify(a:1, ':t')
+endfunction
+function! s:PathLastDirectory(...)             " Given a full filename path, return the last directoryi name only
+    return fnamemodify(a:1, ':p:h:t')
+endfunction
+function! s:PathFullDirectory(...)             " Given a full filename path, return thei path to the filename
+    return fnamemodify(a:1, ':p:h')
+endfunction
+
 function! s:FileNameExtension(...)
     return split(a:1,"[.]")[-1]
 endfunction
@@ -405,18 +419,29 @@ endfunction
 function! g:JAVASNIPS(...)
     call s:MyDirAllSnips(a:1)
 endfunction
-function! g:PROJECTSNIPS(...)
-    call s:MyDirProjectSnips(a:1)
+
+function! g:DIRSELECTOPEN(...)
+    "full path with wildcards
+    " open of close window on action
+    call s:MyDirSelector(a:1, 1)
+endfunction
+function! g:DIRSELECTCLOSE(...)
+    "full path with wildcards
+    " open of close window on action
+    call s:MyDirSelector(a:1, 0)
 endfunction
 
 
-function! s:MyDirProjectSnips(...)
-    let  s:DirCloseWindow = a:1
+"  function! s:PathFileName(...)
+"  function! s:PathLastDirectory(...)
+"  function! s:PathFullDirectory(...)
+function! s:MyDirSelector(...)
+    let  s:DirCloseWindow = a:2
     let  s:DirEditWindow = winnr()
-    let  l:dir="/projects" 
-    call s:DirSetSpecific($HOME . l:dir) 
-    call s:MyDir(1, $HOME . l:dir . "/*.project")
+    call s:DirSetSpecific(s:PathFullDirectory(a:1))
+    call s:MyDir(1, a:1)
 endfunction
+
 
 function! s:MyDirJSnips(...)
     let  s:DirCloseWindow = a:1
