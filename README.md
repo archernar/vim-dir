@@ -1,5 +1,7 @@
 # vim-dir
 
+- 
+- 
 - | function | description |
 - | -------- | ----------- |
 - | g:ALLSNIPS(...) | |
