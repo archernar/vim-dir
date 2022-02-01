@@ -14,7 +14,8 @@ function ltrim(s) { sub(/^ */, "", s); return s }
 function rtrim(s) { sub(/ *$/, "", s); return s }
 function trim(s)  { return rtrim(ltrim(s)); }
 BEGIN {
-        print trim("| function | description |")
+        print trim("| function | description |") > "functions.top"
+        close("functions.top")
 
 }
 {
@@ -31,7 +32,8 @@ BEGIN {
 }
 ' > $Tmp
 
-egrep    "g:" $Tmp | sort > functions.txt
+cat functions.top          > functions.txt
+egrep    "g:" $Tmp | sort >> functions.txt
 egrep -v "g:" $Tmp | sort >> functions.txt
 
 
