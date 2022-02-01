@@ -13,6 +13,10 @@ cat tags | grep function | gawk '
 function ltrim(s) { sub(/^ */, "", s); return s }
 function rtrim(s) { sub(/ *$/, "", s); return s }
 function trim(s)  { return rtrim(ltrim(s)); }
+BEGIN {
+        print trim("| function | description |")
+
+}
 {
         $1=""
         $2=""
@@ -21,8 +25,8 @@ function trim(s)  { return rtrim(ltrim(s)); }
         sz = trim(sz)
         sub(/^.*[!] /, "", sz)
         sub(/[$].*$/, "", sz)
-        sub(/[)]/, ")\t\t", sz)
-        print trim(sz)
+        sub(/[)]/, ") | ", sz)
+        print trim("| " sz +  " |")
 
 }
 ' > $Tmp

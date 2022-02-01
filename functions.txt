@@ -1,47 +1,48 @@
-g:ALLSNIPS(...)		
-g:BuffertoSnip()		
-g:CourseSnip()		
-g:DIRPWD(...)		
-g:DIRPWDACTION(...)		
-g:DIRSELECTCLOSE(...)		
-g:DIRSELECTOPEN(...)		
-g:FreshSnip()		
-g:JAVASNIPS(...)		
-g:ListBuffers()		
-g:MyBufferAction()		
-g:MyDirAction(...)		
-g:VIMBUFFERS(...)		
-s:AssertExecution(...)		
-s:DirFileName(...)		
-s:DirFileNameExtension(...)		
-s:DirSetInto(...)		
-s:DirSetMask(...)		
-s:DirSetPwd()		
-s:DirSetSpecific(...)		
-s:DirSetUp()		
-s:DirToken(...)		
-s:FileNameBookEnds(...)		
-s:FileNameExtension(...)		
-s:FileNameFirstPart(...)		
-s:FileNameIs(...)		
-s:FileNameLastPart(...)		
-s:FileNameMiddlePart(...)		
-s:FileNameSecondPart(...)		
-s:FileNameThirdPart(...)		
-s:MyDir(...)		
-s:MyDirAllSnips(...)		
-s:MyDirClasses(...)		
-s:MyDirCode(...)		
-s:MyDirJSnips(...)		
-s:MyDirPwd(...)		
-s:MyDirSelect(...)		
-s:MyDirSelector(...)		
-s:MyDirSnips(...)		
-s:MyVimBuffers(...)		
-s:NewSnip()		
-s:NewWindow(...)		
-s:PathFileName(...)		 " Given a full filename path, return the filename part
-s:PathFullDirectory(...)		 " Given a full filename path, return thei path to the filename
-s:PathLastDirectory(...)		 " Given a full filename path, return the last directoryi name only
-s:PutLine(...)		
-s:PutLineSet(...)		
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| 0
+| function | description |
