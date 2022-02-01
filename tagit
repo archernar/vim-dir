@@ -27,11 +27,12 @@ BEGIN {
         sub(/^.*[!] /, "", sz)
         sub(/[$].*$/, "", sz)
         sub(/[)]/, ") | ", sz)
-        print trim("| " sz +  " |")
+        sz = trim(sz)
+        print "| "  sz   " |"
 
 }
 ' > $Tmp
-
+cp $Tmp zed
 cat functions.top          > functions.txt
 egrep    "g:" $Tmp | sort >> functions.txt
 egrep -v "g:" $Tmp | sort >> functions.txt
