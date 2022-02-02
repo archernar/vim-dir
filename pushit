@@ -20,9 +20,9 @@ echo "# vim-dir" > README.md
 echo "" >> README.md
 cat functions.txt  | gawk '{print "" $0 }' >> README.md
 
-
 git add plugin/dir.vim
 git add pushit
+git add vim-dir.setup
 git add README.md
 git add tagit
 git commit -m "Update"

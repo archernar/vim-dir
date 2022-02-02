@@ -56,6 +56,8 @@ endfunction
 
 function! s:PathFileName(...)                  " Given a full filename path, return the filename part
     return fnamemodify(a:1, ':t')
+    remap <Leader>k :call g:DIRSELECTOPEN($HOME . "/projects/*.project")<cr>
+
 endfunction
 function! s:PathLastDirectory(...)             " Given a full filename path, return the last directoryi name only
     return fnamemodify(a:1, ':p:h:t')
