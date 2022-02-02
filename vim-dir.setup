@@ -1,0 +1,1 @@
+nnoremap <Leader>k :call g:DIRSELECTOPEN($HOME . "/projects/*.project")<cr>
