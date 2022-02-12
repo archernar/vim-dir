@@ -256,7 +256,7 @@ function! s:MyDir(...)
         endif
 
     " Create Window/Buffer Part
-        call s:NewWindow("Left", &columns/4, "<Enter> :call g:MyDirAction('e')", "r :call g:MyDirAction('r')", "l :call g:MyDirAction('l')" , "p :call g:MyDirAction('p')")
+        call s:NewWindow("Right", &columns/4, "<Enter> :call g:MyDirAction('e')", "r :call g:MyDirAction('r')", "l :call g:MyDirAction('l')" , "p :call g:MyDirAction('p')")
         echom "<enter> to edit the files, <r> to read into current buffer, <l> load session file, <p> open and load project"
 
         let s:DirWindow = winnr()
