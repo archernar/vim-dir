@@ -531,8 +531,8 @@ function! g:MyDirAction(...)
                                     exe s:DirEditWindow+1 . "wincmd w"
                                     exe  "call g:" . s:FileNameMiddlePart(l:sz) . "()"
                                     normal! k
-                                    exe s:DirEditWindow . "wincmd w"
-                                    silent execute "q"
+"                                   exe s:DirEditWindow . "wincmd w"
+"                                   silent execute "q"
                                 else
                                     if (s:FileNameBookEnds(l:sz, "A", "project") == 1)
                                         " let l:ninnnn = input("DEBUG2>> [" . "STOP" . "][" . s:FileNameMiddlePart(l:sz) . "]")
