@@ -528,8 +528,8 @@ function! g:MyDirAction(...)
                      endif
                      if (a:1 == 'e')
                                 if (s:FileNameBookEnds(l:sz, "A", "vim") == 1)
-                                    let l:thisCurrentLine = line(".")
                                     exe s:DirEditWindow+1 . "wincmd w"
+                                    let l:thisCurrentLine = line(".")
                                     exe  "call g:" . s:FileNameMiddlePart(l:sz) . "()"
                                     silent execute "" . l:thisCurrentLine
 "                                   normal! k
