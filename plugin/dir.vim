@@ -531,8 +531,8 @@ function! g:MyDirAction(...)
                                     let l:thisCurrentLine = line(".")
                                     exe s:DirEditWindow+1 . "wincmd w"
                                     exe  "call g:" . s:FileNameMiddlePart(l:sz) . "()"
-                                    normal! k
                                     silent execute "" . l:thisCurrentLine
+"                                   normal! k
 "                                   exe s:DirEditWindow . "wincmd w"
 "                                   silent execute "q"
                                 else
