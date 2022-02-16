@@ -256,7 +256,7 @@ function! s:MyDir(...)
         endif
 
     " Create Window/Buffer Part
-        call s:NewWindow("Left", &columns/4, "<Enter> :call g:MyDirAction('e')", "r :call g:MyDirAction('r')", "l :call g:MyDirAction('l')" , "p :call g:MyDirAction('p')")
+        call s:NewWindow("Left", &columns/4, "<Enter> :call g:MyDirAction('e')", "r :call g:MyDirAction('r')", "l :call g:MyDirAction('l')" , "p :call g:MyDirAction('p')","v :call g:MyDirAction('v')")
         echom "<enter> to edit the files, <r> to read into current buffer, <l> load session file, <p> open and load project"
 
         let s:DirWindow = winnr()
@@ -341,6 +341,12 @@ function! s:NewWindow(...)
         endif
         if ( a:0 > 6)
             execute "nnoremap <silent> <buffer> " . a:7 . "<cr>"
+        endif
+        if ( a:0 > 7)
+            execute "nnoremap <silent> <buffer> " . a:8 . "<cr>"
+        endif
+        if ( a:0 > 8)
+            execute "nnoremap <silent> <buffer> " . a:9 . "<cr>"
         endif
 endfunction
 
@@ -525,6 +531,11 @@ function! g:MyDirAction(...)
                                 execute "r " . l:fs
                                 normal! k
                                 exe s:DirEditWindow . "wincmd w"
+                     endif
+                     if (a:1 == 'v')
+                                exe s:DirEditWindow+1 . "wincmd w"
+                                execute "e " . l:fs
+                                normal! k
                      endif
                      if (a:1 == 'e')
                                 if (s:FileNameBookEnds(l:sz, "A", "vim") == 1)
