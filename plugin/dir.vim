@@ -256,7 +256,7 @@ function! s:MyDir(...)
         endif
 
     " Create Window/Buffer Part
-        call s:NewWindow("Left", &columns/4, "<Enter> :call g:MyDirAction('e')", "r :call g:MyDirAction('r')", "l :call g:MyDirAction('l')" , "p :call g:MyDirAction('p')","v :call g:MyDirAction('v')")
+        call s:NewWindow("Left", &columns/4, "<Enter> :call g:MyDirAction('e')", "r :call g:MyDirAction('r')", "l :call g:MyDirAction('l')" , "p :call g:MyDirAction('p')","v :call g:MyDirAction('v'),"q :call g:MyDirAction('q')")
         echom "<enter> to edit the files, <r> to read into current buffer, <l> load session file, <p> open and load project"
 
         let s:DirWindow = winnr()
@@ -534,6 +534,12 @@ function! g:MyDirAction(...)
                                 if (s:FileNameBookEnds(l:sz, "A", "vim") == 1)
                                     exe s:DirEditWindow+1 . "wincmd w"
                                     execute "e " . "/etc/air/scm/vim-progsnips/plugin/" . l:sz 
+                                    exe "!cd /etc/air/scm/vim-progsnips; A.add " . s:FileNameMiddlePart(l:sz) . ";"
+                                endif
+                     endif
+                     if (a:1 == 'q')
+                                if (s:FileNameBookEnds(l:sz, "A", "vim") == 1)
+                                    exe s:DirEditWindow+1 . "wincmd w"
                                     exe "!cd /etc/air/scm/vim-progsnips; A.add " . s:FileNameMiddlePart(l:sz) . ";"
                                 endif
                      endif
