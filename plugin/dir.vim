@@ -269,8 +269,6 @@ function! s:MyDir(...)
         nnoremap <silent> <buffer> J /^f J<cr>
         nnoremap <silent> <buffer> k /^f K<cr>
         nnoremap <silent> <buffer> K /^f K<cr>
-        nnoremap <silent> <buffer> v /^f V<cr>
-        nnoremap <silent> <buffer> V /^f V<cr>
     " Display Part
         setlocal cursorline
         call s:PutLineSet(1)
