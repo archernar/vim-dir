@@ -531,9 +531,11 @@ function! g:MyDirAction(...)
                                 exe s:DirEditWindow . "wincmd w"
                      endif
                      if (a:1 == 'v')
-                                exe s:DirEditWindow+1 . "wincmd w"
-                                execute "e " . l:fs
-                                normal! k
+                                if (s:FileNameBookEnds(l:sz, "A", "vim") == 1)
+                                    exe s:DirEditWindow+1 . "wincmd w"
+                                    "/etc/air/scm/vim-progsnips/plugin/" . l:sz 
+                                    execute "e " .  normal! k
+                                endif
                      endif
                      if (a:1 == 'e')
                                 if (s:FileNameBookEnds(l:sz, "A", "vim") == 1)
