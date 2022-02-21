@@ -579,6 +579,7 @@ function! g:MyDirAction(...)
                                                         exe "normal! o" . "" . s:item . "" . "\<Esc>"
                                                         exe "set nopaste"
                                                     endfor
+                                                    exe "normal! o" . "" . "" . "" . "\<Esc>"
                                                 endif
                                             endif
                                         else
