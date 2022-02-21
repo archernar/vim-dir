@@ -552,7 +552,7 @@ function! g:MyDirAction(...)
                                 let s:body = []
                                 if (filereadable(l:fs))
                                     let s:body = readfile(l:fs)
-                                    echom s:body[0];
+                                    echom s:body[0]
                                     return 0
                                 endif
 
