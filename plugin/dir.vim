@@ -549,7 +549,8 @@ function! g:MyDirAction(...)
                                 endif
                      endif
                      if (a:1 == 'e')
-
+                         echom l:sz
+                         return 0
                                 let s:body = []
                                 if (filereadable(l:sz))
                                     let s:body = readfile(l:sz)
