@@ -549,22 +549,6 @@ function! g:MyDirAction(...)
                                 endif
                      endif
                      if (a:1 == 'e')
-                                let s:body = []
-                                if (filereadable(l:fs))
-                                    let s:body = readfile(l:fs)
-                                    echom s:body[0]
-                                    if ( s:body[0] == "THISTEXT")
-                                        let i = remove(s:body, 0)
-                                        exe s:DirEditWindow+1 . "wincmd w"
-                                        for s:item in s:body
-                                            exe "set paste"
-                                            exe "normal! o" . "" . s:item . "" . "\<Esc>"
-                                            exe "set nopaste"
-                                        endfor
-"                                       exe s:DirEditWindow . "wincmd w"
-                                        return 0
-                                    endif
-                                endif
 
 
                                 if (s:FileNameBookEnds(l:sz, "A", "vim") == 1)
@@ -583,18 +567,34 @@ function! g:MyDirAction(...)
                                         silent execute "q"
                                         call DIRPWD(s:KEEPSPLITOPEN)
                                     else
-                                        if (s:DirFileNameExtension(l:sz) == "txt")
-                                                exe s:DirEditWindow+1 . "wincmd w"
-                                                execute "e " . l:fs
-                                                normal! k
-                                                exe s:DirEditWindow . "wincmd w"
+                                        if (s:FileNameBookEnds(l:sz, "A", "txt") == 1)
+                                            let s:body = []
+                                            if (filereadable(l:fs))
+                                                let s:body = readfile(l:fs)
+                                                if ( s:body[0] == "THISTEXT")
+                                                    let i = remove(s:body, 0)
+                                                    exe s:DirEditWindow+1 . "wincmd w"
+                                                    for s:item in s:body
+                                                        exe "set paste"
+                                                        exe "normal! o" . "" . s:item . "" . "\<Esc>"
+                                                        exe "set nopaste"
+                                                    endfor
+                                                endif
+                                            endif
                                         else
-                                                "silent execute "q"
-                                                "silent execute a:1 . " " . l:fs
-                                                exe s:DirEditWindow+1 . "wincmd w"
-                                                execute "e " . l:fs
-                                                normal! k
-                                                exe s:DirEditWindow . "wincmd w"
+                                            if (s:DirFileNameExtension(l:sz) == "txt")
+                                                    exe s:DirEditWindow+1 . "wincmd w"
+                                                    execute "e " . l:fs
+                                                    normal! k
+                                                    exe s:DirEditWindow . "wincmd w"
+                                            else
+                                                    "silent execute "q"
+                                                    "silent execute a:1 . " " . l:fs
+                                                    exe s:DirEditWindow+1 . "wincmd w"
+                                                    execute "e " . l:fs
+                                                    normal! k
+                                                    exe s:DirEditWindow . "wincmd w"
+                                            endif 
                                         endif 
                                     endif 
                                 endif 
