@@ -553,7 +553,7 @@ function! g:MyDirAction(...)
                                 if (filereadable(l:fs))
                                     let s:body = readfile(l:fs)
                                     echom s:body[0]
-                                    remove(s:body, 0)
+                                    let i = remove(s:body, 0)
                                     exe s:DirEditWindow+1 . "wincmd w"
 	                                for s:item in s:body
                                         exe "set paste"
