@@ -549,7 +549,7 @@ function! g:MyDirAction(...)
                                 endif
                      endif
                      if (a:1 == 'e')
-                         echom l:sz
+                         echom l:fs
                          return 0
                                 let s:body = []
                                 if (filereadable(l:sz))
