@@ -549,6 +549,15 @@ function! g:MyDirAction(...)
                                 endif
                      endif
                      if (a:1 == 'e')
+
+                                let s:body = []
+                                if (filereadable(l:sz))
+                                    let s:body = readfile(l:sz)
+                                    echom s:body[0];
+                                    return 0
+                                endif
+
+
                                 if (s:FileNameBookEnds(l:sz, "A", "vim") == 1)
                                     exe s:DirEditWindow+1 . "wincmd w"
                                     let l:thisCurrentLine = line(".")
