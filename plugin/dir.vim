@@ -483,6 +483,22 @@ function! g:MyBufferAction()
 endfunction
 
 "if !empty(glob("path/to/file"))
+function! textish()
+    let l:body = []
+    if (filereadable(a:1))
+        let l:body = readfile(a:1)
+        if ( l:body[0] == a:2)
+            let l:temp = remove(l:body, 0)
+            exe s:DirEditWindow+1 . "wincmd w"
+            for l:item in l:body
+                exe "set paste"
+                exe "normal! o" . l:item . "\<Esc>"
+                exe "set nopaste"
+            endfor
+            exe "normal! o" . "\<Esc>"
+        endif
+    endif
+endfunction
 
 function! g:MyDirAction(...)
      let l:sz   = s:DirToken(getline("."))
@@ -549,8 +565,6 @@ function! g:MyDirAction(...)
                                 endif
                      endif
                      if (a:1 == 'e')
-
-
                                 if (s:FileNameBookEnds(l:sz, "A", "vim") == 1)
                                     exe s:DirEditWindow+1 . "wincmd w"
                                     let l:thisCurrentLine = line(".")
@@ -560,41 +574,45 @@ function! g:MyDirAction(...)
 "                                   exe s:DirEditWindow . "wincmd w"
 "                                   silent execute "q"
                                 else
-                                    if (s:FileNameBookEnds(l:sz, "A", "project") == 1)
-                                        " let l:ninnnn = input("DEBUG2>> [" . "STOP" . "][" . s:FileNameMiddlePart(l:sz) . "]")
-                                        exe  "cd /etc/air/scm/" . s:FileNameMiddlePart(l:sz) 
-                                        exe  "pwd"
-                                        silent execute "q"
-                                        call DIRPWD(s:KEEPSPLITOPEN)
+                                    if (s:FileNameBookEnds(l:sz, "B", "txt") == 1)
+                                        textish(l:fs,"THISTEXT")
                                     else
-                                        if (s:FileNameBookEnds(l:sz, "A", "txt") == 1)
-                                            let s:body = []
-                                            if (filereadable(l:fs))
-                                                let s:body = readfile(l:fs)
-                                                if ( s:body[0] == "THISTEXT")
-                                                    let i = remove(s:body, 0)
-                                                    exe s:DirEditWindow+1 . "wincmd w"
-                                                    for s:item in s:body
-                                                        exe "set paste"
-                                                        exe "normal! o" . "" . s:item . "" . "\<Esc>"
-                                                        exe "set nopaste"
-                                                    endfor
-                                                    exe "normal! o" . "" . "" . "" . "\<Esc>"
-                                                endif
-                                            endif
+                                        if (s:FileNameBookEnds(l:sz, "A", "project") == 1)
+                                            " let l:ninnnn = input("DEBUG2>> [" . "STOP" . "][" . s:FileNameMiddlePart(l:sz) . "]")
+                                            exe  "cd /etc/air/scm/" . s:FileNameMiddlePart(l:sz) 
+                                            exe  "pwd"
+                                            silent execute "q"
+                                            call DIRPWD(s:KEEPSPLITOPEN)
                                         else
-                                            if (s:DirFileNameExtension(l:sz) == "txt")
-                                                    exe s:DirEditWindow+1 . "wincmd w"
-                                                    execute "e " . l:fs
-                                                    normal! k
-                                                    exe s:DirEditWindow . "wincmd w"
+                                            if (s:FileNameBookEnds(l:sz, "A", "txt") == 1)
+                                                let s:body = []
+                                                if (filereadable(l:fs))
+                                                    let s:body = readfile(l:fs)
+                                                    if ( s:body[0] == "THISTEXT")
+                                                        let i = remove(s:body, 0)
+                                                        exe s:DirEditWindow+1 . "wincmd w"
+                                                        for s:item in s:body
+                                                            exe "set paste"
+                                                            exe "normal! o" . "" . s:item . "" . "\<Esc>"
+                                                            exe "set nopaste"
+                                                        endfor
+                                                        exe "normal! o" . "" . "" . "" . "\<Esc>"
+                                                    endif
+                                                endif
                                             else
-                                                    "silent execute "q"
-                                                    "silent execute a:1 . " " . l:fs
-                                                    exe s:DirEditWindow+1 . "wincmd w"
-                                                    execute "e " . l:fs
-                                                    normal! k
-                                                    exe s:DirEditWindow . "wincmd w"
+                                                if (s:DirFileNameExtension(l:sz) == "txt")
+                                                        exe s:DirEditWindow+1 . "wincmd w"
+                                                        execute "e " . l:fs
+                                                        normal! k
+                                                        exe s:DirEditWindow . "wincmd w"
+                                                else
+                                                        "silent execute "q"
+                                                        "silent execute a:1 . " " . l:fs
+                                                        exe s:DirEditWindow+1 . "wincmd w"
+                                                        execute "e " . l:fs
+                                                        normal! k
+                                                        exe s:DirEditWindow . "wincmd w"
+                                                endif 
                                             endif 
                                         endif 
                                     endif 
