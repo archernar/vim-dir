@@ -575,7 +575,7 @@ function! g:MyDirAction(...)
 "                                   silent execute "q"
                                 else
                                     if (s:FileNameBookEnds(l:sz, "B", "txt") == 1)
-                                        g:Textish(l:fs,"THISTEXT")
+                                        call g:Textish(l:fs,"THISTEXT")
                                     else
                                         if (s:FileNameBookEnds(l:sz, "A", "project") == 1)
                                             " let l:ninnnn = input("DEBUG2>> [" . "STOP" . "][" . s:FileNameMiddlePart(l:sz) . "]")
