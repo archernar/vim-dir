@@ -483,7 +483,7 @@ function! g:MyBufferAction()
 endfunction
 
 "if !empty(glob("path/to/file"))
-function! textish(...)
+function! g:Textish(...)
     let l:body = []
     if (filereadable(a:1))
         let l:body = readfile(a:1)
@@ -575,7 +575,7 @@ function! g:MyDirAction(...)
 "                                   silent execute "q"
                                 else
                                     if (s:FileNameBookEnds(l:sz, "B", "txt") == 1)
-                                        textish(l:fs,"THISTEXT")
+                                        g:Textish(l:fs,"THISTEXT")
                                     else
                                         if (s:FileNameBookEnds(l:sz, "A", "project") == 1)
                                             " let l:ninnnn = input("DEBUG2>> [" . "STOP" . "][" . s:FileNameMiddlePart(l:sz) . "]")

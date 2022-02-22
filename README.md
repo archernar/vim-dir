@@ -16,6 +16,7 @@
 | g:ListBuffers() | |
 | g:MyBufferAction() | |
 | g:MyDirAction(...) | |
+| g:Textish(...) | |
 | g:VIMBUFFERS(...) | |
 | s:AssertExecution(...) | |
 | s:DirFileName(...) | |
