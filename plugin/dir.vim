@@ -483,6 +483,18 @@ function! g:MyBufferAction()
 endfunction
 
 "if !empty(glob("path/to/file"))
+function! g:IsTextish(...)
+    let l:ret = 0
+    let l:body = []
+    if (filereadable(a:1))
+        let l:body = readfile(a:1)
+        if ( l:body[0] == a:2)
+            let l:ret = 1
+        endif
+    endif
+    let l:body = []
+    return l:ret
+endfunction
 function! g:Textish(...)
     let l:body = []
     if (filereadable(a:1))

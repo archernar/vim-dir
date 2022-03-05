@@ -12,6 +12,7 @@
 | g:DIRSELECTCLOSE(...) | |
 | g:DIRSELECTOPEN(...) | |
 | g:FreshSnip() | |
+| g:IsTextish(...) | |
 | g:JAVASNIPS(...) | |
 | g:ListBuffers() | |
 | g:MyBufferAction() | |
