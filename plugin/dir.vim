@@ -578,13 +578,17 @@ function! g:MyDirAction(...)
                      endif
                      if (a:1 == 'e')
                                 if (s:FileNameBookEnds(l:sz, "A", "vim") == 1)
-                                    exe s:DirEditWindow+1 . "wincmd w"
-                                    let l:thisCurrentLine = line(".")
-                                    exe  "call g:" . s:FileNameMiddlePart(l:sz) . "()"
-                                    silent execute "" . l:thisCurrentLine
-"                                   normal! k
-"                                   exe s:DirEditWindow . "wincmd w"
-"                                   silent execute "q"
+                                    if (g:IsTextish(l:fs,"THISTEXT") == 1)
+                                        call g:Textish(l:fs,"THISTEXT")
+                                    else
+                                        exe s:DirEditWindow+1 . "wincmd w"
+                                        let l:thisCurrentLine = line(".")
+                                        exe  "call g:" . s:FileNameMiddlePart(l:sz) . "()"
+                                        silent execute "" . l:thisCurrentLine
+    "                                   normal! k
+    "                                   exe s:DirEditWindow . "wincmd w"
+    "                                   silent execute "q"
+                                    endif
                                 else
                                     if (s:FileNameBookEnds(l:sz, "B", "txt") == 1)
                                         call g:Textish(l:fs,"THISTEXT")
