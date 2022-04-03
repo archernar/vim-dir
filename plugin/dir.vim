@@ -261,6 +261,7 @@ function! s:MyDir(...)
         echom "<enter> to edit the files, <r> to read into current buffer, <l> load session file, <p> open and load project"
 
         let s:DirWindow = winnr()
+        nnoremap <silent> <buffer> q :close<cr>
         nnoremap <silent> <buffer> w <C-W>w
         nnoremap <silent> <buffer> W <C-W>w
         nnoremap <silent> <buffer> f /^f<cr>
