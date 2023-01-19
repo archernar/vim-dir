@@ -561,8 +561,7 @@ function! g:MyDirAction(...)
                                 endif
                      endif
                      if (a:1 == 'r')
-                                " exe s:DirEditWindow+1 . "wincmd w"
-                                silent execute "q"
+                                 exe s:DirEditWindow+1 . "wincmd w"
                                 execute "r " . l:fs
                                 normal! k
     "                            exe s:DirEditWindow . "wincmd w"
