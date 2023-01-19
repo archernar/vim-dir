@@ -563,7 +563,8 @@ function! g:MyDirAction(...)
                                 exe s:DirEditWindow+1 . "wincmd w"
                                 execute "r " . l:fs
                                 normal! k
-                                exe s:DirEditWindow . "wincmd w"
+    "                            exe s:DirEditWindow . "wincmd w"
+                                silent execute "q"
                      endif
                      if (a:1 == 'v')
                                 if (s:FileNameBookEnds(l:sz, "A", "vim") == 1)
