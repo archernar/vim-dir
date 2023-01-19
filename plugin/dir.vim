@@ -262,7 +262,6 @@ function! s:MyDir(...)
 
         let s:DirWindow = winnr()
         nnoremap <silent> <buffer> <F1> <Nop>
-        nnoremap <silent> <buffer> <esc> :close<cr>
         nnoremap <silent> <buffer> q :close<cr>
         nnoremap <silent> <buffer> w <C-W>w
         nnoremap <silent> <buffer> W <C-W>w
