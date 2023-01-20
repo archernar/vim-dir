@@ -532,8 +532,7 @@ function! g:MyDirAction(...)
                      if (a:1 == 'n')
                                 "silent execute "q"
                                 "silent execute a:1 . " " . l:fs
-                                "   exe s:DirEditWindow+1 . "wincmd w"
-                                silent execute "q"
+                                exe s:DirEditWindow+1 . "wincmd w"
                                 execute "enew"
                                 execute "r " . l:fs
                                 normal! k
