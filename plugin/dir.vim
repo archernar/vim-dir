@@ -257,7 +257,7 @@ function! s:MyDir(...)
 
     " Create Window/Buffer Part
     " 8 Args
-        call s:NewWindow("Left", &columns/4, "<Enter> :call g:MyDirAction('r')", "x :call g:MyDirAction('e')", "l :call g:MyDirAction('l')", "p :call g:MyDirAction('p')", "v :call g:MyDirAction('v')","q :call g:MyDirAction('q')")
+        call s:NewWindow("Left", &columns/4, "<Enter> :call g:MyDirAction('r')", "x :call g:MyDirAction('e')", "n :call g:MyDirAction('n')", "p :call g:MyDirAction('p')", "v :call g:MyDirAction('v')","q :call g:MyDirAction('q')")
         echom "<r> edit snip, <enter> read snip into current buffer, <l> load session file, <p> open and load project"
 
         let s:DirWindow = winnr()
