@@ -266,6 +266,10 @@ function! s:MyDir(...)
         nnoremap <silent> <buffer> w <C-W>w
         nnoremap <silent> <buffer> W <C-W>w
         nnoremap <silent> <buffer> f /^f<cr>
+        " For Professor's site
+        nnoremap <silent> <buffer> p /^f P<cr>
+        nnoremap <silent> <buffer> P /^f P<cr>
+
         nnoremap <silent> <buffer> l /^f L<cr>
         nnoremap <silent> <buffer> L /^f L<cr>
         nnoremap <silent> <buffer> a /^f A<cr>
