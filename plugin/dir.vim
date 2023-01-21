@@ -266,6 +266,8 @@ function! s:MyDir(...)
         nnoremap <silent> <buffer> w <C-W>w
         nnoremap <silent> <buffer> W <C-W>w
         nnoremap <silent> <buffer> f /^f<cr>
+        nnoremap <silent> <buffer> l /^f L<cr>
+        nnoremap <silent> <buffer> L /^f L<cr>
         nnoremap <silent> <buffer> a /^f A<cr>
         nnoremap <silent> <buffer> A /^f A<cr>
         nnoremap <silent> <buffer> j /^f J<cr>
