@@ -272,6 +272,9 @@ function! s:MyDir(...)
         " For Professor's site
         nnoremap <silent> <buffer> p /^f P[.]<cr>
         nnoremap <silent> <buffer> P /^f P[.]<cr>
+        " For Harder Ones
+        nnoremap <silent> <buffer> h /^f H[.]<cr>
+        nnoremap <silent> <buffer> H /^f H[.]<cr>
 
         nnoremap <silent> <buffer> l /^f L<cr>
         nnoremap <silent> <buffer> L /^f L<cr>
