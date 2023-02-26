@@ -19,6 +19,7 @@
 | g:MyBufferAction() | |
 | g:MyDirAction(...) | |
 | g:Textish(...) | |
+| g:TTXT() | |
 | g:VIMBUFFERS(...) | |
 | s:AssertExecution(...) | |
 | s:DirFileName(...) | |
