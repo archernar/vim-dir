@@ -500,7 +500,7 @@ function! g:TTXT()
     let  s:DirEditWindow = winnr()
     let  l:dir="/.vim/bundle/vim-progsnips/plugin" 
     call s:DirSetSpecific($HOME . l:dir) 
-    call s:MyDir(0, $HOME . l:dir . "/*.txt")
+    call s:MyDir(0, $HOME . l:dir . "/J*.txt")
 endfunction
 
 
