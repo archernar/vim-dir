@@ -495,7 +495,7 @@ function! g:AVIM()
     call s:DirSetSpecific($HOME . l:dir) 
     call s:MyDir(0, $HOME . l:dir . "/A.*.vim")
 endfunction
-function! g:TTXT()
+function! g:JTXT()
     let  s:DirCloseWindow = 1
     let  s:DirEditWindow = winnr()
     let  l:dir="/.vim/bundle/vim-progsnips/plugin" 
