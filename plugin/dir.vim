@@ -488,8 +488,8 @@ function! s:MyDirAllSnips(...)
     call s:MyDir(0, $HOME . l:dir . "/*.txt", $HOME . l:dir . "/*.vim", $HOME . "/projects/*.project")
 endfunction
 
-function! g:AVIM(...)
-    call s:MyDirAVimSnips(a:1)
+function! g:AVIM()
+    call s:MyDirAVimSnips(1)
 endfunction
 function! s:MyDirAVimSnips(...)
     let  s:DirCloseWindow = a:1
