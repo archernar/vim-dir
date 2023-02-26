@@ -5,6 +5,7 @@
 | function | description |
 | -------- | ----------- |
 | g:ALLSNIPS(...) | |
+| g:AVIMSNIPS(...) | |
 | g:BuffertoSnip() | |
 | g:CourseSnip() | |
 | g:DIRPWD(...) | |
@@ -38,6 +39,7 @@
 | s:FileNameThirdPart(...) | |
 | s:MyDir(...) | |
 | s:MyDirAllSnips(...) | |
+| s:MyDirAVimSnips(...) | |
 | s:MyDirClasses(...) | |
 | s:MyDirCode(...) | |
 | s:MyDirJSnips(...) | |

@@ -488,6 +488,18 @@ function! s:MyDirAllSnips(...)
     call s:MyDir(0, $HOME . l:dir . "/*.txt", $HOME . l:dir . "/*.vim", $HOME . "/projects/*.project")
 endfunction
 
+function! g:AVIMSNIPS(...)
+    call s:MyDirAVimSnips(a:1)
+endfunction
+function! s:MyDirAVimSnips(...)
+    let  s:DirCloseWindow = a:1
+    let  s:DirEditWindow = winnr()
+    let  l:dir="/.vim/bundle/vim-progsnips/plugin" 
+    call s:DirSetSpecific($HOME . l:dir) 
+    call s:MyDir(0, $HOME . l:dir . "/A.*.vim")
+endfunction
+
+
 function! g:MyBufferAction()
           if (getline(".") != "Vim Buffers")
               let l:ret = split(getline(".")," ")[-1]
