@@ -489,7 +489,7 @@ function! s:MyDirAllSnips(...)
 endfunction
 
 function! g:AVIM()
-    call s:MyDirAVimSnips(1)
+    call s:MyDirAVimSnips(0)
 endfunction
 function! s:MyDirAVimSnips(...)
     let  s:DirCloseWindow = a:1
