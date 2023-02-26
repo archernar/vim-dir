@@ -489,10 +489,7 @@ function! s:MyDirAllSnips(...)
 endfunction
 
 function! g:AVIM()
-    call s:MyDirAVimSnips(0)
-endfunction
-function! s:MyDirAVimSnips(...)
-    let  s:DirCloseWindow = a:1
+    let  s:DirCloseWindow = 1
     let  s:DirEditWindow = winnr()
     let  l:dir="/.vim/bundle/vim-progsnips/plugin" 
     call s:DirSetSpecific($HOME . l:dir) 

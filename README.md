@@ -39,7 +39,6 @@
 | s:FileNameThirdPart(...) | |
 | s:MyDir(...) | |
 | s:MyDirAllSnips(...) | |
-| s:MyDirAVimSnips(...) | |
 | s:MyDirClasses(...) | |
 | s:MyDirCode(...) | |
 | s:MyDirJSnips(...) | |
