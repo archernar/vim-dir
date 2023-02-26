@@ -5,7 +5,7 @@
 | function | description |
 | -------- | ----------- |
 | g:ALLSNIPS(...) | |
-| g:AVIMSNIPS(...) | |
+| g:AVIM(...) | |
 | g:BuffertoSnip() | |
 | g:CourseSnip() | |
 | g:DIRPWD(...) | |

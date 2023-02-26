@@ -488,7 +488,7 @@ function! s:MyDirAllSnips(...)
     call s:MyDir(0, $HOME . l:dir . "/*.txt", $HOME . l:dir . "/*.vim", $HOME . "/projects/*.project")
 endfunction
 
-function! g:AVIMSNIPS(...)
+function! g:AVIM(...)
     call s:MyDirAVimSnips(a:1)
 endfunction
 function! s:MyDirAVimSnips(...)
