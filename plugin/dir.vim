@@ -504,6 +504,15 @@ function! g:BVIM()
     call s:DirSetSpecific($HOME . l:dir) 
     call s:MyDir(0, $HOME . l:dir . "/J*.txt")
     nnoremap <silent> <buffer> q :close<cr>
+    nnoremap <silent> <buffer> <leader>j :close<cr>:call g:CVIM()<cr> 
+endfunction
+function! g:CVIM()
+    let  s:DirCloseWindow = 1
+    let  s:DirEditWindow = winnr()
+    let  l:dir="/.vim/bundle/vim-progsnips/plugin" 
+    call s:DirSetSpecific($HOME . l:dir) 
+    call s:MyDir(0, $HOME . l:dir . "/*.txt")
+    nnoremap <silent> <buffer> q :close<cr>
     nnoremap <silent> <buffer> <leader>j :close<cr>:call g:AVIM()<cr> 
 endfunction
 

@@ -9,6 +9,7 @@
 | g:BuffertoSnip() | |
 | g:BVIM() | |
 | g:CourseSnip() | |
+| g:CVIM() | |
 | g:DIRPWD(...) | |
 | g:DIRPWDACTION(...) | |
 | g:DIRSELECTCLOSE(...) | |
