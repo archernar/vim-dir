@@ -494,6 +494,8 @@ function! g:AVIM()
     let  l:dir="/.vim/bundle/vim-progsnips/plugin" 
     call s:DirSetSpecific($HOME . l:dir) 
     call s:MyDir(0, $HOME . l:dir . "/A.*.vim")
+    nnoremap <silent> <buffer> <F1> <Nop>
+    nnoremap <silent> <buffer> <esc> :close<cr>
 endfunction
 function! g:JTXT()
     let  s:DirCloseWindow = 1
@@ -501,6 +503,8 @@ function! g:JTXT()
     let  l:dir="/.vim/bundle/vim-progsnips/plugin" 
     call s:DirSetSpecific($HOME . l:dir) 
     call s:MyDir(0, $HOME . l:dir . "/J*.txt")
+    nnoremap <silent> <buffer> <F1> <Nop>
+    nnoremap <silent> <buffer> <esc> :close<cr>
 endfunction
 
 
