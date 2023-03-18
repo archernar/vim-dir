@@ -14,6 +14,7 @@
 | g:DIRPWDACTION(...) | |
 | g:DIRSELECTCLOSE(...) | |
 | g:DIRSELECTOPEN(...) | |
+| g:DVIM() | |
 | g:FreshSnip() | |
 | g:IsTextish(...) | |
 | g:JAVASNIPS(...) | |

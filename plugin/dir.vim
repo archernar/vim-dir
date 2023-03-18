@@ -489,30 +489,53 @@ function! s:MyDirAllSnips(...)
     call s:MyDir(0, $HOME . l:dir . "/*.txt", $HOME . l:dir . "/*.vim", $HOME . "/projects/*.project")
 endfunction
 
+
+
 function! g:AVIM()
     let  s:DirCloseWindow = 1
     let  s:DirEditWindow = winnr()
-    let  l:dir="/.vim/bundle/vim-progsnips/plugin" 
+
+    let  l:dir="/private" 
+    let  l:mask="/*"
+
     call s:DirSetSpecific($HOME . l:dir) 
-    call s:MyDir(0, $HOME . l:dir . "/A.*.vim")
+    call s:MyDir(0, $HOME . l:dir . l:mask)
     nnoremap <silent> <buffer> q :close<cr>
     nnoremap <silent> <buffer> <leader>j :close<cr>:call g:BVIM()<cr> 
 endfunction
 function! g:BVIM()
     let  s:DirCloseWindow = 1
     let  s:DirEditWindow = winnr()
+
     let  l:dir="/.vim/bundle/vim-progsnips/plugin" 
+    let  l:mask="/A.*.vim"
+
     call s:DirSetSpecific($HOME . l:dir) 
-    call s:MyDir(0, $HOME . l:dir . "/J*.txt")
+    call s:MyDir(0, $HOME . l:dir . l:mask)
     nnoremap <silent> <buffer> q :close<cr>
     nnoremap <silent> <buffer> <leader>j :close<cr>:call g:CVIM()<cr> 
 endfunction
 function! g:CVIM()
     let  s:DirCloseWindow = 1
     let  s:DirEditWindow = winnr()
+
     let  l:dir="/.vim/bundle/vim-progsnips/plugin" 
+    let  l:mask="/J*.txt"
+
     call s:DirSetSpecific($HOME . l:dir) 
-    call s:MyDir(0, $HOME . l:dir . "/*.txt")
+    call s:MyDir(0, $HOME . l:dir . l:mask)
+    nnoremap <silent> <buffer> q :close<cr>
+    nnoremap <silent> <buffer> <leader>j :close<cr>:call g:DVIM()<cr> 
+endfunction
+function! g:DVIM()
+    let  s:DirCloseWindow = 1
+    let  s:DirEditWindow = winnr()
+
+    let  l:dir="/.vim/bundle/vim-progsnips/plugin" 
+    let  l:mask="/*.txt"
+
+    call s:DirSetSpecific($HOME . l:dir) 
+    call s:MyDir(0, $HOME . l:dir . l:mask)
     nnoremap <silent> <buffer> q :close<cr>
     nnoremap <silent> <buffer> <leader>j :close<cr>:call g:AVIM()<cr> 
 endfunction
