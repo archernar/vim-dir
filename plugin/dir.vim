@@ -495,7 +495,7 @@ function! g:AVIM()
     let  s:DirCloseWindow = 1
     let  s:DirEditWindow = winnr()
 
-    let  l:dir="/private" 
+    let  l:dir="/private/Snips" 
     let  l:mask="/*"
 
     call s:DirSetSpecific($HOME . l:dir) 
