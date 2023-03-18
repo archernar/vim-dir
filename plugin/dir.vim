@@ -624,12 +624,23 @@ function! g:MyDirAction(...)
                                         echom "Not a session file"
                                 endif
                      endif
+
+                     " **************************
+                     " This is the <enter> action
+                     " **************************
                      if (a:1 == 'r')
                                 if (s:FileNameBookEnds(l:sz, "A", "vim") == 0)
                                     if (s:FileNameBookEnds(l:sz, "A", "project") == 0)
                                         exe s:DirEditWindow+1 . "wincmd w"
                                         execute "r " . l:fs
                                         normal! k
+                                        " **************************
+                                        " New Code
+                                        " **************************
+                                        exe s:DirEditWindow . "wincmd w"
+                                        silent execute "q"
+                                        " End **********************
+
                                     endif
                                 endif
                      endif
