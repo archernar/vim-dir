@@ -288,10 +288,16 @@ function! s:MyProject(...)
 
         call s:PutLine("")
         call s:PutLine("")
-        call s:PutLine("COMMIT-ALL")
-
+        let s:cmdCommitAll="Commit-All"
+        let s:cmdLs="List"
+        
+        call s:PutLine(s:cmdCommitAll)
         let l:regex="\\%" . (s:PutLineRow - 1) . "l^.*$"
         call matchadd('ColorGreen', l:regex)
+        call s:PutLine(s:cmdLs)
+        let l:regex="\\%" . (s:PutLineRow - 1) . "l^.*$"
+        call matchadd('ColorGreen', l:regex)
+
 
         set nowrap
 
@@ -663,7 +669,7 @@ function! g:MySelectionAction(...)
      " **************************
      call s:Log(l:sz)
      if (a:1 == 'rx')
-         if (l:sz == 'COMMIT-ALL')
+         if (l:sz == s:cmdCommitAll)
              echom l:sz
              execute "!git commit -a -m \"Commit-All\""
          else
