@@ -234,6 +234,62 @@ function! s:MyVimBuffers(...)
 
         set nowrap
 endfunc
+
+function! g:DIRPF()
+    let s:DirCloseWindow = 0
+    call s:DirSetPwd() 
+    let s:DirSet = "/home/mestes/center"
+    call s:MyProject()
+endfunction
+
+function! s:MyProject(...)
+        call s:PutLineSet(0)
+        let l:list = readfile("/home/mestes/center/projectfile")
+        let l:n=-1
+        let l:k=0
+        for key in l:list
+              let l:k=strlen(key)
+              if ( l:k > l:n )
+                  let l:n=l:k
+              endif
+        endfor
+        let l:n=l:n+6
+
+        " Create Window/Buffer Part
+        call s:NewWindow("Left", l:n, "<Enter> :call g:MySelectionAction('rx')")
+        let s:DirWindow = winnr()
+
+        " Display Part
+        setlocal cursorline
+        call s:PutLineSet(1)
+        for key in l:list
+              call s:PutLine(key)
+        endfor
+
+        " Red
+        highlight ColorRed    ctermfg=Red    guifg=#ff0000 cterm=bold gui=bold
+        " Green
+        highlight ColorGreen  ctermfg=Green  guifg=#00ff00 cterm=bold gui=bold
+        " Blue
+        highlight ColorBlue   ctermfg=Blue   guifg=#0087ff cterm=bold gui=bold
+        " Yellow
+        highlight ColorYellow ctermfg=Yellow guifg=#ffff00 cterm=bold gui=bold
+        " Cyan
+        highlight ColorCyan   ctermfg=Cyan   guifg=#00ffff cterm=bold gui=bold
+        " Magenta / Purple
+        highlight ColorMagenta ctermfg=Magenta guifg=#ff00ff cterm=bold gui=bold
+        " White
+        highlight ColorWhite  ctermfg=White  guifg=#ffffff cterm=bold gui=bold
+        " Black (useful for backgrounds or dark text)
+        highlight ColorBlack  ctermfg=Black  guifg=#000000 
+        " Gray / Grey
+        highlight ColorGray   ctermfg=Gray   guifg=#808080 cterm=NONE gui=NONE
+
+        call matchadd('ColorGreen', '\%3l^.*$')
+        set nowrap
+
+
+endfunc
 function! s:MyDir(...)
         let l:CommandType = a:1
         call s:PutLineSet(0)
@@ -250,6 +306,10 @@ function! s:MyDir(...)
                 else
                     if (a:0 == 5)
                         let l:list = split(glob(a:2),'\n') + split(glob(a:3),'\n') + split(glob(a:4),'\n') + split(glob(a:5),'\n')
+                    else
+                        if (a:0 == 6)
+                            let l:list = readfile("/home/mestes/center/projectfile")
+                        endif
                     endif
                 endif
             endif
@@ -418,6 +478,8 @@ endfunction
 
 
 
+
+
 function! s:DirSetSpecific(...)
     let s:DirSet = a:1
     return s:DirSet
@@ -579,6 +641,18 @@ function! g:Textish(...)
     endif
 endfunction
 
+function! g:MySelectionAction(...)
+     let l:sz   = s:DirToken(getline("."))
+     let l:fs = s:DirSet . "/" . l:sz
+     " **************************
+     " This is the <enter> action
+     " **************************
+     if (a:1 == 'rx')
+         exe "wincmd w"
+         execute "e " . l:fs
+         normal! k
+     endif
+endfunction
 function! g:MyDirAction(...)
      let l:sz   = s:DirToken(getline("."))
      if (line(".") > 1) 
@@ -628,6 +702,17 @@ function! g:MyDirAction(...)
                      " **************************
                      " This is the <enter> action
                      " **************************
+                     if (a:1 == 'rx')
+                                        exe "wincmd w"
+                                        execute "e " . l:fs
+                                        normal! k
+                                        " **************************
+                                        " New Code
+                                        " **************************
+                                        "exe s:DirEditWindow . "wincmd w"
+                                        "silent execute "q"
+                                        " End **********************
+                     endif
                      if (a:1 == 'r')
                                 if (s:FileNameBookEnds(l:sz, "A", "vim") == 0)
                                     if (s:FileNameBookEnds(l:sz, "A", "project") == 0)
