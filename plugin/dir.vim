@@ -1,4 +1,5 @@
 " *****************************************************************************************************
+" *****************************************************************************************************
                 "  dir.vim - a Simple Directory Lister/File Opener
                 " *************************************************************************************
 if exists("g:loaded_plugin_dir") || v:version < 700 || &cp
@@ -238,13 +239,13 @@ endfunc
 function! g:DIRPF()
     let s:DirCloseWindow = 0
     call s:DirSetPwd() 
-    let s:DirSet = "/home/mestes/center"
+    let s:DirSet = "./"
     call s:MyProject()
 endfunction
 
 function! s:MyProject(...)
         call s:PutLineSet(0)
-        let l:list = readfile("/home/mestes/center/projectfile")
+        let l:list = readfile("./projectfile")
         let l:n=-1
         let l:k=0
         for key in l:list
@@ -285,7 +286,13 @@ function! s:MyProject(...)
         " Gray / Grey
         highlight ColorGray   ctermfg=Gray   guifg=#808080 cterm=NONE gui=NONE
 
-        call matchadd('ColorGreen', '\%3l^.*$')
+        call s:PutLine("")
+        call s:PutLine("")
+        call s:PutLine("COMMIT-ALL")
+
+        let l:regex="\\%" . (s:PutLineRow - 1) . "l^.*$"
+        call matchadd('ColorGreen', l:regex)
+
         set nowrap
 
 
@@ -308,7 +315,7 @@ function! s:MyDir(...)
                         let l:list = split(glob(a:2),'\n') + split(glob(a:3),'\n') + split(glob(a:4),'\n') + split(glob(a:5),'\n')
                     else
                         if (a:0 == 6)
-                            let l:list = readfile("/home/mestes/center/projectfile")
+                            let l:list = readfile("./projectfile")
                         endif
                     endif
                 endif
@@ -640,17 +647,30 @@ function! g:Textish(...)
         endif
     endif
 endfunction
+function! s:Log(msg)
+    " Specify your log file path
+    let l:logfile = expand('~/.vim/debug.log')
+    " Format message with a timestamp
+    let l:entry = strftime('%Y-%m-%d %H:%M:%S') . ': ' . a:msg
+    " Append to file (list of lines, file path, append mode)
+    call writefile([l:entry], l:logfile, 'a')
+endfunction
 
 function! g:MySelectionAction(...)
      let l:sz   = s:DirToken(getline("."))
-     let l:fs = s:DirSet . "/" . l:sz
      " **************************
      " This is the <enter> action
      " **************************
+     call s:Log(l:sz)
      if (a:1 == 'rx')
-         exe "wincmd w"
-         execute "e " . l:fs
-         normal! k
+         if (l:sz == 'COMMIT-ALL')
+             echom l:sz
+             execute "!git commit -a -m \"Commit-All\""
+         else
+             exe "wincmd w"
+             execute "e " .  s:DirSet . "/" . l:sz
+             normal! k
+         endif
      endif
 endfunction
 function! g:MyDirAction(...)
