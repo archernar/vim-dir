@@ -134,6 +134,35 @@ let s:PutLineRow=0
 function! s:PutLineSet(...)
     let s:PutLineRow = a:1 
 endfunction
+function! s:MakeAllLinesWhite()
+    call clearmatches()
+    call matchadd('ColorWhite', '.*')
+endfunction
+function! s:MakeThisLineYellow()
+    call s:MakeAllLinesWhite()
+    call matchadd('ColorYellow', "\\%" . line('.') . "l^.*$")
+endfunction
+function! s:MakeThisLineRed()
+    call s:MakeAllLinesWhite()
+    call matchadd('ColorRed', "\\%" . line('.') . "l^.*$")
+endfunction
+function! s:MakeLineRed(...)
+    call matchadd('ColorRed', "\\%" . (a:1) . "l^.*$")
+endfunction
+function! s:PutLineRed(...)
+    call s:PutLine(a:1)
+    call matchadd('ColorRed', "\\%" . (s:PutLineRow - 1) . "l^.*$")
+endfunction
+function! s:PutLineGreen(...)
+    call s:PutLine(a:1)
+    call matchadd('ColorGreen', "\\%" . (s:PutLineRow - 1) . "l^.*$")
+endfunction
+function! s:PutLineYellow(...)
+    call s:PutLine(a:1)
+    call matchadd('ColorYellow', "\\%" . (s:PutLineRow - 1) . "l^.*$")
+endfunction
+
+
 function! s:PutLine(...)
     call setline(s:PutLineRow, a:1)
     let s:PutLineRow = s:PutLineRow + 1
@@ -243,7 +272,21 @@ function! g:DIRPF()
     call s:MyProject()
 endfunction
 
+highlight ColorRed     ctermfg=Red     guifg=#ff0000 cterm=bold gui=bold
+highlight ColorGreen   ctermfg=Green   guifg=#00ff00 cterm=bold gui=bold
+highlight ColorBlue    ctermfg=Blue    guifg=#0087ff cterm=bold gui=bold
+highlight ColorYellow  ctermfg=Yellow  guifg=#ffff00 cterm=bold gui=bold
+highlight ColorCyan    ctermfg=Cyan    guifg=#00ffff cterm=bold gui=bold
+highlight ColorMagenta ctermfg=Magenta guifg=#ff00ff cterm=bold gui=bold
+highlight ColorWhite   ctermfg=White   guifg=#ffffff cterm=bold gui=bold
+highlight ColorBlack   ctermfg=Black   guifg=#000000 
+highlight ColorGray    ctermfg=Gray    guifg=#808080 cterm=NONE gui=NONE
+
 function! s:MyProject(...)
+        if !filereadable("./projectfile")
+            return
+        endif
+
         call s:PutLineSet(0)
         let l:list = readfile("./projectfile")
         let l:n=-1
@@ -264,39 +307,23 @@ function! s:MyProject(...)
         setlocal cursorline
         call s:PutLineSet(1)
         for key in l:list
-              call s:PutLine(key)
+
+              call s:MakeAllLinesWhite()
+
+              call s:PutLineYellow(key)
+                 exe "wincmd w"
+                 execute "e " .  s:DirSet . "/" . key
+                 exe "wincmd w"
         endfor
 
-        " Red
-        highlight ColorRed    ctermfg=Red    guifg=#ff0000 cterm=bold gui=bold
-        " Green
-        highlight ColorGreen  ctermfg=Green  guifg=#00ff00 cterm=bold gui=bold
-        " Blue
-        highlight ColorBlue   ctermfg=Blue   guifg=#0087ff cterm=bold gui=bold
-        " Yellow
-        highlight ColorYellow ctermfg=Yellow guifg=#ffff00 cterm=bold gui=bold
-        " Cyan
-        highlight ColorCyan   ctermfg=Cyan   guifg=#00ffff cterm=bold gui=bold
-        " Magenta / Purple
-        highlight ColorMagenta ctermfg=Magenta guifg=#ff00ff cterm=bold gui=bold
-        " White
-        highlight ColorWhite  ctermfg=White  guifg=#ffffff cterm=bold gui=bold
-        " Black (useful for backgrounds or dark text)
-        highlight ColorBlack  ctermfg=Black  guifg=#000000 
-        " Gray / Grey
-        highlight ColorGray   ctermfg=Gray   guifg=#808080 cterm=NONE gui=NONE
 
         call s:PutLine("")
         call s:PutLine("")
         let s:cmdCommitAll="Commit-All"
-        let s:cmdLs="List"
+        let s:cmdPush="Push"
         
         call s:PutLine(s:cmdCommitAll)
-        let l:regex="\\%" . (s:PutLineRow - 1) . "l^.*$"
-        call matchadd('ColorGreen', l:regex)
-        call s:PutLine(s:cmdLs)
-        let l:regex="\\%" . (s:PutLineRow - 1) . "l^.*$"
-        call matchadd('ColorGreen', l:regex)
+        call s:PutLine(s:cmdPush)
 
 
         set nowrap
@@ -673,12 +700,22 @@ function! g:MySelectionAction(...)
              echom l:sz
              execute "!git commit -a -m \"Commit-All\""
          else
-             exe "wincmd w"
-             execute "e " .  s:DirSet . "/" . l:sz
-             normal! k
+             if (l:sz == s:cmdPush)
+                 echom l:sz
+                 execute "!git push origin master"
+             else
+                 call s:MakeThisLineYellow()
+
+                 exe "wincmd w"
+                 execute "e " .  s:DirSet . "/" . l:sz
+                 normal! k
+             endif
          endif
      endif
 endfunction
+
+
+
 function! g:MyDirAction(...)
      let l:sz   = s:DirToken(getline("."))
      if (line(".") > 1) 
