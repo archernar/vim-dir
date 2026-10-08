@@ -1,7 +1,13 @@
 " *****************************************************************************************************
 " *****************************************************************************************************
                 "  dir.vim - a Simple Directory Lister/File Opener
+                "
+                "  For .bashrc
+                "  alias ide='vim -c "autocmd VimEnter * call DIRPF()"'
+                "  alias vde='vim -c "autocmd VimEnter * call DIRPF()"'
+                "  
                 " *************************************************************************************
+                "
 if exists("g:loaded_plugin_dir") || v:version < 700 || &cp
   finish
 endif
