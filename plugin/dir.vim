@@ -18,7 +18,14 @@ let s:OPENFILEACTION = 1
 let s:CLOSESPLITAFTERACTION = 0
 let s:OPENSPLITAFTERACTION = 1
 let s:KEEPSPLITOPEN = 0
-
+function! s:Log(msg)
+    " Specify your log file path
+    let l:logfile = expand('~/.vim/debug.log')
+    " Format message with a timestamp
+    let l:entry = strftime('%Y-%m-%d %H:%M:%S') . ': ' . a:msg
+    " Append to file (list of lines, file path, append mode)
+    call writefile([l:entry], l:logfile, 'a')
+endfunction
 " *****************************************************************************************************
                 "  Command definitions
                 " *************************************************************************************
@@ -173,6 +180,72 @@ function! s:PutLine(...)
     call setline(s:PutLineRow, a:1)
     let s:PutLineRow = s:PutLineRow + 1
 endfunction
+" Moves the cursor to the first line containing the given string
+"
+" USAGE NOTES & EXAMPLES:
+" --------------------------------------------------------------------------
+" 1. Jump to the first line containing a string:
+"    :call JumpToLineWithStr('FIXME')
+"
+" 2. Combine it with your previous highlighting function:
+"    :call JumpToLineWithStr('TODO')
+"    :call HighlightLineWithStr('ColorRed', 'TODO', 'first')
+" --------------------------------------------------------------------------
+function! JumpToLineWithStr(search_str)
+    let l:last_line = line('$')
+
+    " Loop through every line in the current buffer from top to bottom
+    for l:i in range(1, l:last_line)
+        " Check if the line contains the search string literally
+        if stridx(getline(l:i), a:search_str) != -1
+            " Move cursor to the matching line (column 1)
+            call cursor(l:i, 1)
+            return l:i
+        endif
+    endfor
+
+    " Echo a message if the string wasn't found in the buffer
+    echo "String not found: " . a:search_str
+    return 0
+endfunction
+" General helper function: takes a highlight group and a line number
+function! s:HighlightLine(hl_group, line_num)
+    call matchadd(a:hl_group, "\\%" . a:line_num . "l^.*$")
+endfunction
+
+" Main function: takes a highlight group, a search string, and an optional mode ('first' or 'all')
+"
+" USAGE NOTES & EXAMPLES:
+" --------------------------------------------------------------------------
+" 1. Highlight only the first occurrence (default behavior):
+"    :call s:MakeAllLinesWhite()
+"    :call HighlightLineWithStr('ColorRed', 'TODO')
+"
+" 2. Highlight all occurrences using a specific highlight group:
+"    :call HighlightLineWithStr('ColorBlue', 'FIXME', 'all')
+"
+" 3. Explicitly pass 'first' if you want to be clear about the default behavior:
+"    :call HighlightLineWithStr('WarningMsg', 'ERROR', 'first')
+" --------------------------------------------------------------------------
+function! HighlightLineWithStr(hl_group, search_str, ...)
+    " Default to 'first' if no third argument is provided
+    let l:mode = get(a:, 1, 'first')
+    let l:last_line = line('$')
+
+    " Loop through every line in the current buffer
+    for l:i in range(1, l:last_line)
+        " Check if the line contains the search string literally
+        if stridx(getline(l:i), a:search_str) != -1
+            call s:HighlightLine(a:hl_group, l:i)
+            
+            " Stop after the first match by default
+            if l:mode ==# 'first'
+                break
+            endif
+        endif
+    endfor
+endfunction
+
 
 function! g:CourseSnip()
     let l:tag = "QRS"
@@ -287,6 +360,18 @@ highlight ColorMagenta ctermfg=Magenta guifg=#ff00ff cterm=bold gui=bold
 highlight ColorWhite   ctermfg=White   guifg=#ffffff cterm=bold gui=bold
 highlight ColorBlack   ctermfg=Black   guifg=#000000 
 highlight ColorGray    ctermfg=Gray    guifg=#808080 cterm=NONE gui=NONE
+"augroup BufferSwitchEvents
+"    autocmd!
+"    call s:Log(expand('%:t'))
+"    autocmd BufEnter * call BufferEntry(expand('%:t'))
+"augroup END
+
+function! BufferEntry(...)
+    call win_gotoid(s:menu_win)
+                 call s:MakeAllLinesWhite()
+                 call HighlightLineWithStr('ColorGreen', a:1)
+    call win_gotoid(s:client_win)
+endfunction
 
 function! s:MyProject(...)
         if !filereadable("./projectfile")
@@ -305,18 +390,23 @@ function! s:MyProject(...)
         endfor
         let l:n=l:n+6
 
+        let s:client_win = win_getid()
         " Create Window/Buffer Part
         call s:NewWindow("Left", l:n, "<Enter> :call g:MySelectionAction('rx')")
+        let s:menu_win = win_getid()
+
+
+
+
         let s:DirWindow = winnr()
 
         " Display Part
         setlocal cursorline
         call s:PutLineSet(1)
         for key in l:list
-
               call s:MakeAllLinesWhite()
-
-              call s:PutLineYellow(key)
+              call s:PutLineGreen(key)
+              call JumpToLineWithStr(key)
                  exe "wincmd w"
                  execute "e " .  s:DirSet . "/" . key
                  exe "wincmd w"
@@ -686,14 +776,6 @@ function! g:Textish(...)
         endif
     endif
 endfunction
-function! s:Log(msg)
-    " Specify your log file path
-    let l:logfile = expand('~/.vim/debug.log')
-    " Format message with a timestamp
-    let l:entry = strftime('%Y-%m-%d %H:%M:%S') . ': ' . a:msg
-    " Append to file (list of lines, file path, append mode)
-    call writefile([l:entry], l:logfile, 'a')
-endfunction
 
 function! g:MySelectionAction(...)
      let l:sz   = s:DirToken(getline("."))
@@ -710,7 +792,9 @@ function! g:MySelectionAction(...)
                  echom l:sz
                  execute "!git push origin master"
              else
-                 call s:MakeThisLineYellow()
+                 call s:MakeAllLinesWhite()
+                 call HighlightLineWithStr('ColorGreen', l:sz)
+                 call JumpToLineWithStr(l:sz)
 
                  exe "wincmd w"
                  execute "e " .  s:DirSet . "/" . l:sz
