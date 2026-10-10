@@ -424,10 +424,7 @@ setlocal nonumber norelativenumber
         
         call s:PutLine("")
         call s:PutLine("")
-        call s:PutLine("")
         call s:PutLine("----")
-        call s:PutLine("")
-        call s:PutLine("")
         call s:PutLine(s:cmdCommitBuffer)
         call s:PutLine("")
         call s:PutLine(s:cmdCommitAll)
