@@ -417,10 +417,13 @@ setlocal nonumber norelativenumber
 
         call s:PutLine("")
         call s:PutLine("")
+        let s:cmdCommitBuffer="Commit-Buffer"
         let s:cmdCommitAll="Commit-All"
         let s:cmdPush="Push"
         let s:cmdCommitPush="Commit-Push"
         
+        call s:PutLine(s:cmdCommitBuffer)
+        call s:PutLine("")
         call s:PutLine(s:cmdCommitAll)
         call s:PutLine("")
         call s:PutLine(s:cmdPush)
@@ -803,13 +806,22 @@ function! g:MySelectionAction(...)
                      execute "!git commit -a -m \"Commit-All\""
                      execute "!git push origin master"
                  else
-                     call s:MakeAllLinesWhite()
-                     call HighlightLineWithStr('ColorGreen', l:sz)
-                     call JumpToLineWithStr(l:sz)
+                     if (l:sz == s:cmdCommitBuffer)
+                         echom l:sz
+                         exe "wincmd w"
+                         let l:fn=expand('%')
+                         execute "!git add" . " " . l:fn
+                         execute "!git commit -m \"Update\"" . " " . l:fn
+                         exe "wincmd w"
+                     else
+                         call s:MakeAllLinesWhite()
+                         call HighlightLineWithStr('ColorGreen', l:sz)
+                         call JumpToLineWithStr(l:sz)
 
-                     exe "wincmd w"
-                     execute "e " .  s:DirSet . "/" . l:sz
-                     normal! k
+                         exe "wincmd w"
+                         execute "e " .  s:DirSet . "/" . l:sz
+                         normal! k
+                     endif
                  endif
              endif
          endif
