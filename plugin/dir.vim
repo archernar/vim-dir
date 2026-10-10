@@ -421,6 +421,7 @@ setlocal nonumber norelativenumber
         let s:cmdCommitAll="Commit-All"
         let s:cmdPush="Push"
         let s:cmdCommitPush="Commit-Push"
+        let s:cmdViewLog="View-Log"
         
         call s:PutLine("")
         call s:PutLine("")
@@ -432,6 +433,8 @@ setlocal nonumber norelativenumber
         call s:PutLine(s:cmdPush)
         call s:PutLine("")
         call s:PutLine(s:cmdCommitPush)
+        call s:PutLine("")
+        call s:PutLine(s:cmdViewLog)
 
 
         set nowrap
@@ -817,13 +820,19 @@ function! g:MySelectionAction(...)
                          execute "!git commit -m \"Update\"" . " " . l:fn
                          exe "wincmd w"
                      else
-                         call s:MakeAllLinesWhite()
-                         call HighlightLineWithStr('ColorGreen', l:sz)
-                         call JumpToLineWithStr(l:sz)
+                         if (l:sz == s:cmdViewLog)
+                             exe "wincmd w"
+                             execute "e " . expand('~/.vim/debug.log')
+                             normal! k
+                         else
+                             call s:MakeAllLinesWhite()
+                             call HighlightLineWithStr('ColorGreen', l:sz)
+                             call JumpToLineWithStr(l:sz)
 
-                         exe "wincmd w"
-                         execute "e " .  s:DirSet . "/" . l:sz
-                         normal! k
+                             exe "wincmd w"
+                             execute "e " .  s:DirSet . "/" . l:sz
+                             normal! k
+                         endif
                      endif
                  endif
              endif
