@@ -422,6 +422,12 @@ setlocal nonumber norelativenumber
         let s:cmdPush="Push"
         let s:cmdCommitPush="Commit-Push"
         
+        call s:PutLine("")
+        call s:PutLine("")
+        call s:PutLine("")
+        call s:PutLine("----")
+        call s:PutLine("")
+        call s:PutLine("")
         call s:PutLine(s:cmdCommitBuffer)
         call s:PutLine("")
         call s:PutLine(s:cmdCommitAll)
