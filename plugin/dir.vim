@@ -26,6 +26,16 @@ function! s:Log(msg)
     " Append to file (list of lines, file path, append mode)
     call writefile([l:entry], l:logfile, 'a')
 endfunction
+highlight ColorRed     ctermfg=Red     guifg=#ff0000 cterm=bold gui=bold
+highlight ColorGreen   ctermfg=Green   guifg=#00ff00 cterm=bold gui=bold
+highlight ColorBlue    ctermfg=Blue    guifg=#0087ff cterm=bold gui=bold
+highlight ColorYellow  ctermfg=Yellow  guifg=#ffff00 cterm=bold gui=bold
+highlight ColorCyan    ctermfg=Cyan    guifg=#00ffff cterm=bold gui=bold
+highlight ColorMagenta ctermfg=Magenta guifg=#ff00ff cterm=bold gui=bold
+highlight ColorWhite   ctermfg=White   guifg=#ffffff cterm=bold gui=bold
+highlight ColorBlack   ctermfg=Black   guifg=#000000 
+highlight ColorGray    ctermfg=Gray    guifg=#808080 cterm=NONE gui=NONE
+highlight MyCustomBg guibg=#00005f ctermbg=17 guifg=#ffffff ctermfg=255V
 " *****************************************************************************************************
                 "  Command definitions
                 " *************************************************************************************
@@ -351,15 +361,7 @@ function! g:DIRPF()
     call s:MyProject()
 endfunction
 
-highlight ColorRed     ctermfg=Red     guifg=#ff0000 cterm=bold gui=bold
-highlight ColorGreen   ctermfg=Green   guifg=#00ff00 cterm=bold gui=bold
-highlight ColorBlue    ctermfg=Blue    guifg=#0087ff cterm=bold gui=bold
-highlight ColorYellow  ctermfg=Yellow  guifg=#ffff00 cterm=bold gui=bold
-highlight ColorCyan    ctermfg=Cyan    guifg=#00ffff cterm=bold gui=bold
-highlight ColorMagenta ctermfg=Magenta guifg=#ff00ff cterm=bold gui=bold
-highlight ColorWhite   ctermfg=White   guifg=#ffffff cterm=bold gui=bold
-highlight ColorBlack   ctermfg=Black   guifg=#000000 
-highlight ColorGray    ctermfg=Gray    guifg=#808080 cterm=NONE gui=NONE
+
 "augroup BufferSwitchEvents
 "    autocmd!
 "    call s:Log(expand('%:t'))
@@ -395,8 +397,8 @@ function! s:MyProject(...)
         call s:NewWindow("Left", l:n, "<Enter> :call g:MySelectionAction('rx')")
         let s:menu_win = win_getid()
 
-
-
+setlocal wincolor=MyCustomBg
+setlocal nonumber norelativenumber
 
         let s:DirWindow = winnr()
 
