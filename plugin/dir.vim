@@ -417,9 +417,11 @@ function! s:MyProject(...)
         call s:PutLine("")
         let s:cmdCommitAll="Commit-All"
         let s:cmdPush="Push"
+        let s:cmdCommitPush="Commit-Push"
         
         call s:PutLine(s:cmdCommitAll)
         call s:PutLine(s:cmdPush)
+        call s:PutLine(s:cmdCommitPush)
 
 
         set nowrap
@@ -792,13 +794,19 @@ function! g:MySelectionAction(...)
                  echom l:sz
                  execute "!git push origin master"
              else
-                 call s:MakeAllLinesWhite()
-                 call HighlightLineWithStr('ColorGreen', l:sz)
-                 call JumpToLineWithStr(l:sz)
+                 if (l:sz == s:cmdCommitPush)
+                     echom l:sz
+                     execute "!git commit -a -m \"Commit-All\""
+                     execute "!git push origin master"
+                 else
+                     call s:MakeAllLinesWhite()
+                     call HighlightLineWithStr('ColorGreen', l:sz)
+                     call JumpToLineWithStr(l:sz)
 
-                 exe "wincmd w"
-                 execute "e " .  s:DirSet . "/" . l:sz
-                 normal! k
+                     exe "wincmd w"
+                     execute "e " .  s:DirSet . "/" . l:sz
+                     normal! k
+                 endif
              endif
          endif
      endif
