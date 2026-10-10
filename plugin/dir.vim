@@ -420,7 +420,9 @@ function! s:MyProject(...)
         let s:cmdCommitPush="Commit-Push"
         
         call s:PutLine(s:cmdCommitAll)
+        call s:PutLine("")
         call s:PutLine(s:cmdPush)
+        call s:PutLine("")
         call s:PutLine(s:cmdCommitPush)
 
 
