@@ -26,16 +26,6 @@ function! s:Log(msg)
     " Append to file (list of lines, file path, append mode)
     call writefile([l:entry], l:logfile, 'a')
 endfunction
-highlight ColorRed     ctermfg=Red     guifg=#ff0000 cterm=bold gui=bold
-highlight ColorGreen   ctermfg=Green   guifg=#00ff00 cterm=bold gui=bold
-highlight ColorBlue    ctermfg=Blue    guifg=#0087ff cterm=bold gui=bold
-highlight ColorYellow  ctermfg=Yellow  guifg=#ffff00 cterm=bold gui=bold
-highlight ColorCyan    ctermfg=Cyan    guifg=#00ffff cterm=bold gui=bold
-highlight ColorMagenta ctermfg=Magenta guifg=#ff00ff cterm=bold gui=bold
-highlight ColorWhite   ctermfg=White   guifg=#ffffff cterm=bold gui=bold
-highlight ColorBlack   ctermfg=Black   guifg=#000000 
-highlight ColorGray    ctermfg=Gray    guifg=#808080 cterm=NONE gui=NONE
-highlight MyCustomBg guibg=#00005f ctermbg=17 guifg=#ffffff ctermfg=255V
 " *****************************************************************************************************
                 "  Command definitions
                 " *************************************************************************************
@@ -157,33 +147,6 @@ let s:PutLineRow=0
 function! s:PutLineSet(...)
     let s:PutLineRow = a:1 
 endfunction
-function! s:MakeAllLinesWhite()
-    call clearmatches()
-    call matchadd('ColorWhite', '.*')
-endfunction
-function! s:MakeThisLineYellow()
-    call s:MakeAllLinesWhite()
-    call matchadd('ColorYellow', "\\%" . line('.') . "l^.*$")
-endfunction
-function! s:MakeThisLineRed()
-    call s:MakeAllLinesWhite()
-    call matchadd('ColorRed', "\\%" . line('.') . "l^.*$")
-endfunction
-function! s:MakeLineRed(...)
-    call matchadd('ColorRed', "\\%" . (a:1) . "l^.*$")
-endfunction
-function! s:PutLineRed(...)
-    call s:PutLine(a:1)
-    call matchadd('ColorRed', "\\%" . (s:PutLineRow - 1) . "l^.*$")
-endfunction
-function! s:PutLineGreen(...)
-    call s:PutLine(a:1)
-    call matchadd('ColorGreen', "\\%" . (s:PutLineRow - 1) . "l^.*$")
-endfunction
-function! s:PutLineYellow(...)
-    call s:PutLine(a:1)
-    call matchadd('ColorYellow', "\\%" . (s:PutLineRow - 1) . "l^.*$")
-endfunction
 
 
 function! s:PutLine(...)
@@ -217,43 +180,6 @@ function! JumpToLineWithStr(search_str)
     " Echo a message if the string wasn't found in the buffer
     echo "String not found: " . a:search_str
     return 0
-endfunction
-" General helper function: takes a highlight group and a line number
-function! s:HighlightLine(hl_group, line_num)
-    call matchadd(a:hl_group, "\\%" . a:line_num . "l^.*$")
-endfunction
-
-" Main function: takes a highlight group, a search string, and an optional mode ('first' or 'all')
-"
-" USAGE NOTES & EXAMPLES:
-" --------------------------------------------------------------------------
-" 1. Highlight only the first occurrence (default behavior):
-"    :call s:MakeAllLinesWhite()
-"    :call HighlightLineWithStr('ColorRed', 'TODO')
-"
-" 2. Highlight all occurrences using a specific highlight group:
-"    :call HighlightLineWithStr('ColorBlue', 'FIXME', 'all')
-"
-" 3. Explicitly pass 'first' if you want to be clear about the default behavior:
-"    :call HighlightLineWithStr('WarningMsg', 'ERROR', 'first')
-" --------------------------------------------------------------------------
-function! HighlightLineWithStr(hl_group, search_str, ...)
-    " Default to 'first' if no third argument is provided
-    let l:mode = get(a:, 1, 'first')
-    let l:last_line = line('$')
-
-    " Loop through every line in the current buffer
-    for l:i in range(1, l:last_line)
-        " Check if the line contains the search string literally
-        if stridx(getline(l:i), a:search_str) != -1
-            call s:HighlightLine(a:hl_group, l:i)
-            
-            " Stop after the first match by default
-            if l:mode ==# 'first'
-                break
-            endif
-        endif
-    endfor
 endfunction
 
 
@@ -354,93 +280,6 @@ function! s:MyVimBuffers(...)
         set nowrap
 endfunc
 
-function! g:DIRPF()
-    let s:DirCloseWindow = 0
-    call s:DirSetPwd() 
-    let s:DirSet = "./"
-    call s:MyProject()
-endfunction
-
-
-"augroup BufferSwitchEvents
-"    autocmd!
-"    call s:Log(expand('%:t'))
-"    autocmd BufEnter * call BufferEntry(expand('%:t'))
-"augroup END
-
-function! BufferEntry(...)
-    call win_gotoid(s:menu_win)
-                 call s:MakeAllLinesWhite()
-                 call HighlightLineWithStr('ColorGreen', a:1)
-    call win_gotoid(s:client_win)
-endfunction
-
-function! s:MyProject(...)
-        if !filereadable("./projectfile")
-            return
-        endif
-
-        call s:PutLineSet(0)
-        let l:list = readfile("./projectfile")
-        let l:n=-1
-        let l:k=0
-        for key in l:list
-              let l:k=strlen(key)
-              if ( l:k > l:n )
-                  let l:n=l:k
-              endif
-        endfor
-        let l:n=l:n+6
-
-        let s:client_win = win_getid()
-        " Create Window/Buffer Part
-        call s:NewWindow("Left", l:n, "<Enter> :call g:MySelectionAction('rx')")
-        let s:menu_win = win_getid()
-
-setlocal wincolor=MyCustomBg
-setlocal nonumber norelativenumber
-
-        let s:DirWindow = winnr()
-
-        " Display Part
-        setlocal cursorline
-        call s:PutLineSet(1)
-        for key in l:list
-              call s:MakeAllLinesWhite()
-              call s:PutLineGreen(key)
-              call JumpToLineWithStr(key)
-                 exe "wincmd w"
-                 execute "e " .  s:DirSet . "/" . key
-                 exe "wincmd w"
-        endfor
-
-
-        call s:PutLine("")
-        call s:PutLine("")
-        let s:cmdCommitBuffer="Commit-Buffer"
-        let s:cmdCommitAll="Commit-All"
-        let s:cmdPush="Push"
-        let s:cmdCommitPush="Commit-Push"
-        let s:cmdViewLog="View-Log"
-        
-        call s:PutLine("")
-        call s:PutLine("")
-        call s:PutLine("----")
-        call s:PutLine(s:cmdCommitBuffer)
-        call s:PutLine("")
-        call s:PutLine(s:cmdCommitAll)
-        call s:PutLine("")
-        call s:PutLine(s:cmdPush)
-        call s:PutLine("")
-        call s:PutLine(s:cmdCommitPush)
-        call s:PutLine("")
-        call s:PutLine(s:cmdViewLog)
-
-
-        set nowrap
-
-
-endfunc
 function! s:MyDir(...)
         let l:CommandType = a:1
         call s:PutLineSet(0)
@@ -792,53 +631,6 @@ function! g:Textish(...)
     endif
 endfunction
 
-function! g:MySelectionAction(...)
-     let l:sz   = s:DirToken(getline("."))
-     " **************************
-     " This is the <enter> action
-     " **************************
-     call s:Log(l:sz)
-     if (a:1 == 'rx')
-         if (l:sz == s:cmdCommitAll)
-             echom l:sz
-             execute "!git commit -a -m \"Commit-All\""
-         else
-             if (l:sz == s:cmdPush)
-                 echom l:sz
-                 execute "!git push origin master"
-             else
-                 if (l:sz == s:cmdCommitPush)
-                     echom l:sz
-                     execute "!git commit -a -m \"Commit-All\""
-                     execute "!git push origin master"
-                 else
-                     if (l:sz == s:cmdCommitBuffer)
-                         echom l:sz
-                         exe "wincmd w"
-                         let l:fn=expand('%')
-                         execute "!git add" . " " . l:fn
-                         execute "!git commit -m \"Update\"" . " " . l:fn
-                         exe "wincmd w"
-                     else
-                         if (l:sz == s:cmdViewLog)
-                             exe "wincmd w"
-                             execute "e " . expand('~/.vim/debug.log')
-                             normal! k
-                         else
-                             call s:MakeAllLinesWhite()
-                             call HighlightLineWithStr('ColorGreen', l:sz)
-                             call JumpToLineWithStr(l:sz)
-
-                             exe "wincmd w"
-                             execute "e " .  s:DirSet . "/" . l:sz
-                             normal! k
-                         endif
-                     endif
-                 endif
-             endif
-         endif
-     endif
-endfunction
 
 
 
@@ -1008,6 +800,202 @@ endif
                  silent execute "q"
                  call s:DirSetInto(l:sz)
                  call s:MyDir(0, s:DirSet . s:DirMask)
+             endif
+         endif
+     endif
+endfunction
+
+" SECHIGH
+" *****************************************************************************************************
+                "  Highlights
+                " *************************************************************************************
+highlight ColorRed     ctermfg=Red     guifg=#ff0000 cterm=bold gui=bold
+highlight ColorGreen   ctermfg=Green   guifg=#00ff00 cterm=bold gui=bold
+highlight ColorBlue    ctermfg=Blue    guifg=#0087ff cterm=bold gui=bold
+highlight ColorYellow  ctermfg=Yellow  guifg=#ffff00 cterm=bold gui=bold
+highlight ColorCyan    ctermfg=Cyan    guifg=#00ffff cterm=bold gui=bold
+highlight ColorMagenta ctermfg=Magenta guifg=#ff00ff cterm=bold gui=bold
+highlight ColorWhite   ctermfg=White   guifg=#ffffff cterm=bold gui=bold
+highlight ColorBlack   ctermfg=Black   guifg=#000000 
+highlight ColorGray    ctermfg=Gray    guifg=#808080 cterm=NONE gui=NONE
+highlight MyCustomBg guibg=#00005f ctermbg=17 guifg=#ffffff ctermfg=255V
+function! s:MakeAllLinesWhite()
+    call clearmatches()
+    call matchadd('ColorWhite', '.*')
+endfunction
+function! s:PutLineGreen(...)
+    call s:PutLine(a:1)
+    call matchadd('ColorGreen', "\\%" . (s:PutLineRow - 1) . "l^.*$")
+endfunction
+" General helper function: takes a highlight group and a line number
+function! s:HighlightLine(hl_group, line_num)
+    call matchadd(a:hl_group, "\\%" . a:line_num . "l^.*$")
+endfunction
+
+" Main function: takes a highlight group, a search string, and an optional mode ('first' or 'all')
+"
+" USAGE NOTES & EXAMPLES:
+" --------------------------------------------------------------------------
+" 1. Highlight only the first occurrence (default behavior):
+"    :call s:MakeAllLinesWhite()
+"    :call HighlightLineWithStr('ColorRed', 'TODO')
+"
+" 2. Highlight all occurrences using a specific highlight group:
+"    :call HighlightLineWithStr('ColorBlue', 'FIXME', 'all')
+"
+" 3. Explicitly pass 'first' if you want to be clear about the default behavior:
+"    :call HighlightLineWithStr('WarningMsg', 'ERROR', 'first')
+" --------------------------------------------------------------------------
+function! HighlightLineWithStr(hl_group, search_str, ...)
+    " Default to 'first' if no third argument is provided
+    let l:mode = get(a:, 1, 'first')
+    let l:last_line = line('$')
+
+    " Loop through every line in the current buffer
+    for l:i in range(1, l:last_line)
+        " Check if the line contains the search string literally
+        if stridx(getline(l:i), a:search_str) != -1
+            call s:HighlightLine(a:hl_group, l:i)
+            
+            " Stop after the first match by default
+            if l:mode ==# 'first'
+                break
+            endif
+        endif
+    endfor
+endfunction
+" SECVDE SECVDI
+" *****************************************************************************************************
+                "  Vim Development Environment
+                " *************************************************************************************
+function! g:DIRPF()
+    let s:DirCloseWindow = 0
+    call s:DirSetPwd() 
+    let s:DirSet = "./"
+    call s:MyProject()
+endfunction
+
+"augroup BufferSwitchEvents
+"    autocmd!
+"    call s:Log(expand('%:t'))
+"    autocmd BufEnter * call BufferEntry(expand('%:t'))
+"augroup END
+
+function! BufferEntry(...)
+    call win_gotoid(s:menu_win)
+                 call s:MakeAllLinesWhite()
+                 call HighlightLineWithStr('ColorGreen', a:1)
+    call win_gotoid(s:client_win)
+endfunction
+
+function! s:MyProject(...)
+        if !filereadable("./projectfile")
+            return
+        endif
+
+        call s:PutLineSet(0)
+        let l:list = readfile("./projectfile")
+        let l:n=-1
+        let l:k=0
+        for key in l:list
+              let l:k=strlen(key)
+              if ( l:k > l:n )
+                  let l:n=l:k
+              endif
+        endfor
+        let l:n=l:n+6
+
+        let s:client_win = win_getid()
+        " Create Window/Buffer Part
+        call s:NewWindow("Left", l:n, "<Enter> :call g:MySelectionAction('rx')")
+        let s:menu_win = win_getid()
+
+        setlocal wincolor=MyCustomBg
+        setlocal nonumber norelativenumber
+
+        let s:DirWindow = winnr()
+
+        " Display Part
+        setlocal cursorline
+        call s:PutLineSet(1)
+        for key in l:list
+              call s:MakeAllLinesWhite()
+              call s:PutLineGreen(key)
+              call JumpToLineWithStr(key)
+                 exe "wincmd w"
+                 execute "e " .  s:DirSet . "/" . key
+                 exe "wincmd w"
+        endfor
+
+
+        call s:PutLine("")
+        call s:PutLine("")
+        let s:cmdCommitBuffer="Commit-Buffer"
+        let s:cmdCommitAll="Commit-All"
+        let s:cmdPush="Push"
+        let s:cmdCommitPush="Commit-Push"
+        let s:cmdViewLog="View-Log"
+        
+        call s:PutLine("")
+        call s:PutLine("")
+        call s:PutLine("----")
+        call s:PutLine(s:cmdCommitBuffer)
+        call s:PutLine("")
+        call s:PutLine(s:cmdCommitAll)
+        call s:PutLine("")
+        call s:PutLine(s:cmdPush)
+        call s:PutLine("")
+        call s:PutLine(s:cmdCommitPush)
+        call s:PutLine("")
+        call s:PutLine(s:cmdViewLog)
+
+
+        set nowrap
+
+endfunc
+function! g:MySelectionAction(...)
+     let l:sz   = s:DirToken(getline("."))
+     " **************************
+     " This is the <enter> action
+     " **************************
+     call s:Log(l:sz)
+     if (a:1 == 'rx')
+         if (l:sz == s:cmdCommitAll)
+             echom l:sz
+             execute "!git commit -a -m \"Commit-All\""
+         else
+             if (l:sz == s:cmdPush)
+                 echom l:sz
+                 execute "!git push origin master"
+             else
+                 if (l:sz == s:cmdCommitPush)
+                     echom l:sz
+                     execute "!git commit -a -m \"Commit-All\""
+                     execute "!git push origin master"
+                 else
+                     if (l:sz == s:cmdCommitBuffer)
+                         echom l:sz
+                         exe "wincmd w"
+                         let l:fn=expand('%')
+                         execute "!git add" . " " . l:fn
+                         execute "!git commit -m \"Update\"" . " " . l:fn
+                         exe "wincmd w"
+                     else
+                         if (l:sz == s:cmdViewLog)
+                             exe "wincmd w"
+                             execute "e " . expand('~/.vim/debug.log')
+                             normal! k
+                         else
+                             call s:MakeAllLinesWhite()
+                             call HighlightLineWithStr('ColorGreen', l:sz)
+                             call JumpToLineWithStr(l:sz)
+
+                             exe "wincmd w"
+                             execute "e " .  s:DirSet . "/" . l:sz
+                             normal! k
+                         endif
+                     endif
+                 endif
              endif
          endif
      endif
