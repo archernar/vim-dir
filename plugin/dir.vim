@@ -818,7 +818,7 @@ highlight ColorMagenta ctermfg=Magenta guifg=#ff00ff cterm=bold gui=bold
 highlight ColorWhite   ctermfg=White   guifg=#ffffff cterm=bold gui=bold
 highlight ColorBlack   ctermfg=Black   guifg=#000000 
 highlight ColorGray    ctermfg=Gray    guifg=#808080 cterm=NONE gui=NONE
-highlight MyCustomBg guibg=#00005f ctermbg=17 guifg=#ffffff ctermfg=255V
+highlight MyCustomBg guibg=#00005f ctermbg=17 guifg=#ffffff ctermfg=255
 function! s:MakeAllLinesWhite()
     call clearmatches()
     call matchadd('ColorWhite', '.*')
