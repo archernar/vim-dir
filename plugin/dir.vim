@@ -879,6 +879,10 @@ function! g:DIRPF()
     call s:MyProject()
 endfunction
 
+function! s:systemCommand(...)
+    execute a:1
+endfunction
+
 "augroup BufferSwitchEvents
 "    autocmd!
 "    call s:Log(expand('%:t'))
@@ -972,8 +976,8 @@ function! g:MySelectionAction(...)
              else
                  if (l:sz == s:cmdCommitPush)
                      echom l:sz
-                     execute "!git commit -a -m \"Commit-All\""
-                     execute "!git push origin master"
+                     call s:systemCommand("!git commit -a -m \"Commit-All\"")
+                     call s:systemCommand("!git push origin master")
                  else
                      if (l:sz == s:cmdCommitBuffer)
                          echom l:sz
