@@ -864,6 +864,10 @@ function! HighlightLineWithStr(hl_group, search_str, ...)
         endif
     endfor
 endfunction
+
+
+
+
 " SECVDE SECVDI
 " *****************************************************************************************************
                 "  Vim Development Environment
@@ -927,7 +931,6 @@ function! s:MyProject(...)
                  exe "wincmd w"
         endfor
 
-
         call s:PutLine("")
         call s:PutLine("")
         let s:cmdCommitBuffer="Commit-Buffer"
@@ -948,7 +951,6 @@ function! s:MyProject(...)
         call s:PutLine(s:cmdCommitPush)
         call s:PutLine("")
         call s:PutLine(s:cmdViewLog)
-
 
         set nowrap
 
