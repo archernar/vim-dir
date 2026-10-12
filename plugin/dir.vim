@@ -50,6 +50,7 @@ command! B             :call s:MyVimBuffers(1)
 command! DIR           :call s:MyDirPwd(1)
 command! DIRC          :call s:MyDirPwd(0)
 command! DDIR          :call s:MyDirPwd(0)
+command! VDE           :call s:vde()
 
 
 " *****************************************************************************************************
@@ -880,6 +881,10 @@ endfunction
 " *****************************************************************************************************
                 "  Vim Development Environment
                 " *************************************************************************************
+function! s:vde()
+    call g:DIRPF()
+endfunction
+
 function! g:DIRPF()
     let s:DirCloseWindow = 0
     call s:DirSetPwd() 
