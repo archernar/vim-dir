@@ -631,11 +631,19 @@ function! g:Textish(...)
     endif
 endfunction
 
+function! s:RemoveFirstToken(str)
+    let l:tokens = split(a:str)
+    if len(l:tokens) <= 1
+        return a:str
+    endif
+    return join(l:tokens[1:], ' ')
+endfunction
 
 
 
 function! g:MyDirAction(...)
-     let l:sz   = s:DirToken(getline("."))
+     let l:sz   = s:RemoveFirstToken(getline("."))
+     echom l:sz
      if (line(".") > 1) 
          if (strlen(l:sz) > 0)
              if (l:sz == "..")
