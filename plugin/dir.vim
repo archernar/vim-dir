@@ -50,6 +50,7 @@ command! B             :call s:MyVimBuffers(1)
 command! DIR           :call s:MyDirPwd(1)
 command! DIRC          :call s:MyDirPwd(0)
 command! DDIR          :call s:MyDirPwd(0)
+command! IDE           :call s:vde()
 command! VDE           :call s:vde()
 
 
