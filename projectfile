@@ -1,1 +1,3 @@
 plugin/dir.vim
+popup.vim
+store.vim

@@ -11,6 +11,9 @@
 if exists("g:loaded_plugin_dir") || v:version < 700 || &cp
   finish
 endif
+
+source ~/.vim/bundle/vim-dir/store.vim
+
 let g:loaded_plugin_dir=1
 
 let s:READFILEACTION = 0
@@ -837,6 +840,10 @@ function! s:PutLineGreen(...)
     call s:PutLine(a:1)
     call matchadd('ColorGreen', "\\%" . (s:PutLineRow - 1) . "l^.*$")
 endfunction
+function! s:PutLineYellow(...)
+    call s:PutLine(a:1)
+    call matchadd('ColorYellow', "\\%" . (s:PutLineRow - 1) . "l^.*$")
+endfunction
 " General helper function: takes a highlight group and a line number
 function! s:HighlightLine(hl_group, line_num)
     call matchadd(a:hl_group, "\\%" . a:line_num . "l^.*$")
@@ -916,6 +923,7 @@ function! s:MyProject(...)
         endif
 
         call s:PutLineSet(0)
+        let l:projectlist = readfile($HOME . "/projects")
         let l:list = readfile("./projectfile")
         let l:n=-1
         let l:k=0
@@ -969,12 +977,31 @@ function! s:MyProject(...)
         call s:PutLine(s:cmdCommitPush)
         call s:PutLine("")
         call s:PutLine(s:cmdViewLog)
+        call s:PutLine("")
+        call s:PutLine("")
+        for repo in l:projectlist
+              let l:sz = "PRJ " . s:PathFileName(repo)
+              call StorePut(l:sz, repo)
+              call s:PutLineYellow( l:sz )
+        endfor
 
         set nowrap
 
 endfunc
+function! StartsWith(prefix, str) abort
+    return stridx(a:str, a:prefix) == 0
+endfunction
+function! RemovePrefix(prefix, str) abort
+    if stridx(a:str, a:prefix) == 0
+        " Slice the string starting from the byte-length of the prefix
+        return strpart(a:str, strlen(a:prefix))
+    endif
+    return a:str
+endfunction
+
 function! g:MySelectionAction(...)
      let l:sz   = s:DirToken(getline("."))
+     let l:sz   = getline(".")
      " **************************
      " This is the <enter> action
      " **************************
@@ -1006,13 +1033,22 @@ function! g:MySelectionAction(...)
                              execute "e " . expand('~/.vim/debug.log')
                              normal! k
                          else
-                             call s:MakeAllLinesWhite()
-                             call HighlightLineWithStr('ColorGreen', l:sz)
-                             call JumpToLineWithStr(l:sz)
 
-                             exe "wincmd w"
-                             execute "e " .  s:DirSet . "/" . l:sz
-                             normal! k
+                             if (StartsWith("PRJ ", l:sz))
+                                call ShowPopupMessage('cd ' .  StoreGet(l:sz), 1000)
+
+                                execute 'cd ' .  StoreGet(l:sz)
+                                execute 'q'
+                                call s:vde()
+                             else
+								 call s:MakeAllLinesWhite()
+								 call HighlightLineWithStr('ColorGreen', l:sz)
+								 call JumpToLineWithStr(l:sz)
+
+								 exe "wincmd w"
+								 execute "e " .  s:DirSet . "/" . l:sz
+								 normal! k
+                             endif
                          endif
                      endif
                  endif
