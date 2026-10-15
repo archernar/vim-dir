@@ -966,8 +966,7 @@ function! s:MyProject(...)
         let s:cmdViewLog="View-Log"
         
         call s:PutLine("")
-        call s:PutLine("")
-        call s:PutLine("----")
+        call s:PutLine("Commands")
         call s:PutLine(s:cmdCommitBuffer)
         call s:PutLine("")
         call s:PutLine(s:cmdCommitAll)
@@ -979,6 +978,7 @@ function! s:MyProject(...)
         call s:PutLine(s:cmdViewLog)
         call s:PutLine("")
         call s:PutLine("")
+        call s:PutLine("Projects")
         for repo in l:projectlist
               let l:sz = "PRJ " . s:PathFileName(repo)
               call StorePut(l:sz, repo)
