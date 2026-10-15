@@ -955,6 +955,7 @@ function! s:MyProject(...)
         " Display Part
         setlocal cursorline
         call s:PutLineSet(1)
+        call s:PutLine("Files")
         for key in l:list
               call s:MakeAllLinesWhite()
               call s:PutLineGreen(key)
