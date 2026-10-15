@@ -832,6 +832,12 @@ highlight ColorWhite   ctermfg=White   guifg=#ffffff cterm=bold gui=bold
 highlight ColorBlack   ctermfg=Black   guifg=#000000 
 highlight ColorGray    ctermfg=Gray    guifg=#808080 cterm=NONE gui=NONE
 highlight MyCustomBg guibg=#00005f ctermbg=17 guifg=#ffffff ctermfg=255
+
+function! s:MakeCertainLinesWhite()
+    "call clearmatches()
+    "call matchadd('ColorWhite', '\%>0l\%<4l.*')
+    call matchadd('ColorWhite', '\%>0l\%<'.  s:listlength . 'l.*')
+endfunction
 function! s:MakeAllLinesWhite()
     call clearmatches()
     call matchadd('ColorWhite', '.*')
@@ -925,6 +931,7 @@ function! s:MyProject(...)
         call s:PutLineSet(0)
         let l:projectlist = readfile($HOME . "/projects")
         let l:list = readfile("./projectfile")
+        let s:listlength = len(l:list)
         let l:n=-1
         let l:k=0
         for key in l:list
@@ -967,16 +974,11 @@ function! s:MyProject(...)
         
         call s:PutLine("")
         call s:PutLine("Commands")
-        call s:PutLine(s:cmdCommitBuffer)
-        call s:PutLine("")
-        call s:PutLine(s:cmdCommitAll)
-        call s:PutLine("")
-        call s:PutLine(s:cmdPush)
-        call s:PutLine("")
-        call s:PutLine(s:cmdCommitPush)
-        call s:PutLine("")
-        call s:PutLine(s:cmdViewLog)
-        call s:PutLine("")
+        call s:PutLineYellow(s:cmdCommitBuffer)
+        call s:PutLineYellow(s:cmdCommitAll)
+        call s:PutLineYellow(s:cmdPush)
+        call s:PutLineYellow(s:cmdCommitPush)
+        call s:PutLineYellow(s:cmdViewLog)
         call s:PutLine("")
         call s:PutLine("Projects")
         for repo in l:projectlist
@@ -1041,7 +1043,7 @@ function! g:MySelectionAction(...)
                                 execute 'q'
                                 call s:vde()
                              else
-								 call s:MakeAllLinesWhite()
+								 call s:MakeCertainLinesWhite()
 								 call HighlightLineWithStr('ColorGreen', l:sz)
 								 call JumpToLineWithStr(l:sz)
 
