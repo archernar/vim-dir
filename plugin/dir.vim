@@ -5,6 +5,7 @@
                 "  For .bashrc
                 "  alias ide='vim -c "autocmd VimEnter * call DIRPF()"'
                 "  alias vde='vim -c "autocmd VimEnter * call DIRPF()"'
+                "  alias vdec='vim -c "autocmd VimEnter * call DIRCPF()"'
                 "  
                 " *************************************************************************************
                 "
@@ -898,11 +899,32 @@ endfunction
 function! s:vde()
     call g:DIRPF()
 endfunction
+function! s:vdecreate()
+    call g:DIRCPF()
+endfunction
 
 function! g:DIRPF()
     let s:DirCloseWindow = 0
     call s:DirSetPwd() 
     let s:DirSet = "./"
+    call s:MyProject()
+endfunction
+
+function! g:DIRCPF()
+    " Search upwards from the current file's directory for .git
+    if (!(!empty(finddir('.git', '.;')) || !empty(findfile('.git', '.;'))))
+        echom "Not a git repository."
+        return
+    else
+        call ShowPopupMessage('You are in a git repository',1500)
+        let l:szCommand="git ls-files --full-name | sort > ./projectfile"
+        call system(l:szCommand)
+    endif
+
+    let s:DirCloseWindow = 0
+    call s:DirSetPwd() 
+    let s:DirSet = "./"
+
     call s:MyProject()
 endfunction
 

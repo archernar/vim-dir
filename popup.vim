@@ -28,7 +28,8 @@ function! ShowPopupMessage(msg, ...) abort
         \ 'pos': 'center',
         \ 'padding': [1, 3, 1, 3],
         \ 'border': [],
-        \ 'filter': function('s:AnyKeyFilter')
+        \ 'filter': function('s:AnyKeyFilter'),
+        \ 'highlight': 'Normal'
         \ }
 
     " If a second argument is provided, use it as the timeout (in milliseconds)
