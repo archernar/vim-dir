@@ -13,6 +13,7 @@ if exists("g:loaded_plugin_dir") || v:version < 700 || &cp
   finish
 endif
 
+
 source ~/.vim/bundle/vim-dir/store.vim
 
 let g:loaded_plugin_dir=1
