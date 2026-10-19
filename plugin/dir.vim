@@ -1011,6 +1011,11 @@ function! s:MyProject(...)
               call s:PutLineYellow( l:sz )
         endfor
 
+        let l:notes = readfile($HOME . "/muffala")
+        for l:sz in l:notes
+              call s:PutLineYellow( l:sz )
+        endfor
+
         set nowrap
 
 endfunc
