@@ -14,6 +14,8 @@ if exists("g:loaded_plugin_dir") || v:version < 700 || &cp
 endif
 
 
+source ~/.vim/bundle/vim-dir/popup.vim
+source ~/.vim/bundle/vim-dir/inputpopup.vim
 source ~/.vim/bundle/vim-dir/store.vim
 
 let g:loaded_plugin_dir=1
@@ -1039,6 +1041,9 @@ function! s:MyProject(...)
         
         call s:PutLine("")
         call s:PutLineYellow("Vim Version " . GetVimVersionString())
+    if exists('*popup_dialog')
+        call s:PutLineYellow("PopUp Enabled")
+    endif
         call s:PutLine("")
         call s:PutLineMagenta("Commands")
         call s:PutLineYellow(s:cmdCommitBuffer)
