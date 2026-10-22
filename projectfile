@@ -1,11 +1,12 @@
-LICENSE
-README.md
-functions.txt
 plugin/dir.vim
-plugin/tester.vim
+inputpopup.vim
 popup.vim
-projectfile
+plugin/tester.vim
 pushit
 store.vim
 tagit
 vim-dir.setup
+LICENSE
+README.md
+functions.txt
+projectfile

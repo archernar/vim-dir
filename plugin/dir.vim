@@ -846,11 +846,23 @@ highlight MyCustomBg guibg=#00005f ctermbg=17 guifg=#ffffff ctermfg=255
 function! s:MakeCertainLinesWhite()
     "call clearmatches()
     "call matchadd('ColorWhite', '\%>0l\%<4l.*')
-    call matchadd('ColorWhite', '\%>0l\%<'.  s:listlength . 'l.*')
+    call matchadd('ColorWhite', '\%>0l\%<'.  (s:listlength+4) . 'l.*')
 endfunction
 function! s:MakeAllLinesWhite()
     call clearmatches()
     call matchadd('ColorWhite', '.*')
+endfunction
+function! s:PutLineColor(...)
+    call s:PutLine(a:2)
+    call matchadd(a:1, "\\%" . (s:PutLineRow - 1) . "l^.*$")
+endfunction
+function! s:PutLineWhite(...)
+    call s:PutLine(a:1)
+    call matchadd('ColorWhite', "\\%" . (s:PutLineRow - 1) . "l^.*$")
+endfunction
+function! s:PutLineMagenta(...)
+    call s:PutLine(a:1)
+    call matchadd('ColorMagenta', "\\%" . (s:PutLineRow - 1) . "l^.*$")
 endfunction
 function! s:PutLineGreen(...)
     call s:PutLine(a:1)
@@ -972,6 +984,7 @@ function! s:MyProject(...)
 
         call s:PutLineSet(0)
         let l:list = readfile("./projectfile")
+        let l:first_file = l:list[0]
         let s:listlength = len(l:list)
 
         let l:n=-1
@@ -998,12 +1011,12 @@ function! s:MyProject(...)
         setlocal cursorline
         call s:PutLineSet(1)
         let l:dir_name = fnamemodify(getcwd(), ':t')
-        call s:PutLine(l:dir_name)
+        call s:PutLineColor('ColorMagenta', l:dir_name)
         call s:PutLine("")
-        call s:PutLine("Files")
+        call s:PutLineMagenta("Files")
         for key in l:list
               call s:MakeAllLinesWhite()
-              call s:PutLineGreen(key)
+              call s:PutLine(key)
               call JumpToLineWithStr(key)
                  exe "wincmd w"
                  execute "e " .  s:DirSet . "/" . key
@@ -1019,14 +1032,14 @@ function! s:MyProject(...)
         let s:cmdViewLog="View-Log"
         
         call s:PutLine("")
-        call s:PutLine("Commands")
+        call s:PutLineMagenta("Commands")
         call s:PutLineYellow(s:cmdCommitBuffer)
         call s:PutLineYellow(s:cmdCommitAll)
         call s:PutLineYellow(s:cmdPush)
         call s:PutLineYellow(s:cmdCommitPush)
         call s:PutLineYellow(s:cmdViewLog)
         call s:PutLine("")
-        call s:PutLine("Projects")
+        call s:PutLineMagenta("Projects")
         for repo in l:projectlist
               let l:sz = "PRJ " . s:PathFileName(repo)
               call StorePut(l:sz, repo)
@@ -1037,6 +1050,14 @@ function! s:MyProject(...)
         for l:sz in l:notes
               call s:PutLineYellow( l:sz )
         endfor
+
+        if filereadable(s:DirSet . "/" . l:first_file)
+            call HighlightLineWithStr('ColorGreen', l:first_file)
+			call JumpToLineWithStr(l:first_file)
+            exe "wincmd w"
+            execute "e " .  s:DirSet . "/" . l:first_file
+        endif
+
 
         set nowrap
 
@@ -1062,6 +1083,7 @@ function! g:MySelectionAction(...)
      if (a:1 == 'rx')
          if (l:sz == s:cmdCommitAll)
              echom l:sz
+             let l:comment = PromptPopupInput("Enter new comment:")
              execute "!git commit -a -m \"Commit-All\""
          else
              if (l:sz == s:cmdPush)
