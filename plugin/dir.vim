@@ -1100,6 +1100,7 @@ function! g:MySelectionAction(...)
              else
                  if (l:sz == s:cmdCommitPush)
                      echom l:sz
+                     let l:comment = PromptPopupInput("Enter new comment:")
                      call s:systemCommand("!git commit -a -m \"Commit-All\"")
                      call s:systemCommand("!git push origin master")
                  else
@@ -1108,6 +1109,7 @@ function! g:MySelectionAction(...)
                          echom l:sz
                          exe "wincmd w"
                          let l:fn=expand('%')
+                         let l:comment = PromptPopupInput("Enter new comment:")
                          execute "!git add" . " " . l:fn
                          execute "!git commit -m \"Update\"" . " " . l:fn
                          exe "wincmd w"
