@@ -23,6 +23,13 @@ let s:OPENFILEACTION = 1
 let s:CLOSESPLITAFTERACTION = 0
 let s:OPENSPLITAFTERACTION = 1
 let s:KEEPSPLITOPEN = 0
+" ============================================================================
+function! GetVimVersionString() abort
+    let l:major = v:version / 100
+    let l:minor = v:version % 100
+    return printf('%d.%d', l:major, l:minor)
+endfunction
+
 function! s:Log(msg)
     " Specify your log file path
     let l:logfile = expand('~/.vim/debug.log')
@@ -35,7 +42,7 @@ endfunction
                 "  Command definitions
                 " *************************************************************************************
 command! UPDATEVIMDIR  :PluginUpdate vim-dir
-command! VIMDIR        :PluginUpdate vim-dir
+802
 command! CODE          :call s:MyDirCode(0)
 command! SNIPS         :call s:MyDirSnips(0)
 command! DIRE          :call s:MyDirSelect($VIMSELECTEDDIR,0)
@@ -1024,13 +1031,14 @@ function! s:MyProject(...)
         endfor
 
         call s:PutLine("")
-        call s:PutLine("")
         let s:cmdCommitBuffer="Commit-Buffer"
         let s:cmdCommitAll="Commit-All"
         let s:cmdPush="Push"
         let s:cmdCommitPush="Commit-Push"
         let s:cmdViewLog="View-Log"
         
+        call s:PutLine("")
+        call s:PutLineYellow("Vim Version " . GetVimVersionString())
         call s:PutLine("")
         call s:PutLineMagenta("Commands")
         call s:PutLineYellow(s:cmdCommitBuffer)
