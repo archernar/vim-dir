@@ -1087,6 +1087,9 @@ function! RemovePrefix(prefix, str) abort
 endfunction
 
 function! g:MySelectionAction(...)
+     let l:comment = PromptPopupInput("Enter new comment:")
+
+
      let l:sz   = s:DirToken(getline("."))
      let l:sz   = getline(".")
      " **************************
@@ -1096,7 +1099,6 @@ function! g:MySelectionAction(...)
      if (a:1 == 'rx')
          if (l:sz == s:cmdCommitAll)
              echom l:sz
-             let l:comment = PromptPopupInput("Enter new comment:")
              execute "!git commit -a -m \"Commit-All\""
          else
              if (l:sz == s:cmdPush)
