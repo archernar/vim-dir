@@ -1088,7 +1088,7 @@ endfunction
 
 function! g:MySelectionAction(...)
      let l:comment = PromptPopupInput("Enter new comment:")
-
+     redraw!
 
      let l:sz   = s:DirToken(getline("."))
      let l:sz   = getline(".")

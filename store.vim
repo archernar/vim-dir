@@ -14,8 +14,6 @@
 " * writefile() / readfile() - Standard Vim functions for file I/O.
 " ============================================================================
 
-source ~/.vim/bundle/vim-dir/popup.vim
-source ~/.vim/bundle/vim-dir/inputpopup.vim
 " Define the script-local dictionary to act as the store
 let s:store = {}
 
