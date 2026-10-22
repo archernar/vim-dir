@@ -1096,6 +1096,7 @@ function! g:MySelectionAction(...)
                      call s:systemCommand("!git push origin master")
                  else
                      if (l:sz == s:cmdCommitBuffer)
+                         let l:comment = PromptPopupInput("Enter new comment:")
                          echom l:sz
                          exe "wincmd w"
                          let l:fn=expand('%')
