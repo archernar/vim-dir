@@ -1109,7 +1109,6 @@ function! g:MySelectionAction(...)
                          echom l:sz
                          exe "wincmd w"
                          let l:fn=expand('%')
-                         let l:comment = PromptPopupInput("Enter new comment:")
                          execute "!git add" . " " . l:fn
                          execute "!git commit -m \"Update\"" . " " . l:fn
                          exe "wincmd w"
