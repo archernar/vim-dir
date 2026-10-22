@@ -157,8 +157,14 @@ endfunction
 
 
 function! s:PutLine(...)
-    call setline(s:PutLineRow, a:1)
-    let s:PutLineRow = s:PutLineRow + 1
+        call setline(s:PutLineRow, a:1)
+        let s:PutLineRow = s:PutLineRow + 1
+"     if (a:0 == 1)
+"     else
+"         call setline(s:PutLineRow, a:2)
+"         call matchadd(a:1, "\\%" . (s:PutLineRow) . "l^.*$")
+"     endif
+"     let s:PutLineRow = s:PutLineRow + 1
 endfunction
 " Moves the cursor to the first line containing the given string
 "
@@ -825,7 +831,9 @@ endfunction
                 "  Highlights
                 " *************************************************************************************
 highlight ColorRed     ctermfg=Red     guifg=#ff0000 cterm=bold gui=bold
-highlight ColorGreen   ctermfg=Green   guifg=#00ff00 cterm=bold gui=bold
+"highlight ColorGreen   ctermfg=Green   guifg=#00ff00 cterm=bold,reverse,underline gui=bold,reverse,underline
+highlight ColorGreenBold   ctermfg=Green   guifg=#00ff00 cterm=bold gui=bold
+highlight ColorGreen       ctermfg=Green   guifg=#00ff00
 highlight ColorBlue    ctermfg=Blue    guifg=#0087ff cterm=bold gui=bold
 highlight ColorYellow  ctermfg=Yellow  guifg=#ffff00 cterm=bold gui=bold
 highlight ColorCyan    ctermfg=Cyan    guifg=#00ffff cterm=bold gui=bold
@@ -947,14 +955,25 @@ function! BufferEntry(...)
 endfunction
 
 function! s:MyProject(...)
+
+        if !filereadable($HOME . "/projects")
+            return
+        endif
+        let l:projectlist = readfile($HOME . "/projects")
+        let l:first_project = l:projectlist[0]
+        if getcwd() ==# expand('~')
+            call chdir(expand(l:first_project))
+        endif
+
+
         if !filereadable("./projectfile")
             return
         endif
 
         call s:PutLineSet(0)
-        let l:projectlist = readfile($HOME . "/projects")
         let l:list = readfile("./projectfile")
         let s:listlength = len(l:list)
+
         let l:n=-1
         let l:k=0
         for key in l:list
@@ -978,6 +997,9 @@ function! s:MyProject(...)
         " Display Part
         setlocal cursorline
         call s:PutLineSet(1)
+        let l:dir_name = fnamemodify(getcwd(), ':t')
+        call s:PutLine(l:dir_name)
+        call s:PutLine("")
         call s:PutLine("Files")
         for key in l:list
               call s:MakeAllLinesWhite()
