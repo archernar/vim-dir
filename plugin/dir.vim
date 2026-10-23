@@ -14,6 +14,8 @@ if exists("g:loaded_plugin_dir") || v:version < 700 || &cp
 endif
 
 
+source ~/.vim/bundle/vim-dir/utils.vim
+
 source ~/.vim/bundle/vim-dir/popup.vim
 source ~/.vim/bundle/vim-dir/inputpopup.vim
 source ~/.vim/bundle/vim-dir/store.vim
@@ -26,20 +28,9 @@ let s:CLOSESPLITAFTERACTION = 0
 let s:OPENSPLITAFTERACTION = 1
 let s:KEEPSPLITOPEN = 0
 " ============================================================================
-function! GetVimVersionString() abort
-    let l:major = v:version / 100
-    let l:minor = v:version % 100
-    return printf('%d.%d', l:major, l:minor)
-endfunction
 
-function! s:Log(msg)
-    " Specify your log file path
-    let l:logfile = expand('~/.vim/debug.log')
-    " Format message with a timestamp
-    let l:entry = strftime('%Y-%m-%d %H:%M:%S') . ': ' . a:msg
-    " Append to file (list of lines, file path, append mode)
-    call writefile([l:entry], l:logfile, 'a')
-endfunction
+
+
 " *****************************************************************************************************
                 "  Command definitions
                 " *************************************************************************************
@@ -964,7 +955,7 @@ endfunction
 
 "augroup BufferSwitchEvents
 "    autocmd!
-"    call s:Log(expand('%:t'))
+"    call g:Log(expand('%:t'))
 "    autocmd BufEnter * call BufferEntry(expand('%:t'))
 "augroup END
 
@@ -1033,6 +1024,7 @@ function! s:MyProject(...)
         endfor
 
         call s:PutLine("")
+        let s:cmdSetComment="Set-Comment"
         let s:cmdCommitBuffer="Commit-Buffer"
         let s:cmdCommitAll="Commit-All"
         let s:cmdPush="Push"
@@ -1040,12 +1032,14 @@ function! s:MyProject(...)
         let s:cmdViewLog="View-Log"
         
         call s:PutLine("")
-        call s:PutLineYellow("Vim Version " . GetVimVersionString())
+        call s:PutLineYellow("Vim Version " . g:GetVimVersionString())
     if exists('*popup_dialog')
         call s:PutLineYellow("PopUp Enabled")
     endif
         call s:PutLine("")
         call s:PutLineMagenta("Commands")
+        call s:PutLineYellow(s:cmdSetComment)
+        call s:PutLine("")
         call s:PutLineYellow(s:cmdCommitBuffer)
         call s:PutLineYellow(s:cmdCommitAll)
         call s:PutLineYellow(s:cmdPush)
@@ -1087,15 +1081,13 @@ function! RemovePrefix(prefix, str) abort
 endfunction
 
 function! g:MySelectionAction(...)
-     let l:comment = PromptPopupInput("Enter new comment:")
-     redraw!
 
      let l:sz   = s:DirToken(getline("."))
      let l:sz   = getline(".")
      " **************************
      " This is the <enter> action
      " **************************
-     call s:Log(l:sz)
+     call g:Log(l:sz)
      if (a:1 == 'rx')
          if (l:sz == s:cmdCommitAll)
              echom l:sz
@@ -1123,21 +1115,26 @@ function! g:MySelectionAction(...)
                              execute "e " . expand('~/.vim/debug.log')
                              normal! k
                          else
-
-                             if (StartsWith("PRJ ", l:sz))
-                                call ShowPopupMessage('cd ' .  StoreGet(l:sz), 1000)
-
-                                execute 'cd ' .  StoreGet(l:sz)
-                                execute 'q'
-                                call s:vde()
+                             if (l:sz == s:cmdSetComment)
+                                let s:comment = readfile($HOME . "/comments")[0]
+                                let s:comment = PromptPopupInput("New comment:", s:comment)
+                                redraw!
                              else
-								 call s:MakeCertainLinesWhite()
-								 call HighlightLineWithStr('ColorGreen', l:sz)
-								 call JumpToLineWithStr(l:sz)
+                                 if (StartsWith("PRJ ", l:sz))
+                                    call ShowPopupMessage('cd ' .  StoreGet(l:sz), 1000)
 
-								 exe "wincmd w"
-								 execute "e " .  s:DirSet . "/" . l:sz
-								 normal! k
+                                    execute 'cd ' .  StoreGet(l:sz)
+                                    execute 'q'
+                                    call s:vde()
+                                 else
+                                     call s:MakeCertainLinesWhite()
+                                     call HighlightLineWithStr('ColorGreen', l:sz)
+                                     call JumpToLineWithStr(l:sz)
+
+                                     exe "wincmd w"
+                                     execute "e " .  s:DirSet . "/" . l:sz
+                                     normal! k
+                                 endif
                              endif
                          endif
                      endif

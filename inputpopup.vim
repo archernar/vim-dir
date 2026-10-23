@@ -16,7 +16,7 @@
 " Returns:
 "   String entered by the user, or an empty string '' if cancelled/aborted.
 " ----------------------------------------------------------------------------
-function! PromptPopupInput(title) abort
+function! PromptPopupInput(title, deftitle) abort
 
 
 
@@ -53,7 +53,7 @@ function! PromptPopupInput(title) abort
 
     " popup_dialog() blocks execution until popup_close() is called, 
     " and returns the result code passed to it.
-    let l:result = popup_dialog([a:title, 'Type your input and press <Enter>:', '> '], l:options)
+    let l:result = popup_dialog(['Comment: ', a:deftitle,'',a:title, '', '> '], l:options)
 
     " If user pressed Enter (success code 1), return the typed text; otherwise empty string
     if l:result == 1

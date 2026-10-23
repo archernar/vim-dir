@@ -1,4 +1,5 @@
 plugin/dir.vim
+utils.vim
 inputpopup.vim
 popup.vim
 plugin/tester.vim
