@@ -174,7 +174,109 @@ endfunction
 "    :call JumpToLineWithStr('FIXME')
 "
 " 2. Combine it with your previous highlighting function:
-"    :call JumpToLineWithStr('TODO')
+function! g:MySelectionAction(...)
+    let l:sz = getline(".")
+    call g:Log(l:sz)
+
+    " Exit immediately if the action trigger doesn't match
+    if a:0 == 0 || a:1 !=# 'rx'
+        return
+    endif
+
+    " Map simple 1-to-1 commands to a dictionary for O(1) lookup
+    let l:SimpleCommands = {
+        \ s:cmdCommitAll: '!git commit -a -m "Commit-All"',
+        \ s:cmdPush: '!git push origin master',
+        \ s:cmdCommitPush: '!git commit -a -m "Commit-All" | !git push origin master'
+    \ }
+
+    if has_key(l:SimpleCommands, l:sz)
+        echom l:sz
+        execute l:SimpleCommands[l:sz]
+    elseif l:sz ==# s:cmdCommitBuffer
+        echom l:sz
+        wincmd w
+        let l:fn = expand('%')
+        execute "!git add " . l:fn
+        execute "!git commit -m \"Update\" " . l:fn
+        wincmd w
+    elseif l:sz ==# s:cmdViewLog
+        wincmd w
+        execute "e " . expand('~/.vim/debug.log')
+        normal! k
+    elseif l:sz ==# s:cmdSetComment
+        let s:comment = readfile($HOME . "/comments")[0]
+        let s:comment = PromptPopupInput("New comment:", s:comment)
+        redraw!
+    elseif StartsWith("PRJ ", l:sz)
+        let l:target_dir = StoreGet(l:sz)
+        call ShowPopupMessage('cd ' . l:target_dir, 1000)
+        execute 'cd ' . l:target_dir
+        quit
+        call s:vde()
+    else
+        " Default file-opening behavior
+        call s:MakeCertainLinesWhite()
+        call HighlightLineWithStr('ColorGreen', l:sz)
+        call JumpToLineWithStr(l:sz)
+
+        wincmd w
+        execute "e " . s:DirSet . "/" . l:sz
+        normal! k
+    endif
+endfunction"    :call JumpToLineWithStr('TODO')
+
+function! g:MySelectionActionPrime(...)
+    let l:sz = getline(".")
+    call g:Log(l:sz)
+
+    " Exit immediately if the action trigger doesn't match
+    if a:0 == 0 || a:1 !=# 'rx'
+        return
+    endif
+
+    " Map simple 1-to-1 commands to a dictionary for O(1) lookup
+    let l:SimpleCommands = {
+        \ s:cmdCommitAll: '!git commit -a -m "Commit-All"',
+        \ s:cmdPush: '!git push origin master',
+        \ s:cmdCommitPush: '!git commit -a -m "Commit-All" | !git push origin master'
+    \ }
+
+    if has_key(l:SimpleCommands, l:sz)
+        echom l:sz
+        execute l:SimpleCommands[l:sz]
+    elseif l:sz ==# s:cmdCommitBuffer
+        echom l:sz
+        wincmd w
+        let l:fn = expand('%')
+        execute "!git add " . l:fn
+        execute "!git commit -m \"Update\" " . l:fn
+        wincmd w
+    elseif l:sz ==# s:cmdViewLog
+        wincmd w
+        execute "e " . expand('~/.vim/debug.log')
+        normal! k
+    elseif l:sz ==# s:cmdSetComment
+        let s:comment = readfile($HOME . "/comments")[0]
+        let s:comment = PromptPopupInput("New comment:", s:comment)
+        redraw!
+    elseif StartsWith("PRJ ", l:sz)
+        let l:target_dir = StoreGet(l:sz)
+        call ShowPopupMessage('cd ' . l:target_dir, 1000)
+        execute 'cd ' . l:target_dir
+        quit
+        call s:vde()
+    else
+        " Default file-opening behavior
+        call s:MakeCertainLinesWhite()
+        call HighlightLineWithStr('ColorGreen', l:sz)
+        call JumpToLineWithStr(l:sz)
+
+        wincmd w
+        execute "e " . s:DirSet . "/" . l:sz
+        normal! k
+    endif
+endfunction
 "    :call HighlightLineWithStr('ColorRed', 'TODO', 'first')
 " --------------------------------------------------------------------------
 function! JumpToLineWithStr(search_str)
