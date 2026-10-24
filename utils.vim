@@ -45,3 +45,17 @@ function! g:JumpToLineWithStr(search_str)
     echo "String not found: " . a:search_str
     return 0
 endfunction
+
+
+function! g:StartsWith(prefix, str) abort
+    return stridx(a:str, a:prefix) == 0
+endfunction
+
+
+function! g:RemovePrefix(prefix, str) abort
+    if stridx(a:str, a:prefix) == 0
+        " Slice the string starting from the byte-length of the prefix
+        return strpart(a:str, strlen(a:prefix))
+    endif
+    return a:str
+endfunction

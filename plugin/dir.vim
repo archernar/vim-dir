@@ -195,7 +195,7 @@ function! g:MySelectionAction(...)
         let s:comment = readfile($HOME . "/comments")[0]
         let s:comment = PromptPopupInput("New comment:", s:comment)
         redraw!
-    elseif StartsWith("PRJ ", l:sz)
+    elseif g:StartsWith("PRJ ", l:sz)
         let l:target_dir = StoreGet(l:sz)
         call ShowPopupMessage('cd ' . l:target_dir, 1000)
         execute 'cd ' . l:target_dir
@@ -247,7 +247,7 @@ function! g:MySelectionActionPrime(...)
         let s:comment = readfile($HOME . "/comments")[0]
         let s:comment = PromptPopupInput("New comment:", s:comment)
         redraw!
-    elseif StartsWith("PRJ ", l:sz)
+    elseif g:StartsWith("PRJ ", l:sz)
         let l:target_dir = StoreGet(l:sz)
         call ShowPopupMessage('cd ' . l:target_dir, 1000)
         execute 'cd ' . l:target_dir
@@ -1138,16 +1138,6 @@ function! s:MyProject(...)
         set nowrap
 
 endfunc
-function! StartsWith(prefix, str) abort
-    return stridx(a:str, a:prefix) == 0
-endfunction
-function! RemovePrefix(prefix, str) abort
-    if stridx(a:str, a:prefix) == 0
-        " Slice the string starting from the byte-length of the prefix
-        return strpart(a:str, strlen(a:prefix))
-    endif
-    return a:str
-endfunction
 
 function! g:MySelectionAction(...)
 
@@ -1189,7 +1179,7 @@ function! g:MySelectionAction(...)
                                 let s:comment = PromptPopupInput("New comment:", s:comment)
                                 redraw!
                              else
-                                 if (StartsWith("PRJ ", l:sz))
+                                 if (g:StartsWith("PRJ ", l:sz))
                                     call ShowPopupMessage('cd ' .  StoreGet(l:sz), 1000)
 
                                     execute 'cd ' .  StoreGet(l:sz)
