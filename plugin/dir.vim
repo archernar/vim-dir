@@ -159,21 +159,8 @@ endfunction
 function! s:PutLine(...)
         call setline(s:PutLineRow, a:1)
         let s:PutLineRow = s:PutLineRow + 1
-"     if (a:0 == 1)
-"     else
-"         call setline(s:PutLineRow, a:2)
-"         call matchadd(a:1, "\\%" . (s:PutLineRow) . "l^.*$")
-"     endif
-"     let s:PutLineRow = s:PutLineRow + 1
 endfunction
-" Moves the cursor to the first line containing the given string
-"
-" USAGE NOTES & EXAMPLES:
-" --------------------------------------------------------------------------
-" 1. Jump to the first line containing a string:
-"    :call JumpToLineWithStr('FIXME')
-"
-" 2. Combine it with your previous highlighting function:
+
 function! g:MySelectionAction(...)
     let l:sz = getline(".")
     call g:Log(l:sz)
@@ -218,13 +205,13 @@ function! g:MySelectionAction(...)
         " Default file-opening behavior
         call s:MakeCertainLinesWhite()
         call HighlightLineWithStr('ColorGreen', l:sz)
-        call JumpToLineWithStr(l:sz)
+        call g:JumpToLineWithStr(l:sz)
 
         wincmd w
         execute "e " . s:DirSet . "/" . l:sz
         normal! k
     endif
-endfunction"    :call JumpToLineWithStr('TODO')
+endfunction
 
 function! g:MySelectionActionPrime(...)
     let l:sz = getline(".")
@@ -270,7 +257,7 @@ function! g:MySelectionActionPrime(...)
         " Default file-opening behavior
         call s:MakeCertainLinesWhite()
         call HighlightLineWithStr('ColorGreen', l:sz)
-        call JumpToLineWithStr(l:sz)
+        call g:JumpToLineWithStr(l:sz)
 
         wincmd w
         execute "e " . s:DirSet . "/" . l:sz
@@ -279,23 +266,6 @@ function! g:MySelectionActionPrime(...)
 endfunction
 "    :call HighlightLineWithStr('ColorRed', 'TODO', 'first')
 " --------------------------------------------------------------------------
-function! JumpToLineWithStr(search_str)
-    let l:last_line = line('$')
-
-    " Loop through every line in the current buffer from top to bottom
-    for l:i in range(1, l:last_line)
-        " Check if the line contains the search string literally
-        if stridx(getline(l:i), a:search_str) != -1
-            " Move cursor to the matching line (column 1)
-            call cursor(l:i, 1)
-            return l:i
-        endif
-    endfor
-
-    " Echo a message if the string wasn't found in the buffer
-    echo "String not found: " . a:search_str
-    return 0
-endfunction
 
 
 function! g:CourseSnip()
@@ -1051,9 +1021,6 @@ function! g:DIRCPF()
     call s:MyProject()
 endfunction
 
-function! s:systemCommand(...)
-    execute a:1
-endfunction
 
 "augroup BufferSwitchEvents
 "    autocmd!
@@ -1119,7 +1086,7 @@ function! s:MyProject(...)
         for key in l:list
               call s:MakeAllLinesWhite()
               call s:PutLine(key)
-              call JumpToLineWithStr(key)
+              call g:JumpToLineWithStr(key)
                  exe "wincmd w"
                  execute "e " .  s:DirSet . "/" . key
                  exe "wincmd w"
@@ -1162,7 +1129,7 @@ function! s:MyProject(...)
 
         if filereadable(s:DirSet . "/" . l:first_file)
             call HighlightLineWithStr('ColorGreen', l:first_file)
-			call JumpToLineWithStr(l:first_file)
+			call g:JumpToLineWithStr(l:first_file)
             exe "wincmd w"
             execute "e " .  s:DirSet . "/" . l:first_file
         endif
@@ -1201,8 +1168,8 @@ function! g:MySelectionAction(...)
              else
                  if (l:sz == s:cmdCommitPush)
                      echom l:sz
-                     call s:systemCommand("!git commit -a -m \"Commit-All\"")
-                     call s:systemCommand("!git push origin master")
+                     call g:SystemCommand("!git commit -a -m \"Commit-All\"")
+                     call g:SystemCommand("!git push origin master")
                  else
                      if (l:sz == s:cmdCommitBuffer)
                          echom l:sz
@@ -1231,7 +1198,7 @@ function! g:MySelectionAction(...)
                                  else
                                      call s:MakeCertainLinesWhite()
                                      call HighlightLineWithStr('ColorGreen', l:sz)
-                                     call JumpToLineWithStr(l:sz)
+                                     call g:JumpToLineWithStr(l:sz)
 
                                      exe "wincmd w"
                                      execute "e " .  s:DirSet . "/" . l:sz

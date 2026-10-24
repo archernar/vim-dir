@@ -21,3 +21,27 @@ function! g:Log(msg)
     " Append to file (list of lines, file path, append mode)
     call writefile([l:entry], l:logfile, 'a')
 endfunction
+
+
+function! g:SystemCommand(...)
+    execute a:1
+endfunction
+
+
+function! g:JumpToLineWithStr(search_str)
+    let l:last_line = line('$')
+
+    " Loop through every line in the current buffer from top to bottom
+    for l:i in range(1, l:last_line)
+        " Check if the line contains the search string literally
+        if stridx(getline(l:i), a:search_str) != -1
+            " Move cursor to the matching line (column 1)
+            call cursor(l:i, 1)
+            return l:i
+        endif
+    endfor
+
+    " Echo a message if the string wasn't found in the buffer
+    echo "String not found: " . a:search_str
+    return 0
+endfunction
