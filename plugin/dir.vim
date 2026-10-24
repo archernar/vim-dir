@@ -22,6 +22,7 @@ source ~/.vim/bundle/vim-dir/store.vim
 
 let g:loaded_plugin_dir=1
 
+let s:BrowseMode = 1
 let s:READFILEACTION = 0
 let s:OPENFILEACTION = 1
 let s:CLOSESPLITAFTERACTION = 0
@@ -936,6 +937,7 @@ function! s:MyProject(...)
         endfor
 
         call s:PutLine("")
+        let s:cmdBrowseMode="Set-Browse"
         let s:cmdSetComment="Set-Comment"
         let s:cmdCommitBuffer="Commit-Buffer"
         let s:cmdCommitAll="Commit-All"
@@ -950,6 +952,7 @@ function! s:MyProject(...)
     endif
         call s:PutLine("")
         call s:PutLineMagenta("Commands")
+        call s:PutLineYellow(s:cmdBrowseMode)
         call s:PutLineYellow(s:cmdSetComment)
         call s:PutLine("")
         call s:PutLineYellow(s:cmdCommitBuffer)
@@ -975,6 +978,9 @@ function! s:MyProject(...)
 			call g:JumpToLineWithStr(l:first_file)
             exe "wincmd w"
             execute "e " .  s:DirSet . "/" . l:first_file
+            if (s:BrowseMode == 1)
+                exe "wincmd w"
+            endif
         endif
 
 
@@ -1022,20 +1028,26 @@ function! g:MySelectionAction(...)
                                 let s:comment = PromptPopupInput("New comment:", s:comment)
                                 redraw!
                              else
-                                 if (g:StartsWith("PRJ ", l:sz))
-                                    call ShowPopupMessage('cd ' .  StoreGet(l:sz), 1000)
-
-                                    execute 'cd ' .  StoreGet(l:sz)
-                                    execute 'q'
-                                    call s:vde()
+                                 if (l:sz == s:cmdBrowseMode)
+                                    let s:BrowseMode = s:BrowseMode ? 0 : 1
                                  else
-                                     call s:MakeCertainLinesWhite()
-                                     call HighlightLineWithStr('ColorGreen', l:sz)
-                                     call g:JumpToLineWithStr(l:sz)
+                                     if (g:StartsWith("PRJ ", l:sz))
+                                        call ShowPopupMessage('cd ' .  StoreGet(l:sz), 1000)
 
-                                     exe "wincmd w"
-                                     execute "e " .  s:DirSet . "/" . l:sz
-                                     normal! k
+                                        execute 'cd ' .  StoreGet(l:sz)
+                                        execute 'q'
+                                        call s:vde()
+                                     else
+                                         call s:MakeCertainLinesWhite()
+                                         call HighlightLineWithStr('ColorGreen', l:sz)
+                                         call g:JumpToLineWithStr(l:sz)
+                                         exe "wincmd w"
+                                         execute "e " .  s:DirSet . "/" . l:sz
+                                         if (s:BrowseMode == 1)
+                                             exe "wincmd w"
+                                         endif
+    "                                     normal! k
+                                     endif
                                  endif
                              endif
                          endif
