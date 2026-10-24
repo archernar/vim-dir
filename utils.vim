@@ -28,6 +28,11 @@ function! g:SystemCommand(...)
 endfunction
 
 
+function! g:ReplaceCurrentLine(new_text)
+  call setline('.', a:new_text)
+endfunction
+
+
 function! g:JumpToLineWithStr(search_str)
     let l:last_line = line('$')
 

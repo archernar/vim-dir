@@ -937,7 +937,8 @@ function! s:MyProject(...)
         endfor
 
         call s:PutLine("")
-        let s:cmdBrowseMode="Set-Browse"
+        let s:cmdBrowseMode="Browse-On"
+        let s:cmdBrowseModeOff="Browse-Off"
         let s:cmdSetComment="Set-Comment"
         let s:cmdCommitBuffer="Commit-Buffer"
         let s:cmdCommitAll="Commit-All"
@@ -1028,8 +1029,9 @@ function! g:MySelectionAction(...)
                                 let s:comment = PromptPopupInput("New comment:", s:comment)
                                 redraw!
                              else
-                                 if (l:sz == s:cmdBrowseMode)
+                                 if (g:StartsWith("Browse-", l:sz))
                                     let s:BrowseMode = s:BrowseMode ? 0 : 1
+                                    call setline('.', s:BrowseMode ? s:cmdBrowseMode : s:cmdBrowseModeOff)
                                  else
                                      if (g:StartsWith("PRJ ", l:sz))
                                         call ShowPopupMessage('cd ' .  StoreGet(l:sz), 1000)
