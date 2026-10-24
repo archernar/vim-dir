@@ -59,3 +59,60 @@ function! g:RemovePrefix(prefix, str) abort
     endif
     return a:str
 endfunction
+
+
+function! g:NewWindow(...)
+        " for wincmdH is Left  L is Right  K is Top  J is Bottom
+        " H is Left  L is Right  K is Top  J is Bottom
+        vnew
+        let l:sz = tolower(a:1)
+
+        if (l:sz == "left")
+             wincmd H
+        else
+            if (l:sz == "right")
+                 wincmd L
+            else
+                if (l:sz == "top")
+                     wincmd K
+                else
+                    if (l:sz == "bottom")
+                         wincmd J
+                    endif
+                endif
+            endif
+        endif
+
+        setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
+        nnoremap <silent> <buffer> q :close<cr>
+"       nnoremap <silent> <buffer> = :vertical resize +5<cr>
+"       nnoremap <silent> <buffer> - :vertical resize -5<cr>
+        nnoremap <silent> <buffer> = :exe "vertical resize +" . winwidth(0)/4<cr>
+        nnoremap <silent> <buffer> - :exe "vertical resize -" . winwidth(0)/4<cr>
+        call cursor(1, 1)
+        execute "vertical resize " . a:2
+        if ( a:0 > 2)
+            execute "nnoremap <silent> <buffer> " . a:3 . "<cr>"
+        endif
+        if ( a:0 > 3)
+            execute "nnoremap <silent> <buffer> " . a:4 . "<cr>"
+        endif
+        if ( a:0 > 4)
+            execute "nnoremap <silent> <buffer> " . a:5 . "<cr>"
+        endif
+        if ( a:0 > 5)
+            execute "nnoremap <silent> <buffer> " . a:6 . "<cr>"
+        endif
+        if ( a:0 > 6)
+            execute "nnoremap <silent> <buffer> " . a:7 . "<cr>"
+        endif
+        if ( a:0 > 7)
+            execute "nnoremap <silent> <buffer> " . a:8 . "<cr>"
+        endif
+        if ( a:0 > 8)
+            execute "nnoremap <silent> <buffer> " . a:9 . "<cr>"
+        endif
+        if ( a:0 > 9)
+            execute "nnoremap <silent> <buffer> " . a:10 . "<cr>"
+        endif
+endfunction

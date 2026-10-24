@@ -290,7 +290,7 @@ function! s:MyVimBuffers(...)
                     let l:c += 1
                 endwhile 
     " Create Window/Buffer Part
-        call s:NewWindow("Left", &columns/3, "<Enter> :call g:MyBufferAction()","s :call g:MyBufferAction()", "b :call g:MyBufferAction()")
+        call g:NewWindow("Left", &columns/3, "<Enter> :call g:MyBufferAction()","s :call g:MyBufferAction()", "b :call g:MyBufferAction()")
         let s:DirWindow = winnr()
         nnoremap <silent> <buffer> f /^f<cr>
         echom "<enter> to select"
@@ -341,7 +341,7 @@ function! s:MyDir(...)
 
     " Create Window/Buffer Part
     " 8 Args
-        call s:NewWindow("Left", &columns/3, "<Enter> :call g:MyDirAction('r')", "x :call g:MyDirAction('e')", "n :call g:MyDirAction('n')", "p :call g:MyDirAction('p')", "v :call g:MyDirAction('v')","q :call g:MyDirAction('q')")
+        call g:NewWindow("Left", &columns/3, "<Enter> :call g:MyDirAction('r')", "x :call g:MyDirAction('e')", "n :call g:MyDirAction('n')", "p :call g:MyDirAction('p')", "v :call g:MyDirAction('v')","q :call g:MyDirAction('q')")
         echom "<r> edit snip, <enter> read snip into current buffer, <l> load session file, <p> open and load project"
 
         let s:DirWindow = winnr()
@@ -397,61 +397,6 @@ function! s:AssertExecution(...)
     silent execute a:1
 endfunc
 
-function! s:NewWindow(...)
-        " for wincmdH is Left  L is Right  K is Top  J is Bottom
-        " H is Left  L is Right  K is Top  J is Bottom
-        vnew
-        let l:sz = tolower(a:1)
-
-        if (l:sz == "left")
-             wincmd H
-        else
-            if (l:sz == "right")
-                 wincmd L
-            else
-                if (l:sz == "top")
-                     wincmd K
-                else
-                    if (l:sz == "bottom")
-                         wincmd J
-                    endif
-                endif
-            endif
-        endif
-
-        setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
-        nnoremap <silent> <buffer> q :close<cr>
-"       nnoremap <silent> <buffer> = :vertical resize +5<cr>
-"       nnoremap <silent> <buffer> - :vertical resize -5<cr>
-        nnoremap <silent> <buffer> = :exe "vertical resize +" . winwidth(0)/4<cr>
-        nnoremap <silent> <buffer> - :exe "vertical resize -" . winwidth(0)/4<cr>
-        call cursor(1, 1)
-        execute "vertical resize " . a:2
-        if ( a:0 > 2)
-            execute "nnoremap <silent> <buffer> " . a:3 . "<cr>"
-        endif
-        if ( a:0 > 3)
-            execute "nnoremap <silent> <buffer> " . a:4 . "<cr>"
-        endif
-        if ( a:0 > 4)
-            execute "nnoremap <silent> <buffer> " . a:5 . "<cr>"
-        endif
-        if ( a:0 > 5)
-            execute "nnoremap <silent> <buffer> " . a:6 . "<cr>"
-        endif
-        if ( a:0 > 6)
-            execute "nnoremap <silent> <buffer> " . a:7 . "<cr>"
-        endif
-        if ( a:0 > 7)
-            execute "nnoremap <silent> <buffer> " . a:8 . "<cr>"
-        endif
-        if ( a:0 > 8)
-            execute "nnoremap <silent> <buffer> " . a:9 . "<cr>"
-        endif
-        if ( a:0 > 9)
-            execute "nnoremap <silent> <buffer> " . a:10 . "<cr>"
-        endif
-endfunction
 
 
 " *****************************************************************************************************
@@ -459,7 +404,7 @@ endfunction
                 " *************************************************************************************
 function! g:ListBuffers()
     let l:c=1
-    call s:NewWindow("Left", &columns/4)
+    call g:NewWindow("Left", &columns/4)
     call s:PutLine(1)
     while l:c <= 64 
         if (bufexists(l:c))
@@ -1017,7 +962,7 @@ function! s:MyProject(...)
 
         let s:client_win = win_getid()
         " Create Window/Buffer Part
-        call s:NewWindow("Left", l:n, "<Enter> :call g:MySelectionAction('rx')")
+        call g:NewWindow("Left", l:n, "<Enter> :call g:MySelectionAction('rx')")
         let s:menu_win = win_getid()
 
         setlocal wincolor=MyCustomBg
