@@ -161,57 +161,6 @@ function! s:PutLine(...)
         let s:PutLineRow = s:PutLineRow + 1
 endfunction
 
-function! g:MySelectionAction(...)
-    let l:sz = getline(".")
-    call g:Log(l:sz)
-
-    " Exit immediately if the action trigger doesn't match
-    if a:0 == 0 || a:1 !=# 'rx'
-        return
-    endif
-
-    " Map simple 1-to-1 commands to a dictionary for O(1) lookup
-    let l:SimpleCommands = {
-        \ s:cmdCommitAll: '!git commit -a -m "Commit-All"',
-        \ s:cmdPush: '!git push origin master',
-        \ s:cmdCommitPush: '!git commit -a -m "Commit-All" | !git push origin master'
-    \ }
-
-    if has_key(l:SimpleCommands, l:sz)
-        echom l:sz
-        execute l:SimpleCommands[l:sz]
-    elseif l:sz ==# s:cmdCommitBuffer
-        echom l:sz
-        wincmd w
-        let l:fn = expand('%')
-        execute "!git add " . l:fn
-        execute "!git commit -m \"Update\" " . l:fn
-        wincmd w
-    elseif l:sz ==# s:cmdViewLog
-        wincmd w
-        execute "e " . expand('~/.vim/debug.log')
-        normal! k
-    elseif l:sz ==# s:cmdSetComment
-        let s:comment = readfile($HOME . "/comments")[0]
-        let s:comment = PromptPopupInput("New comment:", s:comment)
-        "call g:SystemCommand("!echo \"" . s:comment . "\" > " . $HOME . "/comments")
-    elseif g:StartsWith("PRJ ", l:sz)
-        let l:target_dir = StoreGet(l:sz)
-        call ShowPopupMessage('cd ' . l:target_dir, 1000)
-        execute 'cd ' . l:target_dir
-        quit
-        call s:vde()
-    else
-        " Default file-opening behavior
-        call s:MakeCertainLinesWhite()
-        call HighlightLineWithStr('ColorGreen', l:sz)
-        call g:JumpToLineWithStr(l:sz)
-
-        wincmd w
-        execute "e " . s:DirSet . "/" . l:sz
-        normal! k
-    endif
-endfunction
 
 "    :call HighlightLineWithStr('ColorRed', 'TODO', 'first')
 " --------------------------------------------------------------------------
@@ -1033,3 +982,66 @@ function! s:MyProject(...)
 
 endfunc
 
+function! g:MySelectionAction(...)
+
+     let l:sz   = s:DirToken(getline("."))
+     let l:sz   = getline(".")
+     " **************************
+     " This is the <enter> action
+     " **************************
+     call g:Log(l:sz)
+     if (a:1 == 'rx')
+         if (l:sz == s:cmdCommitAll)
+             echom l:sz
+             execute "!git commit -a -m \"Commit-All\""
+         else
+             if (l:sz == s:cmdPush)
+                 echom l:sz
+                 execute "!git push origin master"
+             else
+                 if (l:sz == s:cmdCommitPush)
+                     echom l:sz
+                     call g:SystemCommand("!git commit -a -m \"Commit-All\"")
+                     call g:SystemCommand("!git push origin master")
+                 else
+                     if (l:sz == s:cmdCommitBuffer)
+                         echom l:sz
+                         exe "wincmd w"
+                         let l:fn=expand('%')
+                         execute "!git add" . " " . l:fn
+                         execute "!git commit -m \"Update\"" . " " . l:fn
+                         exe "wincmd w"
+                     else
+                         if (l:sz == s:cmdViewLog)
+                             exe "wincmd w"
+                             execute "e " . expand('~/.vim/debug.log')
+                             normal! k
+                         else
+                             if (l:sz == s:cmdSetComment)
+                                let s:comment = readfile($HOME . "/comments")[0]
+                                let s:comment = PromptPopupInput("New comment:", s:comment)
+                                redraw!
+                             else
+                                 if (g:StartsWith("PRJ ", l:sz))
+                                    call ShowPopupMessage('cd ' .  StoreGet(l:sz), 1000)
+
+                                    execute 'cd ' .  StoreGet(l:sz)
+                                    execute 'q'
+                                    call s:vde()
+                                 else
+                                     call s:MakeCertainLinesWhite()
+                                     call HighlightLineWithStr('ColorGreen', l:sz)
+                                     call g:JumpToLineWithStr(l:sz)
+
+                                     exe "wincmd w"
+                                     execute "e " .  s:DirSet . "/" . l:sz
+                                     normal! k
+                                 endif
+                             endif
+                         endif
+                     endif
+                 endif
+             endif
+         endif
+     endif
+endfunction
