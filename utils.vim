@@ -121,3 +121,94 @@ function! g:NewWindow(...)
             execute "nnoremap <silent> <buffer> " . a:10 . "<cr>"
         endif
 endfunction
+
+
+function! CloseNormalBuffers()
+  " Loop through all possible buffer numbers from 1 to the maximum allocated buffer number
+  for l:buf in range(1, bufnr('$'))
+    " Check if the buffer exists and is listed in the buffer list
+    if buflisted(l:buf)
+      " Retrieve the &buftype of the buffer
+      let l:buftype = getbufvar(l:buf, '&buftype')
+
+      " If buftype is empty, it's a normal file buffer—close it.
+      " (Scratch/special buffers have non-empty buftypes like 'nofile', 'help', etc.)
+      if empty(l:buftype)
+        try
+          execute 'bdelete ' . l:buf
+        catch
+          " Silently catch errors, such as when a buffer has unsaved changes
+        endtry
+      endif
+    endif
+  endfor
+endfunction
+
+" Create a convenient user command (:CloseExceptScratch)
+" command! CloseExceptScratch call CloseNormalBuffers()
+function! CloseNormalBuffersKeepWindows()
+  " 1. Create a new scratch buffer to safely house any windows we transition
+  enew
+  setlocal buftype=nofile bufhidden=hide noswapfile
+  let l:scratch_buf = bufnr('%')
+
+  " 2. Switch any window currently showing a normal file buffer over to the scratch buffer
+  windo if buflisted(bufnr('%')) && empty(&buftype) | execute 'buffer ' . l:scratch_buf | endif
+
+  " 3. Now delete all listed normal file buffers across Vim
+  for l:buf in range(1, bufnr('$'))
+    if buflisted(l:buf) && empty(getbufvar(l:buf, '&buftype'))
+      try
+        execute 'bdelete ' . l:buf
+      catch
+        " Silently catch errors (e.g., if a buffer has unsaved changes)
+      endtry
+    endif
+  endfor
+endfunction
+
+" Create a convenient user command
+"command! CloseExceptScratchKeepWindows call CloseNormalBuffersKeepWindows()
+function! CloseOtherBuffers()
+  " Get the buffer number of the currently active buffer
+  let l:current_buf = bufnr('%')
+
+  " Loop through all possible buffer numbers
+  for l:buf in range(1, bufnr('$'))
+    " Check if the buffer exists, is listed, and is NOT the current buffer
+    if buflisted(l:buf) && l:buf != l:current_buf
+      try
+        execute 'bdelete ' . l:buf
+      catch
+        " Silently catch errors (e.g., if another buffer has unsaved changes)
+      endtry
+    endif
+  endfor
+endfunction
+
+" Create a convenient user command (:CloseOthers)
+command! CloseOthers call CloseOtherBuffers()
+function! CloseAllBuffersKeepWindow()
+  " 1. Collect all currently listed buffer numbers
+  let l:bufs_to_delete = []
+  for l:i in range(1, bufnr('$'))
+    if buflisted(l:i)
+      call add(l:bufs_to_delete, l:i)
+    endif
+  endfor
+
+  " 2. Open a fresh new buffer so the window has a safe home
+  enew
+
+  " 3. Delete all the old buffers we collected
+  for l:buf in l:bufs_to_delete
+    try
+      execute 'bdelete ' . l:buf
+    catch
+      " Silently catch errors (e.g., if a buffer has unsaved changes)
+    endtry
+  endfor
+endfunction
+
+" Create a convenient user command (:CloseAllKeepWindow)
+command! CloseAllKeepWindow call CloseAllBuffersKeepWindow()

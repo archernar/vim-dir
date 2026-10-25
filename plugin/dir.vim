@@ -22,7 +22,7 @@ source ~/.vim/bundle/vim-dir/store.vim
 
 let g:loaded_plugin_dir=1
 
-let s:BrowseMode = 1
+let s:BrowseMode = 0
 let s:READFILEACTION = 0
 let s:OPENFILEACTION = 1
 let s:CLOSESPLITAFTERACTION = 0
@@ -36,7 +36,6 @@ let s:KEEPSPLITOPEN = 0
                 "  Command definitions
                 " *************************************************************************************
 command! UPDATEVIMDIR  :PluginUpdate vim-dir
-802
 command! CODE          :call s:MyDirCode(0)
 command! SNIPS         :call s:MyDirSnips(0)
 command! DIRE          :call s:MyDirSelect($VIMSELECTEDDIR,0)
@@ -951,10 +950,15 @@ function! s:MyProject(...)
     if exists('*popup_dialog')
         call s:PutLineYellow("PopUp Enabled")
     endif
+
+        call s:PutLine("")
+        call s:PutLineMagenta("Settings")
+        call s:PutLineYellow(s:cmdBrowseModeOff)
+
         call s:PutLine("")
         call s:PutLineMagenta("Commands")
-        call s:PutLineYellow(s:cmdBrowseMode)
         call s:PutLineYellow(s:cmdSetComment)
+
         call s:PutLine("")
         call s:PutLineYellow(s:cmdCommitBuffer)
         call s:PutLineYellow(s:cmdCommitAll)
@@ -1035,6 +1039,8 @@ function! g:MySelectionAction(...)
                                  else
                                      if (g:StartsWith("PRJ ", l:sz))
                                         call ShowPopupMessage('cd ' .  StoreGet(l:sz), 1000)
+                                        "execute "e " . expand('~/.vim/moe')
+                                        "let &buftype = 'nofile'
 
                                         execute 'cd ' .  StoreGet(l:sz)
                                         execute 'q'
