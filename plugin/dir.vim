@@ -12,7 +12,7 @@
 if exists("g:loaded_plugin_dir") || v:version < 700 || &cp
   finish
 endif
-
+nnoremap <Tab> <C-w>w
 
 source ~/.vim/bundle/vim-dir/utils.vim
 
@@ -753,6 +753,7 @@ highlight ColorBlue    ctermfg=Blue    guifg=#0087ff cterm=bold gui=bold
 highlight ColorYellow  ctermfg=Yellow  guifg=#ffff00 cterm=bold gui=bold
 highlight ColorCyan    ctermfg=Cyan    guifg=#00ffff cterm=bold gui=bold
 highlight ColorMagenta ctermfg=Magenta guifg=#ff00ff cterm=bold gui=bold
+highlight ColorMagentaReverse ctermfg=Magenta guifg=#ff00ff cterm=bold,reverse gui=bold,reverse
 highlight ColorWhite   ctermfg=White   guifg=#ffffff cterm=bold gui=bold
 highlight ColorBlack   ctermfg=Black   guifg=#000000 
 highlight ColorGray    ctermfg=Gray    guifg=#808080 cterm=NONE gui=NONE
@@ -873,8 +874,8 @@ endfunction
 
 function! BufferEntry(...)
     call win_gotoid(s:menu_win)
-                 call s:MakeAllLinesWhite()
-                 call HighlightLineWithStr('ColorGreen', a:1)
+    call s:MakeAllLinesWhite()
+    call HighlightLineWithStr('ColorGreen', a:1)
     call win_gotoid(s:client_win)
 endfunction
 
@@ -888,7 +889,6 @@ function! s:MyProject(...)
         if getcwd() ==# expand('~')
             call chdir(expand(l:first_project))
         endif
-
 
         if !filereadable("./projectfile")
             return
@@ -944,8 +944,16 @@ function! s:MyProject(...)
         let s:cmdPush="Push"
         let s:cmdCommitPush="Commit-Push"
         let s:cmdViewLog="View-Log"
-        
-        call s:PutLine("")
+
+        set nowrap
+let g:BoxHoriz      = '─'
+let g:BoxVert       = '│'
+let g:BoxTopRight   = '┐'
+        let l:sz = g:BoxTopLeft
+        let l:sz = l:sz . repeat( g:BoxHoriz, winwidth(0)-4)
+        let l:sz = l:sz . g:BoxTopRight
+        call s:PutLineColor('ColorMagenta', l:sz)
+
         call s:PutLineYellow("Vim Version " . g:GetVimVersionString())
     if exists('*popup_dialog')
         call s:PutLineYellow("PopUp Enabled")
@@ -987,7 +995,6 @@ function! s:MyProject(...)
                 exe "wincmd w"
             endif
         endif
-
 
         set nowrap
 

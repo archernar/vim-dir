@@ -4,7 +4,51 @@
                 "
                 " *************************************************************************************
                 "
+" ============================================================================
+" Unicode Box-Drawing & Graphic Character Variables
+" ============================================================================
 
+" Single-Line Box Characters (Light)
+let g:BoxHoriz      = '─'
+let g:BoxVert       = '│'
+let g:BoxTopLeft    = '┌'
+let g:BoxTopRight   = '┐'
+let g:BoxBotLeft    = '└'
+let g:BoxBotRight   = '┘'
+let g:BoxTLeft      = '┤'
+let g:BoxTRight     = '├'
+let g:BoxTDown      = '┬'
+let g:BoxTUp        = '┴'
+let g:BoxCross      = '┼'
+
+" Double-Line Box Characters
+let g:BoxDHoriz     = '═'
+let g:BoxDVert      = '║'
+let g:BoxDTopLeft   = '╔'
+let g:BoxDTopRight  = '╗'
+let g:BoxDBotLeft   = '╚'
+let g:BoxDBotRight  = '╝'
+let g:BoxDTLeft     = '╣'
+let g:BoxDTRight    = '╠'
+let g:BoxDTDown     = '╦'
+let g:BoxDTUp       = '╩'
+let g:BoxDCross     = '╬'
+
+" Blocks, Shading, and UI Symbols
+let g:BlockFull     = '█'
+let g:BlockDark     = '▓'
+let g:BlockMedium   = '▒'
+let g:BlockLight    = '░'
+let g:BlockLeft     = '▌'
+let g:BlockRight    = '▐'
+let g:BlockBottom   = '▄'
+let g:BlockTop      = '▀'
+
+" UI Pointers & Indicators
+let g:IconPointer   = '▸'
+let g:IconBullet    = '•'
+let g:IconCheck     = '✓'
+let g:IconCross     = '✗'
 
 function! g:GetVimVersionString() abort
     let l:major = v:version / 100
