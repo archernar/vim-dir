@@ -121,6 +121,13 @@ function! StoreDump() abort
     return deepcopy(s:store)
 endfunction
 
+" ----------------------------------------------------------------------------
+" StoreClear()
+" Empties an existing store by removing all name/value pairs in place.
+" ----------------------------------------------------------------------------
+function! StoreClear() abort
+    call filter(s:store, '0')
+endfunction
 
 " ============================================================================
 " USAGE EXAMPLES

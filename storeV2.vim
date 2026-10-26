@@ -92,6 +92,14 @@ function! StoreLoad(store, filepath) abort
 endfunction
 
 " ----------------------------------------------------------------------------
+" StoreClear(store)
+" Empties an existing store by removing all name/value pairs in place.
+" ----------------------------------------------------------------------------
+function! StoreClear(store) abort
+    call filter(a:store, '0')
+endfunction
+
+" ----------------------------------------------------------------------------
 " StoreDump(store)
 " Optional Utility: Returns a copy of the specified store for inspection.
 " ----------------------------------------------------------------------------

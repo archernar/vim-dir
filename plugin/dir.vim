@@ -14,11 +14,13 @@ if exists("g:loaded_plugin_dir") || v:version < 700 || &cp
 endif
 nnoremap <Tab> <C-w>w
 
+let s:nv_cache1 = {}
+let s:nv_cache2 = {}
 source ~/.vim/bundle/vim-dir/utils.vim
 
 source ~/.vim/bundle/vim-dir/popup.vim
 source ~/.vim/bundle/vim-dir/inputpopup.vim
-source ~/.vim/bundle/vim-dir/store.vim
+source ~/.vim/bundle/vim-dir/storeV2.vim
 
 let g:loaded_plugin_dir=1
 
@@ -926,10 +928,15 @@ function! s:MyProject(...)
         call s:PutLineColor('ColorMagenta', l:dir_name)
         call s:PutLine("")
         call s:PutLineMagenta("Files")
+
+        call StoreClear(s:nv_cache2)
+
+
         for key in l:list
               call s:MakeAllLinesWhite()
               call s:PutLine(key)
               call g:JumpToLineWithStr(key)
+                 call StorePut(s:nv_cache2, key, key)
                  exe "wincmd w"
                  execute "e " .  s:DirSet . "/" . key
                  exe "wincmd w"
@@ -977,7 +984,7 @@ let g:BoxTopRight   = '┐'
         call s:PutLineMagenta("Projects")
         for repo in l:projectlist
               let l:sz = "PRJ " . s:PathFileName(repo)
-              call StorePut(l:sz, repo)
+              call StorePut(s:nv_cache1, l:sz, repo)
               call s:PutLineYellow( l:sz )
         endfor
 
@@ -1045,11 +1052,11 @@ function! g:MySelectionAction(...)
                                     call setline('.', s:BrowseMode ? s:cmdBrowseMode : s:cmdBrowseModeOff)
                                  else
                                      if (g:StartsWith("PRJ ", l:sz))
-                                        call ShowPopupMessage('cd ' .  StoreGet(l:sz), 1000)
+                                        call ShowPopupMessage(s:nv_cache1, 'cd ' .  StoreGet(l:sz), 1000)
                                         "execute "e " . expand('~/.vim/moe')
                                         "let &buftype = 'nofile'
 
-                                        execute 'cd ' .  StoreGet(l:sz)
+                                        execute 'cd ' .  StoreGet(s:nv_cache1, l:sz)
                                         execute 'q'
                                         call s:vde()
                                      else

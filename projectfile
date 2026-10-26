@@ -5,6 +5,7 @@ popup.vim
 plugin/tester.vim
 pushit
 store.vim
+storeV2.vim
 tagit
 vim-dir.setup
 LICENSE
