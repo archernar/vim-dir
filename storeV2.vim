@@ -99,6 +99,18 @@ function! StoreClear(store) abort
     call filter(a:store, '0')
 endfunction
 
+
+" ----------------------------------------------------------------------------
+" StoreIterateTemplate(store)
+" Iterates across all name/value pairs in the specified store.
+" ----------------------------------------------------------------------------
+function! StoreIterateTemplate(store) abort
+    for [l:name, l:value] in items(a:store)
+        " Replace the line below with your custom logic
+        echo "Name: " . l:name . " | Value: " . string(l:value)
+    endfor
+endfunction
+
 " ----------------------------------------------------------------------------
 " StoreDump(store)
 " Optional Utility: Returns a copy of the specified store for inspection.

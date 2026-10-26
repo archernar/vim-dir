@@ -941,6 +941,9 @@ function! s:MyProject(...)
                  execute "e " .  s:DirSet . "/" . key
                  exe "wincmd w"
         endfor
+                 exe "wincmd w"
+                 execute "e " .  s:DirSet . "/" . "momomoe"
+                 exe "wincmd w"
 
         call s:PutLine("")
         let s:cmdBrowseMode="Browse-On"
