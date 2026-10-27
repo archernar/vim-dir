@@ -256,3 +256,20 @@ endfunction
 
 " Create a convenient user command (:CloseAllKeepWindow)
 command! CloseAllKeepWindow call CloseAllBuffersKeepWindow()
+
+
+function! CenterString(text, width, ...) abort
+    " Use the provided padding character, or default to a space
+    let l:pad_char = a:0 > 0 ? a:1 : ' '
+    let l:text_len = strdisplaywidth(a:text)
+
+    if l:text_len >= a:width
+        return a:text
+    endif
+
+    let l:total_pad = a:width - l:text_len
+    let l:left_pad = l:total_pad / 2
+    let l:right_pad = l:total_pad - l:left_pad
+
+    return repeat(l:pad_char, l:left_pad) . a:text . repeat(l:pad_char, l:right_pad)
+endfunction

@@ -959,9 +959,24 @@ function! s:MyProject(...)
 let g:BoxHoriz      = '─'
 let g:BoxVert       = '│'
 let g:BoxTopRight   = '┐'
+let g:BoxTopLeft    = '┌'
+
+let g:BoxBotLeft    = '└'
+let g:BoxBotRight   = '┘'
         let l:sz = g:BoxTopLeft
         let l:sz = l:sz . repeat( g:BoxHoriz, winwidth(0)-4)
         let l:sz = l:sz . g:BoxTopRight
+        call s:PutLineColor('ColorMagenta', l:sz)
+
+        let l:sz = g:BoxVert
+        let l:sz = l:sz . CenterString("Config", winwidth(0)-4)
+        " let l:sz = l:sz . repeat( " ", winwidth(0)-4)
+        let l:sz = l:sz . g:BoxVert
+        call s:PutLineColor('ColorMagenta', l:sz)
+
+        let l:sz = g:BoxBotLeft
+        let l:sz = l:sz . repeat( g:BoxHoriz, winwidth(0)-4)
+        let l:sz = l:sz . g:BoxBotRight
         call s:PutLineColor('ColorMagenta', l:sz)
 
         call s:PutLineYellow("Vim Version " . g:GetVimVersionString())
