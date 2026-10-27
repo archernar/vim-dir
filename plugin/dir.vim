@@ -1070,7 +1070,7 @@ function! g:MySelectionAction(...)
                                     call setline('.', s:BrowseMode ? s:cmdBrowseMode : s:cmdBrowseModeOff)
                                  else
                                      if (g:StartsWith("PRJ ", l:sz))
-                                        call ShowPopupMessage(s:nv_cache1, 'cd ' .  StoreGet(l:sz), 1000)
+                                        call ShowPopupMessage('cd ' .  StoreGet(s:nv_cache1, l:sz), 1000)
                                         "execute "e " . expand('~/.vim/moe')
                                         "let &buftype = 'nofile'
 
