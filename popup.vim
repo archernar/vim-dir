@@ -76,3 +76,39 @@ endfunction
 " " 3. Multi-line message: Pass a List of strings
 " call ShowPopupMessage(["Line 1: Build failed", "Line 2: Check the logs"], 5000)
 " ============================================================================
+
+
+" ----------------------------------------------------------------------------
+" ShowPopupDict(dict, [timeout_ms])
+"
+" Args:
+"   dict: A Dictionary of key-value pairs to display.
+"   [timeout_ms]: Optional. Time in milliseconds before auto-closing.
+" ----------------------------------------------------------------------------
+function! g:ShowPopupDict(dict, ...) abort
+    " Convert the dictionary into a List of formatted strings
+    let l:lines = []
+
+    " Find the maximum key length for neat alignment (optional, but clean)
+    let l:max_len = 0
+    for l:key in keys(a:dict)
+        if len(l:key) > l:max_len
+            let l:max_len = len(l:key)
+        endif
+    endfor
+
+    " Format each key-value pair with padding
+    for l:key in sort(keys(a:dict))
+        let l:val = string(a:dict[l:key])
+        " Format as "Key : Value" with aligned spacing
+        let l:formatted = printf('%-*s : %s', l:max_len, l:key, l:val)
+        call add(l:lines, l:formatted)
+    endfor
+
+    " Handle optional timeout argument
+    if a:0 > 0
+        call ShowPopupMessage(l:lines, a:1)
+    else
+        call ShowPopupMessage(l:lines)
+    endif
+endfunction

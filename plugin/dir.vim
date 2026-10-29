@@ -6,7 +6,7 @@
                 "  alias ide='vim -c "autocmd VimEnter * call DIRPF()"'
                 "  alias vde='vim -c "autocmd VimEnter * call DIRPF()"'
                 "  alias vdec='vim -c "autocmd VimEnter * call DIRCPF()"'
-                "  
+                 "  
                 " *************************************************************************************
                 "
 if exists("g:loaded_plugin_dir") || v:version < 700 || &cp
@@ -795,6 +795,24 @@ function! s:HighlightLine(hl_group, line_num)
     call matchadd(a:hl_group, "\\%" . a:line_num . "l^.*$")
 endfunction
 
+function! s:PutInBox(...) abort
+        let l:sz = g:BoxTopLeft
+        let l:sz = l:sz . repeat( g:BoxHoriz, winwidth(0)-4)
+        let l:sz = l:sz . g:BoxTopRight
+        call s:PutLineColor(a:1, l:sz)
+
+        let l:sz = g:BoxVert
+        let l:sz = l:sz . CenterString(a:2, winwidth(0)-4)
+        " let l:sz = l:sz . repeat( " ", winwidth(0)-4)
+        let l:sz = l:sz . g:BoxVert
+        call s:PutLineColor(a:1, l:sz)
+
+        let l:sz = g:BoxBotLeft
+        let l:sz = l:sz . repeat( g:BoxHoriz, winwidth(0)-4)
+        let l:sz = l:sz . g:BoxBotRight
+        call s:PutLineColor(a:1, l:sz)
+endfunction
+
 " Main function: takes a highlight group, a search string, and an optional mode ('first' or 'all')
 "
 " USAGE NOTES & EXAMPLES:
@@ -931,6 +949,27 @@ function! s:MyProject(...)
 
         call StoreClear(s:nv_cache2)
 
+exe "wincmd w"
+execute "e " .  $HOME . "/" . "LUCIEN"
+call g:CloseBuffersExceptLucien() 
+exe "wincmd w"
+
+" Create an empty dictionary to store bufnr as key and filename as value
+let l:buffer_dict = {}
+
+" Iterate through all listed buffers
+for l:buf in getbufinfo({'buflisted': 1})
+    if !empty(l:buf.name)
+       let l:buffer_dict[l:buf.name] = l:buf.bufnr
+   endif
+endfor
+
+
+
+" Example: Print the resulting dictionary
+" call g:ShowPopupDict(l:buffer_dict, 3000)
+"echo l:buffer_dict
+
 
         for key in l:list
               call s:MakeAllLinesWhite()
@@ -941,9 +980,9 @@ function! s:MyProject(...)
                  execute "e " .  s:DirSet . "/" . key
                  exe "wincmd w"
         endfor
-                 exe "wincmd w"
-                 execute "e " .  s:DirSet . "/" . "momomoe"
-                 exe "wincmd w"
+        exe "wincmd w"
+        call g:CloseLucienBuffer()
+        exe "wincmd w"
 
         call s:PutLine("")
         let s:cmdBrowseMode="Browse-On"
@@ -963,21 +1002,8 @@ let g:BoxTopLeft    = '┌'
 
 let g:BoxBotLeft    = '└'
 let g:BoxBotRight   = '┘'
-        let l:sz = g:BoxTopLeft
-        let l:sz = l:sz . repeat( g:BoxHoriz, winwidth(0)-4)
-        let l:sz = l:sz . g:BoxTopRight
-        call s:PutLineColor('ColorMagenta', l:sz)
 
-        let l:sz = g:BoxVert
-        let l:sz = l:sz . CenterString("Config", winwidth(0)-4)
-        " let l:sz = l:sz . repeat( " ", winwidth(0)-4)
-        let l:sz = l:sz . g:BoxVert
-        call s:PutLineColor('ColorMagenta', l:sz)
-
-        let l:sz = g:BoxBotLeft
-        let l:sz = l:sz . repeat( g:BoxHoriz, winwidth(0)-4)
-        let l:sz = l:sz . g:BoxBotRight
-        call s:PutLineColor('ColorMagenta', l:sz)
+        call s:PutInBox('ColorMagenta', "Actions-Config")
 
         call s:PutLineYellow("Vim Version " . g:GetVimVersionString())
     if exists('*popup_dialog')

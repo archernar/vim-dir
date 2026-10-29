@@ -273,3 +273,48 @@ function! CenterString(text, width, ...) abort
 
     return repeat(l:pad_char, l:left_pad) . a:text . repeat(l:pad_char, l:right_pad)
 endfunction
+
+
+
+" ----------------------------------------------------------------------------
+" Close all buffers except any buffer named 'LUCIEN'
+" ----------------------------------------------------------------------------
+function! g:CloseBuffersExceptLucien() abort
+    for l:buf in range(1, bufnr('$'))
+        if buflisted(l:buf)
+            " Extract just the filename (ignoring directory paths)
+            let l:fname = fnamemodify(bufname(l:buf), ':t')
+
+            " Close any buffer whose filename is not 'LUCIEN'
+            if l:fname !=# 'LUCIEN'
+                silent! execute 'bdelete ' . l:buf
+            endif
+        endif
+    endfor
+endfunction
+
+" Command mapping for convenience
+"command! CloseExceptLucien call CloseBuffersExceptLucien()
+"
+"
+
+
+" ----------------------------------------------------------------------------
+" Close any buffer named 'LUCIEN'
+" ----------------------------------------------------------------------------
+function! g:CloseLucienBuffer() abort
+    for l:buf in range(1, bufnr('$'))
+        if buflisted(l:buf)
+            " Extract just the filename (ignoring directory paths)
+            let l:fname = fnamemodify(bufname(l:buf), ':t')
+
+            " Close the buffer if its filename matches 'LUCIEN'
+            if l:fname ==# 'LUCIEN'
+                silent! execute 'bdelete ' . l:buf
+            endif
+        endif
+    endfor
+endfunction
+
+" Command mapping for convenience
+" command! CloseLucien call CloseLucienBuffer()
