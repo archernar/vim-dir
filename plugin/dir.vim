@@ -919,7 +919,9 @@ function! s:MyProject(...)
 
         let s:client_win = win_getid()
         " Create Window/Buffer Part
+        let w:window_name = 'client'
         call g:NewWindow("Left", l:n, "<Enter> :call g:MySelectionAction('rx')")
+        let w:window_name = 'menu'
         let s:menu_win = win_getid()
 
         setlocal wincolor=MyCustomBg
@@ -962,9 +964,14 @@ endfor
               call s:PutLine(key)
               call g:JumpToLineWithStr(key)
                  call StorePut(s:nv_cache2, key, key)
-                 exe "wincmd w"
+
+                 "exe "wincmd w"
+                 call g:JumpToWindowByName('client')
+
                  execute "e " .  s:DirSet . "/" . key
-                 exe "wincmd w"
+
+                 "exe "wincmd w"
+                 call g:JumpToWindowByName('menu')
         endfor
 
 

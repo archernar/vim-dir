@@ -318,3 +318,22 @@ endfunction
 
 " Command mapping for convenience
 " command! CloseLucien call CloseLucienBuffer()
+
+
+" 1. Name the current window
+"let w:window_name = 'sidebar'
+
+" 2. Helper function to jump to a window by its custom name
+function! g:JumpToWindowByName(name)
+    for l:i in range(1, winnr('$'))
+        if getwinvar(l:i, 'window_name', '') ==# a:name
+            execute l:i . 'wincmd w'
+            return 1
+        endif
+    endfor
+    echohl WarningMsg | echom "Window not found: " . a:name | echohl None
+    return 0
+endfunction
+
+" 3. Usage
+"call JumpToWindowByName('sidebar')
