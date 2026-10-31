@@ -10,7 +10,7 @@
                 " *************************************************************************************
                 "
 if exists("g:loaded_plugin_dir") || v:version < 700 || &cp
-  finish
+    finish
 endif
 nnoremap <Tab> <C-w>w
 
@@ -156,7 +156,6 @@ let s:PutLineRow=0
 function! s:PutLineSet(...)
     let s:PutLineRow = a:1 
 endfunction
-
 
 function! s:PutLine(...)
         call setline(s:PutLineRow, a:1)
@@ -771,25 +770,14 @@ function! s:MakeAllLinesWhite()
     call matchadd('ColorWhite', '.*')
 endfunction
 function! s:PutLineColor(...)
-    call s:PutLine(a:2)
-    call matchadd(a:1, "\\%" . (s:PutLineRow - 1) . "l^.*$")
+    " a:000[0] is the highlight group (a:1)
+    " a:000[1:] contains all the subsequent string arguments
+    for l:str in a:000[1:]
+        call s:PutLine(l:str)
+        call matchadd(a:000[0], "\\%" . (s:PutLineRow - 1) . "l^.*$")
+    endfor
 endfunction
-function! s:PutLineWhite(...)
-    call s:PutLine(a:1)
-    call matchadd('ColorWhite', "\\%" . (s:PutLineRow - 1) . "l^.*$")
-endfunction
-function! s:PutLineMagenta(...)
-    call s:PutLine(a:1)
-    call matchadd('ColorMagenta', "\\%" . (s:PutLineRow - 1) . "l^.*$")
-endfunction
-function! s:PutLineGreen(...)
-    call s:PutLine(a:1)
-    call matchadd('ColorGreen', "\\%" . (s:PutLineRow - 1) . "l^.*$")
-endfunction
-function! s:PutLineYellow(...)
-    call s:PutLine(a:1)
-    call matchadd('ColorYellow', "\\%" . (s:PutLineRow - 1) . "l^.*$")
-endfunction
+
 " General helper function: takes a highlight group and a line number
 function! s:HighlightLine(hl_group, line_num)
     call matchadd(a:hl_group, "\\%" . a:line_num . "l^.*$")
@@ -943,9 +931,7 @@ function! s:MyProject(...)
         setlocal cursorline
         call s:PutLineSet(1)
         let l:dir_name = fnamemodify(getcwd(), ':t')
-        call s:PutLineColor('ColorMagenta', l:dir_name)
-        call s:PutLine("")
-        call s:PutLineMagenta("Files")
+        call s:PutInBox('ColorMagenta', CenterString(l:dir_name, winwidth(0)-4))
 
         call StoreClear(s:nv_cache2)
 
@@ -972,7 +958,7 @@ endfor
 
 
         for key in l:list
-              call s:MakeAllLinesWhite()
+              "call s:MakeAllLinesWhite()
               call s:PutLine(key)
               call g:JumpToLineWithStr(key)
                  call StorePut(s:nv_cache2, key, key)
@@ -980,11 +966,12 @@ endfor
                  execute "e " .  s:DirSet . "/" . key
                  exe "wincmd w"
         endfor
+
+
         exe "wincmd w"
         call g:CloseLucienBuffer()
         exe "wincmd w"
 
-        call s:PutLine("")
         let s:cmdBrowseMode="Browse-On"
         let s:cmdBrowseModeOff="Browse-Off"
         let s:cmdSetComment="Set-Comment"
@@ -1005,36 +992,23 @@ let g:BoxBotRight   = '┘'
 
         call s:PutInBox('ColorMagenta', "Actions-Config")
 
-        call s:PutLineYellow("Vim Version " . g:GetVimVersionString())
-    if exists('*popup_dialog')
-        call s:PutLineYellow("PopUp Enabled")
-    endif
+        call s:PutLineColor('ColorYellow', "Vim Version " . g:GetVimVersionString())
+        if exists('*popup_dialog')
+            call s:PutLineColor('ColorYellow', "PopUp Enabled")
+        endif
 
-        call s:PutLine("")
-        call s:PutLineMagenta("Settings")
-        call s:PutLineYellow(s:cmdBrowseModeOff)
+        call s:PutLineColor('ColorYellow',s:cmdBrowseModeOff, s:cmdSetComment, "", s:cmdCommitBuffer,s:cmdCommitAll, s:cmdPush, s:cmdCommitPush, s:cmdViewLog)
+        call s:PutInBox('ColorMagenta', "Projects")
 
-        call s:PutLine("")
-        call s:PutLineMagenta("Commands")
-        call s:PutLineYellow(s:cmdSetComment)
-
-        call s:PutLine("")
-        call s:PutLineYellow(s:cmdCommitBuffer)
-        call s:PutLineYellow(s:cmdCommitAll)
-        call s:PutLineYellow(s:cmdPush)
-        call s:PutLineYellow(s:cmdCommitPush)
-        call s:PutLineYellow(s:cmdViewLog)
-        call s:PutLine("")
-        call s:PutLineMagenta("Projects")
         for repo in l:projectlist
               let l:sz = "PRJ " . s:PathFileName(repo)
               call StorePut(s:nv_cache1, l:sz, repo)
-              call s:PutLineYellow( l:sz )
+              call s:PutLineColor('ColorYellow', l:sz )
         endfor
 
         let l:notes = readfile($HOME . "/muffala")
         for l:sz in l:notes
-              call s:PutLineYellow( l:sz )
+              call s:PutLineColor('ColorYellow', l:sz )
         endfor
 
         if filereadable(s:DirSet . "/" . l:first_file)
@@ -1104,7 +1078,7 @@ function! g:MySelectionAction(...)
                                         execute 'q'
                                         call s:vde()
                                      else
-                                         call s:MakeCertainLinesWhite()
+                                         "call s:MakeCertainLinesWhite()
                                          call HighlightLineWithStr('ColorGreen', l:sz)
                                          call g:JumpToLineWithStr(l:sz)
                                          exe "wincmd w"
