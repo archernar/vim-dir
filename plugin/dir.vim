@@ -14,10 +14,18 @@ if exists("g:loaded_plugin_dir") || v:version < 700 || &cp
 endif
 
 function! g:Switcher()
+    call g:JumpToWindowByName('menu')
     close
     call s:MyDirPwd(0)
+    
+    " Use all lines in the buffer
     let s:max_width = max(map(getline(1, '$'), 'strdisplaywidth(v:val)'))
     execute 'vertical resize ' . (s:max_width + 2)
+
+    " Alternative: Use only visible lines in the buffer
+    " let s:visible_lines = getline(line('w0'), line('w$'))
+    " let s:max_width = empty(s:visible_lines) ? 0 : max(map(s:visible_lines, 'strdisplaywidth(v:val)'))
+    " execute 'vertical resize ' . (s:max_width + 2)
 endfunction
 
 nnoremap <Tab> <C-w>w
