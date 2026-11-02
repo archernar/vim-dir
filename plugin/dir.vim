@@ -12,7 +12,16 @@
 if exists("g:loaded_plugin_dir") || v:version < 700 || &cp
     finish
 endif
+
+function! g:Switcher()
+    close
+    call s:MyDirPwd(0)
+    let s:max_width = max(map(getline(1, '$'), 'strdisplaywidth(v:val)'))
+    execute 'vertical resize ' . (s:max_width + 2)
+endfunction
+
 nnoremap <Tab> <C-w>w
+nnoremap <leader><Tab> :call g:Switcher()<cr>
 
 let s:nv_cache1 = {}
 let s:nv_cache2 = {}
@@ -1012,6 +1021,8 @@ let g:BoxBotRight   = '┘'
               call StorePut(s:nv_cache1, l:sz, repo)
               call s:PutLineColor('ColorYellow', l:sz )
         endfor
+
+        call system("ls > ". $HOME . "/muffala" )
 
         let l:notes = readfile($HOME . "/muffala")
         for l:sz in l:notes
