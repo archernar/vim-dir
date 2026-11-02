@@ -320,6 +320,15 @@ endfunction
 " command! CloseLucien call CloseLucienBuffer()
 
 
+function! g:WindowExists(name) abort
+    for l:i in range(1, winnr('$'))
+        if getwinvar(l:i, 'window_name', '') ==# a:name
+            return 1
+        endif
+    endfor
+    return 0
+endfunction
+
 " 1. Name the current window
 "let w:window_name = 'sidebar'
 
