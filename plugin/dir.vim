@@ -13,19 +13,39 @@ if exists("g:loaded_plugin_dir") || v:version < 700 || &cp
     finish
 endif
 
-function! g:Switcher()
-    call g:JumpToWindowByName('menu')
-    close
-    call s:MyDirPwd(0)
-    
-    " Use all lines in the buffer
-    let s:max_width = max(map(getline(1, '$'), 'strdisplaywidth(v:val)'))
-    execute 'vertical resize ' . (s:max_width + 2)
+let g:menumode=1
 
-    " Alternative: Use only visible lines in the buffer
-    " let s:visible_lines = getline(line('w0'), line('w$'))
-    " let s:max_width = empty(s:visible_lines) ? 0 : max(map(s:visible_lines, 'strdisplaywidth(v:val)'))
-    " execute 'vertical resize ' . (s:max_width + 2)
+function! g:Switcher()
+    if (g:menumode  == 1) 
+        call g:JumpToWindowByName('menu')
+        close
+        call s:MyDirPwd(0)
+        let g:menumode=0
+        
+        " Use all lines in the buffer
+        let s:max_width = max(map(getline(1, '$'), 'strdisplaywidth(v:val)'))
+        execute 'vertical resize ' . (s:max_width + 2)
+
+        " Alternative: Use only visible lines in the buffer
+        " let s:visible_lines = getline(line('w0'), line('w$'))
+        " let s:max_width = empty(s:visible_lines) ? 0 : max(map(s:visible_lines, 'strdisplaywidth(v:val)'))
+        " execute 'vertical resize ' . (s:max_width + 2)
+    else
+        call g:JumpToWindowByName('dir')
+        close
+        call  s:vde()
+        let g:menumode=1
+        call g:JumpToWindowByName('menu')
+        
+        " Use all lines in the buffer
+        "let s:max_width = max(map(getline(1, '$'), 'strdisplaywidth(v:val)'))
+        "execute 'vertical resize ' . (s:max_width + 2)
+
+        " Alternative: Use only visible lines in the buffer
+        " let s:visible_lines = getline(line('w0'), line('w$'))
+        " let s:max_width = empty(s:visible_lines) ? 0 : max(map(s:visible_lines, 'strdisplaywidth(v:val)'))
+        " execute 'vertical resize ' . (s:max_width + 2)
+    endif
 endfunction
 
 nnoremap <Tab> <C-w>w
@@ -310,6 +330,7 @@ function! s:MyDir(...)
     " 8 Args
         call g:NewWindow("Left", &columns/3, "<Enter> :call g:MyDirAction('r')", "x :call g:MyDirAction('e')", "n :call g:MyDirAction('n')", "p :call g:MyDirAction('p')", "v :call g:MyDirAction('v')","q :call g:MyDirAction('q')")
         echom "<r> edit snip, <enter> read snip into current buffer, <l> load session file, <p> open and load project"
+        let w:window_name = 'dir'
 
         let s:DirWindow = winnr()
         nnoremap <silent> <buffer> i <Nop>
