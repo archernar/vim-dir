@@ -320,6 +320,41 @@ endfunction
 " command! CloseLucien call CloseLucienBuffer()
 
 
+function! g:AnyWindowsExist(...) abort
+    " Loop through each target name passed as an argument
+    for l:target_name in a:000
+        " Check all open windows to see if this target name exists
+        for l:i in range(1, winnr('$'))
+            if getwinvar(l:i, 'window_name', '') ==# l:target_name
+                return 1
+            endif
+        endfor
+    endfor
+    " None of the specified window names were found
+    return 0
+endfunction
+
+
+function! g:WindowsExist(...) abort
+    " Loop through each window name passed as an argument
+    for l:target_name in a:000
+        let l:found = 0
+        " Check all open windows to see if the current target name exists
+        for l:i in range(1, winnr('$'))
+            if getwinvar(l:i, 'window_name', '') ==# l:target_name
+                let l:found = 1
+                break
+            endif
+        endfor
+        " If any name from the arguments is missing, return 0 immediately
+        if !l:found
+            return 0
+        endif
+    endfor
+    " All specified window names were found
+    return 1
+endfunction
+
 function! g:WindowExists(name) abort
     for l:i in range(1, winnr('$'))
         if getwinvar(l:i, 'window_name', '') ==# a:name

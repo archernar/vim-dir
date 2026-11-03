@@ -16,35 +16,37 @@ endif
 let g:menumode=1
 
 function! g:Switcher()
-    if (g:menumode  == 1) 
-        call g:JumpToWindowByName('menu')
-        close
-        call s:MyDirPwd(0)
-        let g:menumode=0
-        
-        " Use all lines in the buffer
-        let s:max_width = max(map(getline(1, '$'), 'strdisplaywidth(v:val)'))
-        execute 'vertical resize ' . (s:max_width + 2)
+    if (g:AnyWindowsExist('menu','dir'))
+        if (g:menumode  == 1) 
+            call g:JumpToWindowByName('menu')
+            close
+            call s:MyDirPwd(0)
+            let g:menumode=0
+            
+            " Use all lines in the buffer
+            let s:max_width = max(map(getline(1, '$'), 'strdisplaywidth(v:val)'))
+            execute 'vertical resize ' . (s:max_width + 2)
 
-        " Alternative: Use only visible lines in the buffer
-        " let s:visible_lines = getline(line('w0'), line('w$'))
-        " let s:max_width = empty(s:visible_lines) ? 0 : max(map(s:visible_lines, 'strdisplaywidth(v:val)'))
-        " execute 'vertical resize ' . (s:max_width + 2)
-    else
-        call g:JumpToWindowByName('dir')
-        close
-        call  s:vde()
-        let g:menumode=1
-        call g:JumpToWindowByName('menu')
-        
-        " Use all lines in the buffer
-        "let s:max_width = max(map(getline(1, '$'), 'strdisplaywidth(v:val)'))
-        "execute 'vertical resize ' . (s:max_width + 2)
+            " Alternative: Use only visible lines in the buffer
+            " let s:visible_lines = getline(line('w0'), line('w$'))
+            " let s:max_width = empty(s:visible_lines) ? 0 : max(map(s:visible_lines, 'strdisplaywidth(v:val)'))
+            " execute 'vertical resize ' . (s:max_width + 2)
+        else
+            call g:JumpToWindowByName('dir')
+            close
+            call  s:vde()
+            let g:menumode=1
+            call g:JumpToWindowByName('menu')
+            
+            " Use all lines in the buffer
+            "let s:max_width = max(map(getline(1, '$'), 'strdisplaywidth(v:val)'))
+            "execute 'vertical resize ' . (s:max_width + 2)
 
-        " Alternative: Use only visible lines in the buffer
-        " let s:visible_lines = getline(line('w0'), line('w$'))
-        " let s:max_width = empty(s:visible_lines) ? 0 : max(map(s:visible_lines, 'strdisplaywidth(v:val)'))
-        " execute 'vertical resize ' . (s:max_width + 2)
+            " Alternative: Use only visible lines in the buffer
+            " let s:visible_lines = getline(line('w0'), line('w$'))
+            " let s:max_width = empty(s:visible_lines) ? 0 : max(map(s:visible_lines, 'strdisplaywidth(v:val)'))
+            " execute 'vertical resize ' . (s:max_width + 2)
+        endif
     endif
 endfunction
 
