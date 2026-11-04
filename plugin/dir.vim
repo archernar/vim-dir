@@ -7,7 +7,7 @@
                 "  alias vde='vim -c "autocmd VimEnter * call DIRPF()"'
                 "  alias vdec='vim -c "autocmd VimEnter * call DIRCPF()"'
                 "  
-                "  For airline
+                "  For airline, include in .vimrc   
                 "  Disable the airline tabline extension completely (removes buffer/tab list from top)
                 "  let g:airline#extensions#tabline#enabled = 0
                 "  Ensure Vim's native tabline does not appear at the top either unless multiple tabs are open
