@@ -1101,14 +1101,17 @@ function! g:MySelectionAction(...)
                  else
                      if (l:sz == s:cmdCommitBuffer)
                          echom l:sz
-                         exe "wincmd w"
+                         call g:JumpToWindowByName('client')
+                         " exe "wincmd w"
                          let l:fn=expand('%')
                          execute "!git add" . " " . l:fn
                          execute "!git commit -m \"Update\"" . " " . l:fn
-                         exe "wincmd w"
+                         call g:JumpToWindowByName('menu')
+                         " exe "wincmd w"
                      else
                          if (l:sz == s:cmdViewLog)
-                             exe "wincmd w"
+                             call g:JumpToWindowByName('client')
+                             "exe "wincmd w"
                              execute "e " . expand('~/.vim/debug.log')
                              normal! k
                          else
@@ -1133,10 +1136,12 @@ function! g:MySelectionAction(...)
                                          "call s:MakeCertainLinesWhite()
                                          call HighlightLineWithStr('ColorGreen', l:sz)
                                          call g:JumpToLineWithStr(l:sz)
-                                         exe "wincmd w"
+                                         call g:JumpToWindowByName('client')
+                                         " exe "wincmd w"
                                          execute "e " .  s:DirSet . "/" . l:sz
                                          if (s:BrowseMode == 1)
-                                             exe "wincmd w"
+                                             call g:JumpToWindowByName('menu')
+                                             "exe "wincmd w"
                                          endif
     "                                     normal! k
                                      endif
