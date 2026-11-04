@@ -666,7 +666,8 @@ function! g:MyDirAction(...)
                      " This is the <enter> action
                      " **************************
                      if (a:1 == 'rx')
-                                        exe "wincmd w"
+                                        call g:JumpToWindowByName('client')
+                                        "exe "wincmd w"
                                         execute "e " . l:fs
                                         normal! k
                                         " **************************
@@ -1010,19 +1011,16 @@ endfor
               call g:JumpToLineWithStr(key)
                  call StorePut(s:nv_cache2, key, key)
 
-                 "exe "wincmd w"
                  call g:JumpToWindowByName('client')
-
                  execute "e " .  s:DirSet . "/" . key
-
-                 "exe "wincmd w"
                  call g:JumpToWindowByName('menu')
+
         endfor
 
 
-        exe "wincmd w"
+        call g:JumpToWindowByName('client')
         call g:CloseLucienBuffer()
-        exe "wincmd w"
+        call g:JumpToWindowByName('menu')
 
         let s:cmdBrowseMode="Browse-On"
         let s:cmdBrowseModeOff="Browse-Off"
