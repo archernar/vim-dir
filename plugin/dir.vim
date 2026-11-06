@@ -1039,10 +1039,7 @@ let g:BoxBotRight   = '┘'
 
         call s:PutInBox('ColorMagenta', "Actions-Config")
 
-        call s:PutLineColor('ColorYellow', "Vim Version " . g:GetVimVersionString())
-        if exists('*popup_dialog')
-            call s:PutLineColor('ColorYellow', "PopUp Enabled")
-        endif
+        call s:PutLineColor('ColorYellow', "Vim" . g:GetVimVersionString() . (exists('*popup_dialog') ? ", ":", No ") . "Popups")
 
         call s:PutLineColor('ColorYellow',s:cmdBrowseModeOff, s:cmdSetComment, "", s:cmdCommitBuffer,s:cmdCommitAll, s:cmdPush, s:cmdCommitPush, s:cmdViewLog)
         call s:PutInBox('ColorMagenta', "Projects")
