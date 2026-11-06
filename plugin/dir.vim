@@ -1006,15 +1006,12 @@ endfor
 
 
         for key in l:list
-              "call s:MakeAllLinesWhite()
               call s:PutLine(key)
               call g:JumpToLineWithStr(key)
                  call StorePut(s:nv_cache2, key, key)
-
                  call g:JumpToWindowByName('client')
                  execute "e " .  s:DirSet . "/" . key
                  call g:JumpToWindowByName('menu')
-
         endfor
 
 
@@ -1056,12 +1053,6 @@ let g:BoxBotRight   = '┘'
               call s:PutLineColor('ColorYellow', l:sz )
         endfor
 
-        call system("ls > ". $HOME . "/muffala" )
-
-        let l:notes = readfile($HOME . "/muffala")
-        for l:sz in l:notes
-              call s:PutLineColor('ColorYellow', l:sz )
-        endfor
 
         if filereadable(s:DirSet . "/" . l:first_file)
             call HighlightLineWithStr('ColorGreen', l:first_file)
