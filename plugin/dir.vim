@@ -828,7 +828,12 @@ endfunction
 function! s:HighlightLine(hl_group, line_num)
     call matchadd(a:hl_group, "\\%" . a:line_num . "l^.*$")
 endfunction
-
+function! s:PutInLineHeader(hl_group, title)
+    let l:width = winwidth(0) - 4
+    let l:pad = max([2, (l:width - strdisplaywidth(a:title)) / 2])
+    let l:line = repeat('─', l:pad) . ' ' . a:title . ' ' . repeat('─', l:pad)
+    call s:PutLineColor(a:hl_group, l:line)
+endfunction
 function! s:PutInBox(...) abort
         let l:sz = g:BoxTopLeft
         let l:sz = l:sz . repeat( g:BoxHoriz, winwidth(0)-4)
@@ -979,7 +984,7 @@ function! s:MyProject(...)
         setlocal cursorline
         call s:PutLineSet(1)
         let l:dir_name = fnamemodify(getcwd(), ':t')
-        call s:PutInBox('ColorMagenta', CenterString(l:dir_name, winwidth(0)-4))
+        call s:PutInLineHeader('ColorMagenta', l:dir_name)
 
         call StoreClear(s:nv_cache2)
 
@@ -1037,12 +1042,12 @@ let g:BoxTopLeft    = '┌'
 let g:BoxBotLeft    = '└'
 let g:BoxBotRight   = '┘'
 
-        call s:PutInBox('ColorMagenta', "Actions-Config")
+        call s:PutInLineHeader('ColorMagenta', "Actions-Config")
 
         call s:PutLineColor('ColorYellow', "Vim" . g:GetVimVersionString() . (exists('*popup_dialog') ? ", ":", No ") . "Popups")
 
         call s:PutLineColor('ColorYellow',s:cmdBrowseModeOff, s:cmdSetComment, "", s:cmdCommitBuffer,s:cmdCommitAll, s:cmdPush, s:cmdCommitPush, s:cmdViewLog)
-        call s:PutInBox('ColorMagenta', "Projects")
+        call s:PutInLineHeader('ColorMagenta', "Projects")
 
         for repo in l:projectlist
               let l:sz = "PRJ " . s:PathFileName(repo)
