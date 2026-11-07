@@ -318,7 +318,9 @@ endfunction
 
 " Command mapping for convenience
 " command! CloseLucien call CloseLucienBuffer()
-
+function! g:GetCurrentWindowName() abort
+    return getwinvar(0, 'window_name', '')
+endfunction
 
 function! g:AnyWindowsExist(...) abort
     " Loop through each target name passed as an argument
@@ -334,6 +336,9 @@ function! g:AnyWindowsExist(...) abort
     return 0
 endfunction
 
+function! g:IsCurrentWindow(name) abort
+    return getwinvar(0, 'window_name', '') ==# a:name
+endfunction
 
 function! g:WindowsExist(...) abort
     " Loop through each window name passed as an argument

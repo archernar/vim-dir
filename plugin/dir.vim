@@ -20,7 +20,38 @@ endif
 
 let g:menumode=1
 
+function! g:DirSwitcher()
+            call ShowPopupMessage('HERE',1500)
+            call g:JumpToWindowByName('menu')
+            close
+            call s:MyDirPwd(0)
+            let g:menumode=0
+            
+            " Use all lines in the buffer
+            let s:max_width = max(map(getline(1, '$'), 'strdisplaywidth(v:val)'))
+            execute 'vertical resize ' . (s:max_width + 2)
+endfunction
+
 function! g:Switcher()
+    if (g:AnyWindowsExist('menu','term','client','dir'))
+        if (g:IsCurrentWindow('client'))
+            call g:JumpToWindowByName('menu')
+            nnoremap <buffer> <Tab> :call g:Switcher()<cr>
+        elseif (g:IsCurrentWindow('menu'))
+            call g:JumpToWindowByName('client')
+            nnoremap <buffer> <Tab> :call g:Switcher()<cr>
+        elseif (g:IsCurrentWindow('dir'))
+            call g:JumpToWindowByName('client')
+            nnoremap <buffer> <Tab> :call g:Switcher()<cr>
+        elseif (g:IsCurrentWindow('term'))
+            nnoremap <buffer> <Tab> :call g:Switcher()<cr>
+            let NOTHING=0
+        endif
+    endif
+endfunction
+
+
+function! g:XXxxSwitcher()
     if (g:AnyWindowsExist('menu','dir'))
         if (g:menumode  == 1) 
             call g:JumpToWindowByName('menu')
@@ -55,8 +86,8 @@ function! g:Switcher()
     endif
 endfunction
 
-nnoremap <Tab> <C-w>w
-nnoremap <leader><Tab> :call g:Switcher()<cr>
+"nnoremap <Tab> <C-w>w
+nnoremap <Tab> :call g:Switcher()<cr>
 
 let s:nv_cache1 = {}
 let s:nv_cache2 = {}
@@ -973,6 +1004,7 @@ function! s:MyProject(...)
         let w:window_name = 'client'
         call g:NewWindow("Left", l:n, "<Enter> :call g:MySelectionAction('rx')")
         let w:window_name = 'menu'
+        nnoremap <buffer> <Tab> :call g:Switcher()<cr>
         let s:menu_win = win_getid()
 
         setlocal wincolor=MyCustomBg
@@ -1064,6 +1096,12 @@ let g:BoxBotRight   = '┘'
             if (s:BrowseMode == 1)
                 exe "wincmd w"
             endif
+        endif
+        if ( 1==0 )
+            exe "botright terminal"
+            let w:window_name = 'term'
+            exe "resize 4"
+            call g:JumpToWindowByName('client')
         endif
 
         set nowrap
